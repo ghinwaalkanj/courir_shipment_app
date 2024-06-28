@@ -2,25 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'dart:ui' as ui;
 
 class ActiveShipmentsMapController extends GetxController {
-  late final LatLng initialPosition;
-  var selectedLocation = LatLng(31.9539, 35.9106).obs; // Default coordinates of Amman
+  var selectedLocation = LatLng(31.9539, 35.9106).obs;
   late BitmapDescriptor recipientCustomIcon;
   late GoogleMapController mapController;
   var markers = Set<Marker>().obs;
-  var polylines = Set<Polyline>().obs;
-  var currentPosition = LatLng(0, 0).obs;
 
   Future<void> initialize(LatLng position) async {
-    initialPosition = position;
     selectedLocation.value = position;
     await setCustomMarkerIcons();
-    await getCurrentLocation();
     addMarker();
-    drawPolyline();
   }
 
   Future<void> setCustomMarkerIcons() async {
@@ -41,18 +34,6 @@ class ActiveShipmentsMapController extends GetxController {
     return BitmapDescriptor.fromBytes(resizedImageBytes);
   }
 
-  Future<void> getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    currentPosition.value = LatLng(position.latitude, position.longitude);
-    markers.add(
-      Marker(
-        markerId: MarkerId('currentLocation'),
-        position: currentPosition.value,
-        infoWindow: InfoWindow(title: 'My Location'),
-      ),
-    );
-  }
-
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
     mapController.animateCamera(
@@ -66,18 +47,6 @@ class ActiveShipmentsMapController extends GetxController {
         markerId: MarkerId('recipientLocation'),
         position: selectedLocation.value,
         icon: recipientCustomIcon,
-      ),
-    );
-  }
-
-  void drawPolyline() {
-    polylines.add(
-      Polyline(
-        polylineId: PolylineId('line1'),
-        visible: true,
-        points: [currentPosition.value, selectedLocation.value],
-        width: 4,
-        color: Colors.blue,
       ),
     );
   }

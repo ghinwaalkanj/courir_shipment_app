@@ -63,6 +63,7 @@ class ActiveShipmentsTab extends StatelessWidget {
           pageController.changePage(4);
           break;
         case 6:
+          pageController.changePage(4);
           showShipmentCustomerDialog(
             context,
             shipmentAmount + deliveryFee,
@@ -71,7 +72,6 @@ class ActiveShipmentsTab extends StatelessWidget {
               final success = await controller.updateShipmentStatus(
                   shipmentNumber: shipmentNumber, newStatus: 7);
               if (success) {
-                Navigator.of(context).pop();
                 Get.to(NavigationMenu());
                 Get.snackbar(
                   'نجاح',

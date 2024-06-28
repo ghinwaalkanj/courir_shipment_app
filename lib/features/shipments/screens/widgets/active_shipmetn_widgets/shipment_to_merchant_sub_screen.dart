@@ -47,7 +47,6 @@ class ShipmentToMerchantScreen extends StatelessWidget {
                 zoom: 15,
               ),
               markers: mapController.markers.value,
-              polylines: mapController.polylines.value,
             ),
           ),
         ),

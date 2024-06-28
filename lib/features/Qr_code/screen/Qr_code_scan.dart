@@ -57,7 +57,7 @@ class BarcodeScanScreen extends StatelessWidget {
               SizedBox(height: 3.h),
               Center(
                 child: Text(
-                  'امسح الرمز لاسترجاع الشحنة!',
+                  'امسح الرمز لاستلام الشحنة!',
                   textDirection: TextDirection.rtl,
                   style: CustomTextStyle.headlineTextStyle
                       .apply(color: TColors.primary, fontSizeFactor: 1.1),
@@ -67,7 +67,7 @@ class BarcodeScanScreen extends StatelessWidget {
               SizedBox(height: 1.h),
               Center(
                 child: Text(
-                  'يرجى مسح الرمز لاسترجاع الشحنة من المندوب، وذلك لاستكمال عملية الاسترجاع.',
+                  'يرجى مسح الرمز لاستلام الشحنة من التاجر، وذلك لاستكمال عملية الاستلام.',
                   textDirection: TextDirection.rtl,
                   style: CustomTextStyle.greyTextStyle.apply(fontSizeFactor: 0.8),
                   textAlign: TextAlign.center,

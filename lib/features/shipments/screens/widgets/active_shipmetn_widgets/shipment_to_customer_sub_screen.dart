@@ -46,7 +46,6 @@ class ShipmentToCustomerScreen extends StatelessWidget {
                 zoom: 15,
               ),
               markers: mapController.markers.value,
-              polylines: mapController.polylines.value,
               circles: {
                 Circle(
                   circleId: CircleId('delivery_area'),

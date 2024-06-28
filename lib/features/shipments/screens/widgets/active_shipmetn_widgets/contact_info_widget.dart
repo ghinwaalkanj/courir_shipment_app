@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../../common/styles/custom_textstyle.dart';
 import '../../../../../utils/constants/colors.dart';
 
@@ -9,6 +10,7 @@ class ContactInfoWidget extends StatelessWidget {
   });
   final String name;
   final String phoneNumber;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -59,6 +61,7 @@ class ContactInfoWidget extends StatelessWidget {
               Row(
                 children: [
                   GestureDetector(
+                    onTap: () => _makePhoneCall(phoneNumber), // Add this line
                     child: Container(
                       height: 5.5.h,
                       width: 13.w,
@@ -103,5 +106,13 @@ class ContactInfoWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 }

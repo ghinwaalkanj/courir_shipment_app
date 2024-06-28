@@ -35,76 +35,94 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: 2.h, left: 5.w, right: 5.w, bottom: 1.h),
-                child: const SearchWidgets(),
-              ),
-              SizedBox(height: 2.h),
-              SizedBox(
-                height: 53.h,
-                child: FutureBuilder(
-                  future: mapController.initialize(),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await homeController.refreshData();
+            await myShipmentsController.fetchMyShipments();
+            await mapController.initialize();
+          },
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 2.h, left: 5.w, right: 5.w, bottom: 1.h),
+                        child: const SearchWidgets(),
+                      ),
+                      SizedBox(height: 2.h),
+                    ],
+                  ),
+                ),
+              ];
+            },
+            body: Column(
+              children: [
+                SizedBox(
+                  height: 53.h,
+                  child: FutureBuilder(
+                    future: mapController.initialize(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else {
+                        return Obx(() {
+                          if (homeController.center.value == null) {
+                            return Center(child: Text(''));
+                          }
+                          return GoogleMap(
+                            zoomGesturesEnabled: true,
+                            zoomControlsEnabled: false,
+                            onMapCreated: mapController.onMapCreated,
+                            initialCameraPosition: CameraPosition(
+                              bearing: 5.sp,
+                              target: mapController.selectedLocation.value = homeController.center.value!,
+                              zoom: 20,
+                            ),
+                            circles: {
+                              Circle(
+                                circleId: CircleId('delivery_area'),
+                                center: homeController.center.value!,
+                                radius: 2000,
+                                fillColor: TColors.error.withOpacity(0.3),
+                                strokeColor: TColors.error,
+                                strokeWidth: 1,
+                              ),
+                            },
+                          );
+                        });
+                      }
+                    },
+                  ),
+                ),
+                FutureBuilder(
+                  future: myShipmentsController.fetchMyShipments(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
+                      return Center();
                     } else {
                       return Obx(() {
-                        if (homeController.center.value == null) {
-                          return Center(child: Text(''));
-                        }
-                        return GoogleMap(
-                          zoomControlsEnabled: false,
-                          zoomGesturesEnabled: true,
-                          onMapCreated: mapController.onMapCreated,
-                          initialCameraPosition: CameraPosition(
-                            target: mapController.selectedLocation.value = homeController.center.value!,
-                            zoom: 20,
-                          ),
-                          circles: {
-                            Circle(
-                              circleId: CircleId('delivery_area'),
-                              center: homeController.center.value!,
-                              radius: 2000,
-                              fillColor: TColors.error.withOpacity(0.3),
-                              strokeColor: TColors.error,
-                              strokeWidth: 1,
-                            ),
-                          },
+                        int activeShipmentsCount = myShipmentsController.getActiveShipmentsCount();
+                        return ActiveShipmentsButton(
+                          count: activeShipmentsCount,
+                          onPressed: activeShipmentsCount > 0
+                              ? () {
+                            Get.to(ActiveShipmentsScreen());
+                          }
+                              : null,
                         );
                       });
                     }
                   },
                 ),
-              ),
-              FutureBuilder(
-                future: myShipmentsController.fetchMyShipments(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    return Obx(() {
-                      int activeShipmentsCount = myShipmentsController.getActiveShipmentsCount();
-                      return ActiveShipmentsButton(
-                        count: activeShipmentsCount,
-                        onPressed: activeShipmentsCount > 0
-                            ? () {
-                          Get.to(ActiveShipmentsScreen());
-                        }
-                            : null,
-                      );
-                    });
-                  }
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

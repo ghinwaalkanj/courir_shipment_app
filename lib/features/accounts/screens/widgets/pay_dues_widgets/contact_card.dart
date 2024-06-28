@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../common/styles/custom_textstyle.dart';
 import '../../../../../utils/constants/colors.dart';
+import '../../../models/contact_info_model.dart';
 import 'contact_details.dart';
 
 class ContactCard extends StatelessWidget {
-  final String phoneNumber;
-  final String website;
+  final List<ContactInfo> contactInfoList;
 
-  ContactCard({
-    required this.phoneNumber,
-    required this.website,
-  });
+  ContactCard({required this.contactInfoList});
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +34,17 @@ class ContactCard extends StatelessWidget {
               SizedBox(height: 7.h),
               Text(
                 'يرجى التواصل مع الإدارة عبر',
-                style:
-                CustomTextStyle.primaryTextStyle.apply(fontSizeFactor: 1.4,fontWeightDelta: 4),
+                style: CustomTextStyle.primaryTextStyle.apply(fontSizeFactor: 1.4, fontWeightDelta: 4),
               ),
               SizedBox(height: 4.h),
-              ContactDetail(
-                icon: Icons.local_phone_outlined,
-                detail: phoneNumber,
-              ),
-              SizedBox(height: 2.h),
-              ContactDetail(
-                icon: Icons.web_outlined,
-                detail: website,
-              ),
+              ...contactInfoList.map((contact) => Padding(
+                padding: EdgeInsets.symmetric(vertical: 2.h),
+                child: ContactDetail(
+                  icon: getIconForContactType(contact.type),
+                  detail: contact.value,
+                  type: contact.type,
+                ),
+              )),
             ],
           ),
         ),
@@ -67,5 +61,25 @@ class ContactCard extends StatelessWidget {
       ],
     );
   }
-}
 
+  IconData getIconForContactType(String type) {
+    switch (type) {
+      case 'phone':
+        return Icons.local_phone_outlined;
+      case 'whatsapp':
+        return Icons.messenger;
+      case 'telegram':
+        return Icons.telegram;
+      case 'facebook':
+        return Icons.facebook;
+      case 'website':
+        return Icons.web_outlined;
+      case 'instagram':
+        return Icons.camera_alt_outlined;
+      case 'email':
+        return Icons.email_outlined;
+      default:
+        return Icons.contact_page;
+    }
+  }
+}

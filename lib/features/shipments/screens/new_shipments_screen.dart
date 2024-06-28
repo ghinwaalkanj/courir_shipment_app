@@ -34,52 +34,58 @@ class NewShipmentsScreen extends StatelessWidget {
               ],
             ));
           }
-          return SingleChildScrollView(
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Column(
-                children: [
-                  ListView.builder(
-                    padding: EdgeInsets.all(5.w),
-                    itemCount: controller.shipments.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final shipment = controller.shipments[index];
-                      return ShipmentItem(
-                        shipmentName: shipment.shipmentInfo.shipmentContents,
-                        shipmentNumber: shipment.shipmentInfo.shipmentNumber,
-                        senderCity: shipment.userInfo.city,
-                        shipmentDate: shipment.shipmentInfo.createdAt,
-                        recipientCity: shipment.recipientInfo.city,
-                        estimatedDate:
-                            shipment.shipmentInfo.estimatedDeliveryTime,
-                        courierEarnings:
-                            shipment.shipmentInfo.courierEarnings.toString(),
-                        onTap: () {
-                          print(shipment.shipmentInfo.courierEarnings);
-                          Get.to(
-                            OrderDetailScreen(),
-                            arguments: {
-                              'shipmentNumber':
-                                  shipment.shipmentInfo.shipmentNumber,
-                              'deliveryPrice':
-                                  shipment.shipmentInfo.shipmentFee,
-                              'shipmentPrice':
-                                  shipment.shipmentInfo.shipmentValue,
-                              'shipmentDate': shipment.shipmentInfo.createdAt,
-                              'shipmentWeight':
-                                  shipment.shipmentInfo.shipmentWeight,
-                              'shipmentQuantity': shipment
-                                  .shipmentInfo.shipmentQuantity
-                                  .toString(),
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
+          return RefreshIndicator(
+            onRefresh: () async {
+              await controller.fetchNewShipments();
+
+            },
+            child: SingleChildScrollView(
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      padding: EdgeInsets.all(5.w),
+                      itemCount: controller.shipments.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final shipment = controller.shipments[index];
+                        return ShipmentItem(
+                          shipmentName: shipment.shipmentInfo.shipmentContents,
+                          shipmentNumber: shipment.shipmentInfo.shipmentNumber,
+                          senderCity: shipment.userInfo.city,
+                          shipmentDate: shipment.shipmentInfo.createdAt,
+                          recipientCity: shipment.recipientInfo.city,
+                          estimatedDate:
+                              shipment.shipmentInfo.estimatedDeliveryTime,
+                          courierEarnings:
+                              shipment.shipmentInfo.courierEarnings.toString(),
+                          onTap: () {
+                            print(shipment.shipmentInfo.courierEarnings);
+                            Get.to(
+                              OrderDetailScreen(),
+                              arguments: {
+                                'shipmentNumber':
+                                    shipment.shipmentInfo.shipmentNumber,
+                                'deliveryPrice':
+                                    shipment.shipmentInfo.shipmentFee,
+                                'shipmentPrice':
+                                    shipment.shipmentInfo.shipmentValue,
+                                'shipmentDate': shipment.shipmentInfo.createdAt,
+                                'shipmentWeight':
+                                    shipment.shipmentInfo.shipmentWeight,
+                                'shipmentQuantity': shipment
+                                    .shipmentInfo.shipmentQuantity
+                                    .toString(),
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );

@@ -120,4 +120,10 @@ class HomeController extends GetxController {
       },
     );
   }
+
+  Future<void> refreshData() async {
+    await fetchHomeData();
+    // Fetch other necessary data here if needed
+  }
+
 }

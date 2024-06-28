@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: Obx(() {
             if (blockStatusController.isLoading.value) {
-              return Center(child: CircularProgressIndicator());
+              return Scaffold(body:Center(child: CircularProgressIndicator()),);
             } else if (blockStatusController.isBlocked.value) {
               return BlockedScreen();
             } else if (prefs.getBool('isAuth') == true) {

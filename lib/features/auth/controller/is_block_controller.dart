@@ -16,8 +16,8 @@ class BlockStatusController extends GetxController {
   void onInit() {
     super.onInit();
     checkBlockStatus();
-    // Check block status every minute
-    Timer.periodic(Duration(minutes: 1), (timer) => checkBlockStatus());
+    // // Check block status every minute
+    // Timer.periodic(Duration(minutes: 1), (timer) => checkBlockStatus());
   }
 
   void checkBlockStatus() async {
@@ -35,13 +35,11 @@ class BlockStatusController extends GetxController {
 
     response.fold(
           (failure) {
-        ErrorSnackbar.show('فشل في جلب حالة الحظر');
       },
           (data) {
         var blockStatus = BlockStatus.fromJson(data);
         isBlocked.value = blockStatus.isBlocked == 1;
         if (!isBlocked.value) {
-          SuccessSnackbar.show("you're not Blocked, Welcome");
           print("you're not Blocked");
         }
       },

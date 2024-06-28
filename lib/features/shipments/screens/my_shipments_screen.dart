@@ -31,7 +31,10 @@ class MyShipmentsScreen extends StatelessWidget {
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await controller.fetchMyShipments();
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,47 +67,47 @@ class MyShipmentsScreen extends StatelessWidget {
                 selectedFilterIndex: selectedFilterIndex.value,
                 onTap: (index) => _onFilterTap(index, controller),
               )),
-              Obx(() {
-                if (controller.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                var filteredShipments = controller.filterShipments(selectedFilterIndex.value);
-                if (filteredShipments.isEmpty) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 7.h,),
-                        Image(
-                          image: AssetImage(
-                              'assets/images/sammy-line-man-checking-mailbox.png'),
-                          height: 30.h,
-                        ),
-                        SizedBox(height: 3.h,),
-                        Text('لا يوجد شحنات', style: CustomTextStyle.primaryTextStyle,),
-                      ],
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  padding: EdgeInsets.all(5.w),
-                  itemCount: filteredShipments.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final shipment = filteredShipments[index];
-                    return ShipmentItem(
-                      shipmentName: shipment.shipmentInfo.shipmentContents,
-                      shipmentNumber: shipment.shipmentInfo.shipmentNumber,
-                      senderCity: shipment.userInfo.city,
-                      shipmentDate: shipment.shipmentInfo.createdAt,
-                      recipientCity: shipment.recipientInfo.city,
-                      estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
-                      courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
-                      onTap: () {},
+              Expanded(
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  var filteredShipments = controller.filterShipments(selectedFilterIndex.value);
+                  if (filteredShipments.isEmpty) {
+                    return Center(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 7.h,),
+                          Image(
+                            image: AssetImage(
+                                'assets/images/sammy-line-man-checking-mailbox.png'),
+                            height: 30.h,
+                          ),
+                          SizedBox(height: 3.h,),
+                          Text('لا يوجد شحنات', style: CustomTextStyle.primaryTextStyle,),
+                        ],
+                      ),
                     );
-                  },
-                );
-              }),
+                  }
+                  return ListView.builder(
+                    padding: EdgeInsets.all(5.w),
+                    itemCount: filteredShipments.length,
+                    itemBuilder: (context, index) {
+                      final shipment = filteredShipments[index];
+                      return ShipmentItem(
+                        shipmentName: shipment.shipmentInfo.shipmentContents,
+                        shipmentNumber: shipment.shipmentInfo.shipmentNumber,
+                        senderCity: shipment.userInfo.city,
+                        shipmentDate: shipment.shipmentInfo.createdAt,
+                        recipientCity: shipment.recipientInfo.city,
+                        estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
+                        courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
+                        onTap: () {},
+                      );
+                    },
+                  );
+                }),
+              ),
             ],
           ),
         ),

@@ -12,8 +12,9 @@ import '../../../controller/profile_controller.dart';
 
 class ProfileButtons extends StatelessWidget {
   final ProfileController controller;
+  final void Function()? onPressed;
 
-  const ProfileButtons({Key? key, required this.controller}) : super(key: key);
+  const ProfileButtons({Key? key, required this.controller, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,7 @@ class ProfileButtons extends StatelessWidget {
       children: [
         TButton(
           text: 'حفظ',
-          onPressed: () {
-            // controller.editProfile(
-            //   controller.nameController.text,
-            //   controller.phoneController.text,
-            //   controller.businessNameController.text,
-            // );
-          },
+          onPressed:onPressed,
         ),
         TTextButton(
           text: 'تسجيل خروج',

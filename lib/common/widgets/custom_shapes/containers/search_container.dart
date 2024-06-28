@@ -36,10 +36,6 @@ class TSearchContainer extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(width: 2.w,),
-            Icon(
-              icon,
-              color: TColors.darkerGrey,
-            ),
             const SizedBox(
               width: TSizes.spaceBtwItems,
             ),

@@ -20,19 +20,21 @@ class IncomeDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 1.h),
+      padding: EdgeInsets.symmetric(vertical: 2.h),
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Container(
+          width: 85.w,
+          margin: EdgeInsets.fromLTRB(4.w, 0, 4.w, 0),
           padding: EdgeInsets.fromLTRB(4.w, 3.h, 4.w, 5.h),
           decoration: BoxDecoration(
             color: TColors.white,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 5,
-                spreadRadius: 10,
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 3,
+                spreadRadius: 8,
                 offset: Offset(0, 2),
               ),
             ],

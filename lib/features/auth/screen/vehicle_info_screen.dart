@@ -1,6 +1,6 @@
 import 'package:courir_shipment_app/common/widgets/text_field.dart';
 import 'package:courir_shipment_app/features/auth/controller/vehicle_info_controller.dart';
-import 'package:courir_shipment_app/features/auth/screen/dellivery_cities_screen.dart';
+import 'package:courir_shipment_app/features/auth/screen/add_delivery_areas_screen.dart';
 import 'package:courir_shipment_app/features/auth/screen/widgets/action_buttons_widget.dart';
 import 'package:courir_shipment_app/features/auth/screen/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +9,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 
 class VehicleInfoScreen extends StatelessWidget {
-  const VehicleInfoScreen({super.key});
+  VehicleInfoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(VehicleInfoController());
+    final VehicleInfoController controller = Get.put(VehicleInfoController());
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -34,7 +34,7 @@ class VehicleInfoScreen extends StatelessWidget {
                 currentStep: 3,
               ),
               SizedBox(height: 7.h),
-              Obx(() => Column(
+              Column(
                 children: [
                   TTextField(
                     hintText: "نوع المركبة",
@@ -42,9 +42,9 @@ class VehicleInfoScreen extends StatelessWidget {
                     controller: controller.vehicleTypeController,
                     keyboardType: TextInputType.name,
                     onChanged: (value) {
-                      controller.vehicleTypeError.value = '';
+                      controller.vehicleType.value = value;
+                      controller.validateForm();
                     },
-                    errorText: controller.vehicleTypeError.value.isEmpty ? null : controller.vehicleTypeError.value,
                   ),
                   SizedBox(height: 2.h),
                   TTextField(
@@ -53,20 +53,20 @@ class VehicleInfoScreen extends StatelessWidget {
                     controller: controller.vehiclePlateController,
                     keyboardType: TextInputType.phone,
                     onChanged: (value) {
-                      controller.vehiclePlateError.value = '';
+                      controller.vehiclePlate.value = value;
+                      controller.validateForm();
                     },
-                    errorText: controller.vehiclePlateError.value.isEmpty ? null : controller.vehiclePlateError.value,
                   ),
                   SizedBox(height: 2.h),
                   TTextField(
                     hintText: "موديل المركبة",
                     prefixIcon: Icon(Iconsax.car),
                     controller: controller.vehicleModelController,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.phone,
                     onChanged: (value) {
-                      controller.vehicleModelError.value = '';
+                      controller.vehicleModel.value = value;
+                      controller.validateForm();
                     },
-                    errorText: controller.vehicleModelError.value.isEmpty ? null : controller.vehicleModelError.value,
                   ),
                   SizedBox(height: 2.h),
                   TTextField(
@@ -75,17 +75,15 @@ class VehicleInfoScreen extends StatelessWidget {
                     controller: controller.vehicleColorController,
                     keyboardType: TextInputType.name,
                     onChanged: (value) {
-                      controller.vehicleColorError.value = '';
+                      controller.vehicleColor.value = value;
+                      controller.validateForm();
                     },
-                    errorText: controller.vehicleColorError.value.isEmpty ? null : controller.vehicleColorError.value,
                   ),
                 ],
-              )),
+              ),
               SizedBox(height: 5.h),
-               ActionButtonsWidget(
-                onPressed: () {
-                  controller.validateForm();
-                },
+              ActionButtonsWidget(
+                onPressed: controller.saveVehicleInfo,
                 isLoading: controller.isLoading,
               )
             ],

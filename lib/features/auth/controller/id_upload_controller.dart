@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:courir_shipment_app/features/auth/screen/vehicle_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -158,7 +159,6 @@ class IDUploadController extends GetxController {
       response = await crud.postFileAndTwoData(
         IDUploadEndpoint,
         {
-          'token':token.toString(),
           'user_id': userId.toString(),
         },
         {},
@@ -196,13 +196,22 @@ class IDUploadController extends GetxController {
             IDUploadResponseModel.fromJson(data);
         print(responseModel.status);
         print(responseModel.error);
+        print(responseModel.vehicleInfo?.vehicleColor);
+        print(responseModel.vehicleInfo?.vehicleModel);
+        print(responseModel.vehicleInfo?.vehiclePlateNumber);
+        print(responseModel.vehicleInfo?.vehicleType);
         if (responseModel.status) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isAuth', true);
           // FirebaseMessaging.instance.subscribeToTopic("merchant");
           // FirebaseMessaging.instance
           //     .subscribeToTopic("merchant${userId.toString()}");
-          Get.offAll(NavigationMenu());
+          Get.to(VehicleInfoScreen(),arguments: {
+            'vehicle_type':responseModel.vehicleInfo?.vehicleType,
+            'vehicle_plate_number':responseModel.vehicleInfo?.vehiclePlateNumber,
+            'vehicle_model':responseModel.vehicleInfo?.vehicleModel,
+            'vehicle_color':responseModel.vehicleInfo?.vehicleColor,
+          });
         } else {
           Get.snackbar(
             'خطأ',

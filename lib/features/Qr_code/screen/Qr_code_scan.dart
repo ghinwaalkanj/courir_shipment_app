@@ -120,7 +120,7 @@ class BarcodeScanScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 14.h),
+                        SizedBox(height: 8.h),
                         SizedBox(
                           width: double.infinity,
                           height: 7.h,

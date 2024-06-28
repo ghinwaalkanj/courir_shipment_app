@@ -35,7 +35,7 @@ class LoginController extends GetxController {
     String digits = value.replaceAll(RegExp(r'[^\d]'), '');
     if (digits.length > 8) {
       digits = digits.substring(0, 8);
-      FocusScope.of(Get.context!).unfocus(); // Hide the keyboard
+      FocusScope.of(Get.context!).unfocus();
     }
     phoneNumber.value = digits;
     validatePhoneNumber();
@@ -59,7 +59,7 @@ class LoginController extends GetxController {
       isLoading.value = true;
       var response = await crud.postData(
         LoginEndpoint,
-        {'phone': '+9627${phoneNumber.value}', 'role': 'تاجر'},
+        {'phone': '+9627${phoneNumber.value}', 'role': 'مندوب'},
         {},
       );
       isLoading.value = false;

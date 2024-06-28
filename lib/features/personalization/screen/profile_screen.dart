@@ -8,6 +8,7 @@ import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/custom_sized_box.dart';
 import '../../../common/widgets/custom_shapes/containers/common_container.dart';
 import '../../../utils/constants/colors.dart';
+import '../../auth/screen/widgets/dropdown_field_widget.dart';
 import '../controller/profile_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -27,52 +28,73 @@ class ProfileScreen extends StatelessWidget {
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: Obx(
-              () => controller.isLoading.value
+          () => controller.isLoading.value
               ? Center(child: CircularProgressIndicator(color: TColors.primary))
               : SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomSizedBox.itemSpacingVertical(),
-                TraderRankingWidget(
-                  rankingPercentage: controller.merchant_rank.toDouble(),
-                  totalShipments: controller.totalShipments.value,
-                  motivationalMessage: 'كن الملك في Kwickly واعمل المزيد من الشحنات!',
-                ),
-                CustomSizedBox.itemSpacingVertical(),
-                CommonContainer(
-                  height: 70.h,
-                  width: 100.w,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 5.w),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ProfileTextField(
-                            labelText: 'الاسم بالكامل',
-                            controller: controller.nameController,
-                          ),
-                          CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                          ProfileTextField(
-                            labelText: 'رقم الهاتف',
-                            controller: controller.phoneController,
-                          ),
-                          CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                          ProfileTextField(
-                            labelText: 'النشاط التجاري',
-                            controller: controller.businessNameController,
-                          ),
-                          CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                          ProfileButtons(controller: controller),
-                        ],
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomSizedBox.itemSpacingVertical(),
+                      TraderRankingWidget(
+                        rankingPercentage: 50.0,
+                        totalShipments: controller.totalShipments.value,
+                        motivationalMessage:
+                            'كن الملك في Kwickly واعمل المزيد من الشحنات!',
                       ),
-                    ),
+                      CustomSizedBox.itemSpacingVertical(),
+                      CommonContainer(
+                        height: 70.h,
+                        width: 100.w,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 4.h, horizontal: 5.w),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                ProfileTextField(
+                                  labelText: 'الاسم بالكامل',
+                                  controller: controller.nameController,
+                                ),
+                                CustomSizedBox.itemSpacingVertical(
+                                    height: 0.5.h),
+                                ProfileTextField(
+                                  labelText: 'رقم الهاتف',
+                                  controller: controller.phoneController,
+                                ),
+                                CustomSizedBox.itemSpacingVertical(
+                                    height: 0.5.h),
+                                DropdownFieldWidget(
+                                  value: controller.gender.value.isEmpty
+                                      ? null
+                                      : controller.gender.value,
+                                  onChanged: (value) {
+                                    controller.gender.value = value!;
+                                  },
+                                  item1: 'ذكر',
+                                  item2: 'أنثى',
+                                  hintText: 'النوع',
+                                ),
+                                CustomSizedBox.itemSpacingVertical(
+                                    height: 0.5.h),
+                                ProfileButtons(
+                                  controller: controller,
+                                  onPressed: () {
+                                    controller.editProfile(
+                                        controller.nameController.text,
+                                        controller.phoneController.text,
+                                      controller.gender.value
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );

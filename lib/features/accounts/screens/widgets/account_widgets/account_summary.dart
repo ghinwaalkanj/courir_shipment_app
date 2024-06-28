@@ -7,23 +7,23 @@ class AccountSummary extends StatelessWidget {
   const AccountSummary({super.key, required this.total});
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          'مستحقاتك هي',
-          style: CustomTextStyle.primaryTextStyle
-              .apply(fontSizeFactor: 1.1),
-        ),
-        SizedBox(
-          width: 40.w,
-        ),
-        Text(
-          '$total JD',
-          style: CustomTextStyle.primaryTextStyle
-              .apply(fontSizeFactor: 1.1),
-        ),
-      ],
+    return FittedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'مستحقاتك هي',
+            style: CustomTextStyle.primaryTextStyle
+                .apply(fontSizeFactor: 1.1),
+          ),
+          SizedBox(width: 45.w,),
+          Text(
+            '$total JD',
+            style: CustomTextStyle.primaryTextStyle
+                .apply(fontSizeFactor: 1.1),
+          ),
+        ],
+      ),
     );
   }
 }

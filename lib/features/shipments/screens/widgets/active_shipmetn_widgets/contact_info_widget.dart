@@ -77,7 +77,7 @@ class ContactInfoWidget extends StatelessWidget {
                   SizedBox(width: 2.w),
                   Container(
                     width: 65.w,
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(2.w, 1.h, 2.w, 1.h),
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                       border: Border.all(

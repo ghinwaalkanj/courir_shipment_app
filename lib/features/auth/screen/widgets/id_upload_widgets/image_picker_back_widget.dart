@@ -29,7 +29,7 @@ class ImagePickerBackWidget extends StatelessWidget {
               );
             } else {
               return Image.network(
-                '${IDUploadEndpoint}${controller.idBackImageUrl.value}',
+                '${UploadIdImagesAPI}${controller.idBackImageUrl.value}',
                 height: 15.h,
                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;

@@ -1,4 +1,5 @@
 import 'package:courir_shipment_app/features/home/screens/qrsearch_screen.dart';
+import 'package:courir_shipment_app/features/home/screens/widgets/search_widgets/no_shipments.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -8,6 +9,8 @@ import '../../../../utils/constants/colors.dart';
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/custom_sized_box.dart';
+import '../../shipments/screens/widgets/shipments_widgets/shipment_item.dart';
+import '../controller/search_controller.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -16,9 +19,18 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final FocusNode focusNode = FocusNode();
     final TextEditingController searchController = TextEditingController();
+    final TSearchController controller = Get.put(TSearchController());
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       focusNode.requestFocus();
     });
+
+    void searchShipment() {
+      final query = searchController.text;
+      if (query.isNotEmpty) {
+        controller.searchShipment(query);
+      }
+    }
 
     return Scaffold(
       backgroundColor: TColors.bg,
@@ -36,50 +48,46 @@ class SearchScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    TSearchFormField(
-                      iscearch: true,
-                      hintText: 'ابحث عن الشحنة',
-                      controller: searchController,
-                      focusNode: focusNode,
-                      onChanged: (value) {
-                        if (value.isNotEmpty) {
-                          // controller.searchShipment(value);
-                        }
-                      },
+                    Expanded(
+                      child: TSearchFormField(
+                        iscearch: true,
+                        hintText: 'ابحث عن الشحنة',
+                        controller: searchController,
+                        focusNode: focusNode,
+                        onSubmitted: (_) => searchShipment(),
+                      ),
                     ),
                     SizedBox(
                       width: 2.w,
                     ),
                     CircularContainer(
-                      onTap: (){
-                        Get.to(BarcodeSearchScreen());
-                      },
-                      icon: Icons.qr_code_scanner,
+                      onTap: searchShipment,
+                      icon: Icons.search,
                       color: TColors.primary,
                     ),
                   ],
                 ),
-                      Column(
-                      children: [
-                        Center(
-                          child: Image(
-                            image: AssetImage(
-                                "assets/gifs/sammy-line-sailor-on-mast-looking-through-telescope.gif"),
-                          ),
-                        ),
-                        CustomSizedBox.itemSpacingVertical(height: 0.5.h),
-                        Text(
-                          'لا توجد شحنة',
-                          style: CustomTextStyle.headlineTextStyle,
-                        ),
-                        CustomSizedBox.textSpacingVertical(),
-                        Text(
-                          'حاول البحث عن شحنة أخرى',
-                          style: CustomTextStyle.headlineTextStyle.apply(
-                              color: TColors.darkGrey, fontWeightDelta: -1),
-                        ),
-                      ],
-                    ),
+                SizedBox(height: 2.h),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return CircularProgressIndicator();
+                  } else if (controller.shipments.isEmpty) {
+                    return NoShipmentsWidget();
+                  } else {
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: controller.shipments.length,
+                        itemBuilder: (context, index) {
+                          var shipment = controller.shipments[index];
+                          return ShipmentItem(
+                            onTap: () {
+                            }, shipmentName: '', shipmentNumber: '', senderCity: '', shipmentDate: '', recipientCity: '', estimatedDate: '',
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }),
               ],
             ),
           ),

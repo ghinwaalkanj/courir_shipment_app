@@ -4,8 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   awesome_notifications
+  connectivity_plus_windows
   file_selector_windows
   firebase_core
+  geolocator_windows
   url_launcher_windows
 )
 

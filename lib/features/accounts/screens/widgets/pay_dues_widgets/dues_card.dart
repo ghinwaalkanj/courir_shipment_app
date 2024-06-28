@@ -7,7 +7,7 @@ import '../../../../../utils/constants/colors.dart';
 
 class DuesCard extends StatelessWidget {
   final String duesAmount;
-  final int percentage;
+  final double percentage;
   final String requiredAmount;
 
   DuesCard({
@@ -45,6 +45,7 @@ class DuesCard extends StatelessWidget {
                   center: new Text("$percentage%",style: CustomTextStyle.primaryTextStyle.apply(color: TColors.white),),
                   progressColor: TColors.white,
                 ),
+                SizedBox(width:4.w ,),
                 Column(
                   children: [
                     Text(

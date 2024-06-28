@@ -61,7 +61,7 @@ class HeaderWidget extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(height: 3.h),
+        SizedBox(height: 4.h),
         Text(
           desc,
           style: CustomTextStyle.greyTextStyle

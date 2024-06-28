@@ -1,10 +1,11 @@
+import 'package:courir_shipment_app/features/personalization/screen/add_delivery_cities_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../common/styles/custom_textstyle.dart';
 import '../../../../utils/constants/colors.dart';
+import '../../controller/home_controller.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HomeAppBar({
@@ -32,7 +33,7 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  bool isOnline = false;
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +51,22 @@ class _HomeAppBarState extends State<HomeAppBar> {
               AppBar(
                 automaticallyImplyLeading: false,
                 title: Padding(
-                  padding:
-                      EdgeInsets.only(right: 2.5.w, left: 2.5.w, top: 2.5.h),
+                  padding: EdgeInsets.only(right: 2.5.w, left: 2.5.w, top: 2.5.h),
                   child: widget.title,
                 ),
                 leading: widget.showBackArrow
                     ? IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: widget.leadingOnPressed,
-                      )
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: widget.leadingOnPressed,
+                )
                     : null,
                 actions: widget.actions != null
                     ? widget.actions!
-                        .map((action) => Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: action,
-                            ))
-                        .toList()
+                    .map((action) => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: action,
+                ))
+                    .toList()
                     : null,
                 elevation: 0,
                 backgroundColor: Colors.transparent,
@@ -75,13 +75,17 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 bottom: 2.5.h,
                 right: 7.w,
                 child: GestureDetector(
-                  onTap: widget.onTap,
+                  onTap: () {
+                    Get.to(AddDeliveryCitiesScreen());
+                  },
                   child: Row(
                     children: [
-                      Text(
-                        'أضف عنوانك',
+                      Obx(() => Text(
+                        '${controller.cityNum.value}  محافظة ',
                         style: CustomTextStyle.headlineTextStyle,
-                      ),
+                        textDirection: TextDirection.rtl,
+                      )),
+                      SizedBox(width: 2.w),
                       Icon(Icons.keyboard_arrow_down_rounded),
                     ],
                   ),
@@ -90,10 +94,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
               Positioned(
                 bottom: 1.8.h,
                 left: 7.w,
-                child: Row(
+                child: Obx(() => Row(
                   children: [
                     Text(
-                      isOnline ? 'متصل' : 'غير متصل',
+                      controller.isOnline.value ? 'متصل' : 'غير متصل',
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 10.sp,
@@ -102,16 +106,14 @@ class _HomeAppBarState extends State<HomeAppBar> {
                       ),
                     ),
                     Switch(
-                      value: isOnline,
+                      value: controller.isOnline.value,
                       onChanged: (value) {
-                        setState(() {
-                          isOnline = value;
-                        });
+                        controller.toggleOnlineStatus(value);
                       },
                       activeColor: TColors.primary,
                     ),
                   ],
-                ),
+                )),
               ),
             ],
           ),

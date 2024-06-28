@@ -11,8 +11,10 @@ class CustomerShipmentDialog extends StatelessWidget {
   final double total;
   final int tabIndex;
   final TPageController pageController;
+  final void Function() onDragEnd;
 
-  CustomerShipmentDialog({required this.total, required this.tabIndex})
+
+  CustomerShipmentDialog({required this.total, required this.tabIndex, required this.onDragEnd})
       : pageController = Get.find<TPageController>(tag: 'tab$tabIndex');
 
   @override
@@ -64,22 +66,7 @@ class CustomerShipmentDialog extends StatelessWidget {
             DraggableConfirmButton(
               dragThreshold: 0.5,
               text: 'قم بالسحب للتأكيد',
-              onDragEnd: () {
-                Navigator.of(context).pop();
-                Get.to(NavigationMenu());
-                Get.snackbar(
-                  'نجاح',
-                  'لقد قمت بتسليم الشحنة بنجاح',
-                  backgroundColor: TColors.primary,
-                  colorText: TColors.white,
-                  snackPosition: SnackPosition.TOP,
-                  margin: EdgeInsets.all(10),
-                  borderRadius: 10,
-                  icon: Icon(Icons.check_circle_outline, color: TColors.white),
-                  duration: Duration(seconds: 5),
-                );
-
-              },
+              onDragEnd: onDragEnd
             ),
           ],
         ),
@@ -88,13 +75,14 @@ class CustomerShipmentDialog extends StatelessWidget {
   }
 }
 
-void showShipmentCustomerDialog(BuildContext context, double total, int tabIndex) {
+void showShipmentCustomerDialog(BuildContext context, double total, int tabIndex,void Function() onDragEnd) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return CustomerShipmentDialog(
         total: total,
         tabIndex: tabIndex,
+        onDragEnd: onDragEnd,
       );
     },
   );

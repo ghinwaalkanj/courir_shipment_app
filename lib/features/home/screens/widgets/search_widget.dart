@@ -24,10 +24,7 @@ class SearchWidgets extends StatelessWidget {
           ),
           SizedBox(width: 2.w),
           CircularContainer(
-            onTap: () {
-              Get.to(BarcodeSearchScreen());
-            },
-            icon: Icons.qr_code_scanner,
+            icon: Icons.search,
             color: TColors.primary,
           ),
         ],

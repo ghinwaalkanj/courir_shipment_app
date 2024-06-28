@@ -1,22 +1,61 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import '../../../core/integration/crud.dart';
+import '../../../utils/constants/colors.dart';
+import '../model/search_model.dart';
 
-class SEarchController extends GetxController {
+class TSearchController extends GetxController {
   var isLoading = false.obs;
-  var barcode = ''.obs;
-  var isFlashOn = false.obs;
-  QRViewController? qrController;
+  var shipments = <ShipmentResponse>[].obs;
 
+  final Crud crud = Get.find<Crud>();
 
-  void updateBarcode(String code) {
-    barcode.value = code;
-  }
+  void searchShipment(String shipmentNumber) async {
+    isLoading.value = true;
+    shipments.clear(); // Clear previous shipments
 
-  void toggleFlashlight() {
-    if (qrController != null) {
-      qrController!.toggleFlash();
-      isFlashOn.value = !isFlashOn.value;
-    }
+    var response = await crud.postData(
+      'https://api.wasenahon.com/Kwickly/delivery/shipments/search_shipment.php',
+      {
+        'shipment_number': shipmentNumber,
+      },
+      {},
+    );
+
+    isLoading.value = false;
+
+    response.fold(
+      (failure) {
+        Get.snackbar(
+          'خطأ',
+          'فشل في البحث عن الشحنة',
+          backgroundColor: TColors.error,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          margin: EdgeInsets.all(10),
+          borderRadius: 10,
+          icon: Icon(Icons.error_outline, color: Colors.white),
+          duration: Duration(seconds: 5),
+        );
+      },
+      (data) {
+        if (data['status']) {
+          var shipmentResponse = ShipmentResponse.fromJson(data);
+          shipments.add(shipmentResponse);
+        } else {
+          Get.snackbar(
+            'خطأ',
+            'لا توجد شحنات مطابقة للرقم المدخل',
+            backgroundColor: TColors.error,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: Colors.white),
+            duration: Duration(seconds: 5),
+          );
+        }
+      },
+    );
   }
 }

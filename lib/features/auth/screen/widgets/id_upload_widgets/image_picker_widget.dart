@@ -29,7 +29,7 @@ class ImagePickerWidget extends StatelessWidget {
               );
             } else {
               return Image.network(
-                '${IDUploadEndpoint}${controller.idFrontImageUrl.value}',
+                '${UploadIdImagesAPI}${controller.idFrontImageUrl.value}',
                 height: 15.h,
                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;

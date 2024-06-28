@@ -57,10 +57,7 @@ class IDUploadScreen extends StatelessWidget {
             ),
             ActionButtonsWidget(
               isLoading: controller.isLoading,
-              onPressed: () {
-                Get.to(VehicleInfoScreen());
-                // controller.uploadIDImages;
-              },
+              onPressed: controller.uploadIDImages
             ),
           ],
         ),

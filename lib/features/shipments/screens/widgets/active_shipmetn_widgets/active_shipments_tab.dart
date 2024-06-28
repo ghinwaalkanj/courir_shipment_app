@@ -5,24 +5,93 @@ import 'package:courir_shipment_app/features/shipments/screens/widgets/active_sh
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_to_merchant_sub_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
-
+import '../../../../../navigation_menu.dart';
+import '../../../../../utils/constants/colors.dart';
 import '../../../controller/page_controller.dart';
+import '../../../controller/update_status_controller.dart';
 import 'contact_info_widget.dart';
 import 'draggable_button.dart';
 
 class ActiveShipmentsTab extends StatelessWidget {
   final int tabIndex;
-  final Future<void> Function() initializeMap;
+  final String shipmentNumber;
+  final String merchantName;
+  final String merchantPhone;
+  final String customerName;
+  final String customerPhone;
+  final double shipmentAmount;
+  final double deliveryFee;
+  final int initialStatus;
+  final LatLng recipientLocation;
 
   ActiveShipmentsTab({
     required this.tabIndex,
-    required this.initializeMap,
+    required this.shipmentNumber,
+    required this.merchantName,
+    required this.merchantPhone,
+    required this.customerName,
+    required this.customerPhone,
+    required this.shipmentAmount,
+    required this.deliveryFee,
+    required this.initialStatus,
+    required this.recipientLocation,
   });
 
   @override
   Widget build(BuildContext context) {
-    final TPageController pageController = Get.put(TPageController(), tag: 'tab$tabIndex');
+    final TPageController pageController =
+    Get.put(TPageController(), tag: 'tab$tabIndex');
+    final controller = Get.put(UpdateShipmentStatusController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      switch (initialStatus) {
+        case 1:
+          pageController.changePage(0);
+          break;
+        case 2:
+          pageController.changePage(1);
+          break;
+        case 3:
+          pageController.changePage(2);
+          break;
+        case 4:
+          pageController.changePage(3);
+          break;
+        case 5:
+          pageController.changePage(4);
+          break;
+        case 6:
+          showShipmentCustomerDialog(
+            context,
+            shipmentAmount + deliveryFee,
+            tabIndex,
+                () async {
+              final success = await controller.updateShipmentStatus(
+                  shipmentNumber: shipmentNumber, newStatus: 7);
+              if (success) {
+                Navigator.of(context).pop();
+                Get.to(NavigationMenu());
+                Get.snackbar(
+                  'نجاح',
+                  'لقد قمت بتسليم الشحنة بنجاح',
+                  backgroundColor: TColors.primary,
+                  colorText: TColors.white,
+                  snackPosition: SnackPosition.TOP,
+                  margin: EdgeInsets.all(10),
+                  borderRadius: 10,
+                  icon: Icon(Icons.check_circle_outline, color: TColors.white),
+                  duration: Duration(seconds: 5),
+                );
+              }
+            },
+          );
+          break;
+        default:
+          pageController.changePage(0);
+      }
+    });
 
     return Obx(() {
       return Stack(
@@ -30,23 +99,32 @@ class ActiveShipmentsTab extends StatelessWidget {
           IndexedStack(
             index: pageController.currentPage.value,
             children: [
-              ShipmentToMerchantScreen(initializeMap: initializeMap),
-              ShipmentToMerchantScreen(initializeMap: initializeMap),
+              ShipmentToMerchantScreen(recipientLocation: recipientLocation),
+              ShipmentToMerchantScreen(recipientLocation: recipientLocation),
               BarcodeScanScreen(onPressed: () {
-                pageController.changePage(3);
+                controller.updateShipmentStatus(
+                    shipmentNumber: shipmentNumber, newStatus: 4).then((success) {
+                  if (success) {
+                    pageController.changePage(3);
+                  }
+                });
               }),
-              ShipmentToCustomerScreen(initializeMap: initializeMap),
-              ShipmentToCustomerScreen(initializeMap: initializeMap),
+              ShipmentToCustomerScreen(recipientLocation: recipientLocation),
+              ShipmentToCustomerScreen(recipientLocation: recipientLocation),
             ],
           ),
           if (pageController.currentPage.value != 2)
             ContactInfoWidget(
-              name: 'توحييييد',
-              phoneNumber: '+963964724390',
+              name: pageController.currentPage.value < 3
+                  ? merchantName
+                  : customerName,
+              phoneNumber: pageController.currentPage.value < 3
+                  ? merchantPhone
+                  : customerPhone,
             ),
           if (pageController.currentPage.value != 2)
             Padding(
-              padding: EdgeInsets.only(top:76.2.h),
+              padding: EdgeInsets.only(top: 76.2.h),
               child: DraggableConfirmButton(
                 text: pageController.currentPage.value == 0
                     ? 'قم بالسحب عند الخروج إلى الطريق'
@@ -57,13 +135,65 @@ class ActiveShipmentsTab extends StatelessWidget {
                     : 'قم بالسحب عند الوصول إلى الزبون',
                 onDragEnd: () {
                   if (pageController.currentPage.value == 0) {
-                    pageController.changePage(1);
+                    controller.updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 2).then((success) {
+                      if (success) {
+                        pageController.changePage(1);
+                      }
+                    });
                   } else if (pageController.currentPage.value == 1) {
-                    showShipmentMerchantDialog(context, 500, 1500, tabIndex);
+                    showShipmentMerchantDialog(
+                      context,
+                      shipmentAmount,
+                      deliveryFee,
+                      tabIndex,
+                          () {
+                        Navigator.of(context).pop();
+                        controller.updateShipmentStatus(
+                            shipmentNumber: shipmentNumber, newStatus: 3).then((success) {
+                          if (success) {
+                            pageController.changePage(2);
+                          }
+                        });
+                      },
+                    );
                   } else if (pageController.currentPage.value == 3) {
-                    pageController.changePage(4);
+                    controller.updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 5).then((success) {
+                      if (success) {
+                        pageController.changePage(4);
+                      }
+                    });
                   } else {
-                    showShipmentCustomerDialog(context, 50000, tabIndex);
+                    controller.updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 6).then((success) {
+                      if (success) {
+                        showShipmentCustomerDialog(
+                          context,
+                          shipmentAmount + deliveryFee,
+                          tabIndex,
+                              () async {
+                            final success = await controller.updateShipmentStatus(
+                                shipmentNumber: shipmentNumber, newStatus: 7);
+                            if (success) {
+                              Navigator.of(context).pop();
+                              Get.to(NavigationMenu());
+                              Get.snackbar(
+                                'نجاح',
+                                'لقد قمت بتسليم الشحنة بنجاح',
+                                backgroundColor: TColors.primary,
+                                colorText: TColors.white,
+                                snackPosition: SnackPosition.TOP,
+                                margin: EdgeInsets.all(10),
+                                borderRadius: 10,
+                                icon: Icon(Icons.check_circle_outline, color: TColors.white),
+                                duration: Duration(seconds: 5),
+                              );
+                            }
+                          },
+                        );
+                      }
+                    });
                   }
                 },
               ),
@@ -73,4 +203,3 @@ class ActiveShipmentsTab extends StatelessWidget {
     });
   }
 }
-

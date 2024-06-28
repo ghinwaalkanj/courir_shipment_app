@@ -22,13 +22,6 @@ class FilterButtonRow extends StatelessWidget {
         child: Row(
           children: [
             CustomFilterButton(
-              icon: Iconsax.box,
-              label: 'بانتظار قبولها',
-              index: 0,
-              selectedFilterIndex: selectedFilterIndex,
-              onTap: onTap,
-            ),
-            CustomFilterButton(
               icon: Iconsax.box_time4,
               label: 'قيد التوصيل',
               index: 1,
@@ -43,16 +36,9 @@ class FilterButtonRow extends StatelessWidget {
               onTap: onTap,
             ),
             CustomFilterButton(
-              icon: Iconsax.box_tick,
-              label: 'الملغية',
-              index: 3,
-              selectedFilterIndex: selectedFilterIndex,
-              onTap: onTap,
-            ),
-            CustomFilterButton(
               icon: Iconsax.box_remove,
               label: 'الراجعة',
-              index: 4,
+              index: 3,
               selectedFilterIndex: selectedFilterIndex,
               onTap: onTap,
             ),

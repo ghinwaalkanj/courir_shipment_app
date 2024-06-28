@@ -29,79 +29,122 @@ class AccountDataTable extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.sp),
-        child: DataTable(
-          columnSpacing: 12.w,
-          dataRowHeight: 8.h,
-          headingRowHeight: 6.h,
-          columns: [
-            DataColumn(
-              label: Expanded(
-                child: Center(
-                  child: Text(
-                    'اليوم',
-                    style: CustomTextStyle.primaryTextStyle
-                        .apply(fontSizeFactor: 1.1),
+        child: Table(
+          border: TableBorder(
+            horizontalInside: BorderSide(
+              color: TColors.darkerGrey.withOpacity(0.5),
+              width: 1.0,
+            ),
+            verticalInside: BorderSide(
+              color: TColors.darkerGrey.withOpacity(0.5),
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(15.sp),
+          ),
+          columnWidths: {
+            0: FlexColumnWidth(1),
+            1: FlexColumnWidth(1),
+            2: FlexColumnWidth(1),
+          },
+          children: [
+            TableRow(
+              decoration: BoxDecoration(
+                color: TColors.white,
+              ),
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 3.h),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'اليوم',
+                        style: CustomTextStyle.primaryTextStyle
+                            .apply(fontSizeFactor: 1.1),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Center(
-                  child: Text(
-                    'إيرادتي',
-                    style: CustomTextStyle.primaryTextStyle
-                        .apply(fontSizeFactor: 1.1),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 3.h),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'إيرادتي',
+                        style: CustomTextStyle.primaryTextStyle
+                            .apply(fontSizeFactor: 1.1),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Center(
-                  child: Text(
-                    'مستحقاتي',
-                    style: CustomTextStyle.primaryTextStyle
-                        .apply(fontSizeFactor: 1.1),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 3.h),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'مستحقاتي',
+                        style: CustomTextStyle.primaryTextStyle
+                            .apply(fontSizeFactor: 1.1),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
+            ...data.map((item) {
+              return TableRow(
+                decoration: BoxDecoration(
+                  color: TColors.white,
+                ),
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 3.h),
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          item['date']!,
+                          style: CustomTextStyle.primaryTextStyle.apply(
+                              color: TColors.darkerGrey, fontSizeFactor: 1.1),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 3.h),
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          item['revenue']!,
+                          style: CustomTextStyle.primaryTextStyle.apply(
+                              color: TColors.darkerGrey, fontSizeFactor: 1.1),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 3.h),
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          item['dues']!,
+                          style: CustomTextStyle.primaryTextStyle.apply(
+                              color: TColors.darkerGrey, fontSizeFactor: 1.1),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ],
-          rows: data.map((item) {
-            return DataRow(cells: [
-              DataCell(
-                Center(
-                  child: Text(
-                    item['date']!,
-                    style: CustomTextStyle.primaryTextStyle.apply(
-                        color: TColors.darkerGrey, fontSizeFactor: 1.1),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              DataCell(
-                Center(
-                  child: Text(
-                    item['revenue']!,
-                    style: CustomTextStyle.primaryTextStyle.apply(
-                        color: TColors.darkerGrey, fontSizeFactor: 1.1),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              DataCell(
-                Center(
-                  child: Text(
-                    item['dues']!,
-                    style: CustomTextStyle.primaryTextStyle.apply(
-                        color: TColors.darkerGrey, fontSizeFactor: 1.1),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ]);
-          }).toList(),
         ),
       ),
     );

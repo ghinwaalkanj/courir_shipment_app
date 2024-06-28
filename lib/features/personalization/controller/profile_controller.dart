@@ -1,95 +1,143 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
-import '../../../utils/constants/api_constants.dart';
-import '../../../utils/constants/colors.dart';
+import '../../../common/widgets/snack_bars/error_snack_bar.dart';
+import '../../../common/widgets/snack_bars/success_snack_bar.dart';
+import '../model/profile_model.dart';
 
 class ProfileController extends GetxController {
-  // var profile = MerchantInfo.empty().obs;
   var isLoading = false.obs;
+  var name = ''.obs;
+  var phone = ''.obs;
+  var gender = ''.obs;
   var totalShipments = 0.obs;
-  var merchant_rank = 0.obs;
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController businessNameController = TextEditingController();
+  var vehicleType = ''.obs;
+  var vehiclePlate = ''.obs;
+  var vehicleModel = ''.obs;
+  var vehicleColor = ''.obs;
+
+  late TextEditingController nameController;
+  late TextEditingController phoneController;
+  late TextEditingController businessNameController;
+  late TextEditingController vehicleTypeController;
+  late TextEditingController vehiclePlateController;
+  late TextEditingController vehicleModelController;
+  late TextEditingController vehicleColorController;
 
   final Crud crud = Get.find<Crud>();
 
   @override
   void onInit() {
     super.onInit();
-    // fetchProfile();
+    nameController = TextEditingController();
+    phoneController = TextEditingController();
+    businessNameController = TextEditingController();
+    vehicleTypeController = TextEditingController();
+    vehiclePlateController = TextEditingController();
+    vehicleModelController = TextEditingController();
+    vehicleColorController = TextEditingController();
+    fetchProfile();
   }
-  //
-  // void fetchProfile() async {
-  //   isLoading.value = true;
-  //   var userId = await SharedPreferencesHelper.getInt('user_id');
-  //   var response = await crud.postData(
-  //     ProfileEndpoint,
-  //     {'user_id': userId.toString()},
-  //     {},
-  //   );
-  //   isLoading.value = false;
-  //
-  //   response.fold(
-  //     (failure) {
-  //     },
-  //     (data) {
-  //       ProfileResponseModel responseModel =
-  //           ProfileResponseModel.fromJson(data);
-  //       profile.value = responseModel.merchantInfo;
-  //       totalShipments.value = responseModel.totalShipments;
-  //       merchant_rank.value = responseModel.merchantRank;
-  //       nameController.text = profile.value.name;
-  //       phoneController.text = profile.value.phone;
-  //       businessNameController.text = profile.value.businessName;
-  //     },
-  //   );
-  // }
-  //
-  // void editProfile(String name, String phone, String businessName) async {
-  //   isLoading.value = true;
-  //   var userId = await SharedPreferencesHelper.getInt('user_id');
-  //   var response = await crud.postData(
-  //     EditProfileEndpoint,
-  //     {
-  //       'user_id': userId.toString(),
-  //       'name': nameController.text,
-  //       'phone': phoneController.text,
-  //       'business_name': businessNameController.text,
-  //     },
-  //     {},
-  //   );
-  //   isLoading.value = false;
-  //
-  //   response.fold(
-  //     (failure) {
-  //       Get.snackbar('Error', 'Failed to update profile');
-  //       print(profile.value.name);
-  //       print(profile.value.name);
-  //     },
-  //     (data) {
-  //       EditProfileResponseModel responseModel =
-  //           EditProfileResponseModel.fromJson(data);
-  //       if (responseModel.status) {
-  //         Get.snackbar(
-  //           'نجاح',
-  //           'تم تحديث الملف الشخصي بنجاح',
-  //           backgroundColor: TColors.primary,
-  //           colorText: Colors.white,
-  //           snackPosition: SnackPosition.TOP,
-  //           margin: EdgeInsets.all(10),
-  //           borderRadius: 10,
-  //           icon: Icon(Icons.check_circle_outline, color: Colors.white),
-  //           duration: Duration(seconds: 5),
-  //         );
-  //         fetchProfile();
-  //       } else {
-  //         Get.snackbar('Error', responseModel.message);
-  //       }
-  //     },
-  //   );
-  // }
+
+  void fetchProfile() async {
+    isLoading.value = true;
+    var deliveryId = await SharedPreferencesHelper.getInt('user_id');
+    var response = await crud.postData(
+      'https://api.wasenahon.com/Kwickly/delivery/get_delivery_profile.php',
+      {
+        'delivery_id': deliveryId.toString(),
+      },
+      {},
+    );
+
+    isLoading.value = false;
+
+    response.fold(
+          (failure) {
+        ErrorSnackbar.show('فشل في جلب البيانات');
+      },
+          (data) {
+        var userProfile = UserProfile.fromJson(data['user']);
+        var vehicle = Vehicle.fromJson(data['user']['vehicles'][0]);
+
+        name.value = userProfile.name;
+        phone.value = userProfile.phone;
+        gender.value = userProfile.gender;
+        totalShipments.value = userProfile.completedShipments;
+
+        nameController.text = userProfile.name;
+        phoneController.text = userProfile.phone;
+
+        vehicleType.value = vehicle.vehicleType;
+        vehiclePlate.value = vehicle.vehiclePlateNumber;
+        vehicleModel.value = vehicle.vehicleModel;
+        vehicleColor.value = vehicle.vehicleColor;
+
+        vehicleTypeController.text = vehicle.vehicleType;
+        vehiclePlateController.text = vehicle.vehiclePlateNumber;
+        vehicleModelController.text = vehicle.vehicleModel;
+        vehicleColorController.text = vehicle.vehicleColor;
+      },
+    );
+  }
+
+  void saveProfile() async {
+    isLoading.value = true;
+    var deliveryId = await SharedPreferencesHelper.getInt('user_id');
+    var response = await crud.postData(
+      'https://api.wasenahon.com/Kwickly/delivery/update_delivery_profile.php',
+      {
+        'delivery_id': deliveryId.toString(),
+        'name': nameController.text,
+        'phone': phoneController.text,
+        'business_name': businessNameController.text,
+      },
+      {},
+    );
+
+    isLoading.value = false;
+
+    response.fold(
+          (failure) {
+        ErrorSnackbar.show('فشل في تحديث البيانات');
+      },
+          (data) {
+        SuccessSnackbar.show('تم تحديث البيانات بنجاح');
+        fetchProfile();
+      },
+    );
+  }
+
+  void editProfile(String newName, String newPhone, String newGender) async {
+    isLoading.value = true;
+    var deliveryId = await SharedPreferencesHelper.getInt('user_id');
+    var response = await crud.postData(
+      'https://api.wasenahon.com/Kwickly/delivery/edit_delivery_profile.php',
+      {
+        'delivery_id': deliveryId.toString(),
+        'name': newName,
+        'phone': newPhone,
+        'gender': newGender,
+      },
+      {},
+    );
+
+    isLoading.value = false;
+
+    response.fold(
+          (failure) {
+        ErrorSnackbar.show('فشل في تحديث البروفايل');
+      },
+          (data) {
+        if (data['status']) {
+          SuccessSnackbar.show(data['message'] ?? 'تم تحديث البروفايل بنجاح');
+          fetchProfile();
+        } else {
+          ErrorSnackbar.show(data['message'] ?? 'حدث خطأ ما');
+        }
+      },
+    );
+  }
 }

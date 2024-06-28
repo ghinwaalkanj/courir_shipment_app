@@ -32,7 +32,7 @@ class InternetController extends GetxController {
         FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
         wasDisconnected.value = false;
         // Wait for 2 seconds before resetting the status bar color
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(Duration(seconds: 3));
         FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
         FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
       }

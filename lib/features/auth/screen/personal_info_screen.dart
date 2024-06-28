@@ -35,7 +35,7 @@ class PersonalInfoScreen extends StatelessWidget {
                   desc:
                       'مرحبًا! قبل البدء، يُرجى إدخال معلوماتك الشخصية لتوثيق هويتك والوصول إلى خدماتنا بسهولة.',
                   currentStep: 1),
-              SizedBox(height: 7.h),
+              SizedBox(height: 9.h),
               TTextField(
                 hintText: "الاسم الكامل",
                 prefixIcon: Icon(Icons.person_3_outlined),
@@ -59,17 +59,6 @@ class PersonalInfoScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 2.h),
-              TTextField(
-                hintText: "اسم نشاطك التجاري",
-                prefixIcon: Icon(Iconsax.bag_24),
-                controller: controller.shopController,
-                keyboardType: TextInputType.text,
-                onChanged: (value) {
-                  controller.businessName.value = value;
-                  controller.validateForm();
-                },
-              ),
-              SizedBox(height: 2.h),
               DropdownFieldWidget(
                 value: controller.gender.value.isEmpty
                     ? null
@@ -79,7 +68,7 @@ class PersonalInfoScreen extends StatelessWidget {
                   controller.validateForm();
                 }, item1: 'ذكر', item2: 'أنثى', hintText: 'النوع',
               ),
-              SizedBox(height: 5.h),
+              SizedBox(height: 15.h),
               ActionButtonsWidget(
                 isLoading: controller.isLoading,
                 onPressed: controller.submitPersonalInfo,

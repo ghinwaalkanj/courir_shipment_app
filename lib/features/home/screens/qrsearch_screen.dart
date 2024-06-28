@@ -1,12 +1,11 @@
-import 'package:courir_shipment_app/features/home/controller/search_controller.dart';
 import 'package:courir_shipment_app/features/home/screens/widgets/qrview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../utils/constants/colors.dart';
+import '../controller/qrsearch_controller.dart';
 
 class BarcodeSearchScreen extends StatelessWidget {
 
@@ -14,7 +13,7 @@ class BarcodeSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SEarchController controller=Get.put(SEarchController());
+    QrSearchController controller=Get.put(QrSearchController());
     return Scaffold(
       backgroundColor: TColors.bg,
       appBar: const TAppBar(

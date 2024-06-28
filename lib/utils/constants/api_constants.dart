@@ -2,12 +2,14 @@
 /* -- LIST OF Constants used in APIs -- */
 
 const String DelieveryAPIKey = "https://api.wasenahon.com/Kwickly/delivery/";
+const String UploadIdImagesAPI = "https://api.wasenahon.com/Kwickly/upload/id_images/";
 
 // Authentication Endpoints
 const String LoginEndpoint = "${DelieveryAPIKey}auth/login.php";
 const String VerifyEndpoint = "${DelieveryAPIKey}auth/verify.php";
 const String PersonalInfoEndpoint = "${DelieveryAPIKey}auth/personal_info.php";
 const String IDUploadEndpoint = "${DelieveryAPIKey}auth/ID_Upload.php";
+const String VehicleInfoEndPoint = "${DelieveryAPIKey}auth/add_vehicles.php";
 
 // Shipment Endpoints
 const String AddShipmentEndpoint = "${DelieveryAPIKey}shipments/add.php";
@@ -21,6 +23,7 @@ const String CancelShipmenEndpoint = "${DelieveryAPIKey}shipments/cancel_shipmen
 // Profile Endpoints
 const String ProfileEndpoint = "${DelieveryAPIKey}profile.php";
 const String EditProfileEndpoint = "${DelieveryAPIKey}edit_profile.php";
+const String UpdateStatusEndpoint = "${DelieveryAPIKey}update_status.php";
 
 
 

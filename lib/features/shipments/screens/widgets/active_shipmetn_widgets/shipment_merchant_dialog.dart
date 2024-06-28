@@ -11,11 +11,13 @@ class MerchantShipmentDialog extends StatelessWidget {
   final double deliveryFee;
   final int tabIndex;
   final TPageController pageController;
+  final void Function() onDragEnd;
 
   MerchantShipmentDialog(
       {required this.shipmentAmount,
-        required this.deliveryFee,
-        required this.tabIndex})
+      required this.deliveryFee,
+      required this.tabIndex,
+      required this.onDragEnd})
       : pageController = Get.find<TPageController>(tag: 'tab$tabIndex');
 
   @override
@@ -67,13 +69,14 @@ class MerchantShipmentDialog extends StatelessWidget {
               ),
             ),
             DraggableConfirmButton(
-              dragThreshold: 0.5,
-              text: 'قم بالسحب للتأكيد',
-              onDragEnd: () {
-                pageController.changePage(2);
-                Navigator.of(context).pop();
-              },
-            ),
+                dragThreshold: 0.5,
+                text: 'قم بالسحب للتأكيد',
+                onDragEnd: onDragEnd
+                //     () {
+                //   pageController.changePage(2);
+                //   Navigator.of(context).pop();
+                // },
+                ),
           ],
         ),
       ),
@@ -81,8 +84,8 @@ class MerchantShipmentDialog extends StatelessWidget {
   }
 }
 
-void showShipmentMerchantDialog(
-    BuildContext context, double shipmentAmount, double deliveryFee, int tabIndex) {
+void showShipmentMerchantDialog(BuildContext context, double shipmentAmount,
+    double deliveryFee, int tabIndex, void Function() onDragEnd) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -90,6 +93,7 @@ void showShipmentMerchantDialog(
         shipmentAmount: shipmentAmount,
         deliveryFee: deliveryFee,
         tabIndex: tabIndex,
+        onDragEnd: onDragEnd,
       );
     },
   );

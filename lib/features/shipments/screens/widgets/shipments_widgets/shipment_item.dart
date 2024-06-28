@@ -1,13 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../common/styles/custom_textstyle.dart';
 import '../../../../../common/widgets/custom_sized_box.dart';
 import '../../../../../utils/constants/colors.dart';
 
 class ShipmentItem extends StatelessWidget {
+  final String shipmentName;
+  final String shipmentNumber;
+  final String? courierEarnings;
+  final String senderCity;
+  final String shipmentDate;
+  final String recipientCity;
+  final String estimatedDate;
   final void Function()? onTap;
 
-  const ShipmentItem({super.key, this.onTap});
+  const ShipmentItem({
+    required this.shipmentName,
+    required this.shipmentNumber,
+    required this.senderCity,
+    required this.shipmentDate,
+    required this.recipientCity,
+    required this.estimatedDate,
+    this.onTap, this.courierEarnings,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,91 +53,119 @@ class ShipmentItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: 17.h,
-                width: 15.h,
+                height: 12.h,
+                width: 12.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.sp),
                   image: DecorationImage(
-                    image: AssetImage("assets/images/normal.png"),
+                    image: AssetImage('assets/images/normal.png'),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 2.h, right: 5.w),
+                padding: EdgeInsets.only(top: 2.h, right: 3.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        'shipment.shipmentContents',
+                        shipmentName,
                         style: CustomTextStyle.headlineTextStyle.apply(
-                            fontSizeFactor: 0.7, fontWeightDelta: 2),
+                          fontSizeFactor: 0.7,
+                          fontWeightDelta: 2,
+                        ),
                       ),
                     ),
                     CustomSizedBox.textSpacingVertical(),
                     Text(
-                      'gfjsjlkfs',
+                      shipmentNumber,
                       style: CustomTextStyle.greyTextStyle,
                     ),
                     CustomSizedBox.textSpacingVertical(),
-                    Row(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/Subtract (1).png'),
-                          height: 5.h,
-                          width: 5.w,
-                        ),
-                        SizedBox(width: 2.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'shipment.senderCity',
-                              style: CustomTextStyle.headlineTextStyle
-                                  .apply(fontSizeFactor: 0.6),
-                            ),
-                            Text(
-                              'shipment.createdAt'.split(' ')[0],
-                              style: CustomTextStyle.greyTextStyle,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 2.w),
-                      child: Image(
-                          image: AssetImage("assets/images/Line 15.png"),
-                          height: 2.h,
-                          width: 1.2.w),
-                    ),
-                    Row(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/Subtract (2).png'),
-                          height: 5.h,
-                          width: 5.w,
-                        ),
-                        SizedBox(width: 2.w),
-                        FittedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    FittedBox(
+                      child: Row(
+                        children: [
+                          Row(
                             children: [
-                              Text(
-                                'shipment.recipientCity',
-                                style: CustomTextStyle.headlineTextStyle
-                                    .apply(fontSizeFactor: 0.6),
+                              Image(
+                                image: AssetImage(
+                                    'assets/images/Subtract (1).png'),
+                                height: 5.h,
+                                width: 5.w,
                               ),
-                              Text(
-                                ' shipment.estimated',
-                                style: CustomTextStyle.greyTextStyle,
-                                overflow: TextOverflow.ellipsis,
+                              SizedBox(width: 2.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    senderCity,
+                                    style: CustomTextStyle.headlineTextStyle
+                                        .apply(fontSizeFactor: 0.6),
+                                  ),
+                                  Text(
+                                    shipmentDate.split(' ')[0],
+                                    style: CustomTextStyle.greyTextStyle,
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 4.w,
+                          ),
+                          Row(
+                            children: [
+                              Image(
+                                image: AssetImage(
+                                    'assets/images/Subtract (2).png'),
+                                height: 5.h,
+                                width: 5.w,
+                              ),
+                              SizedBox(width: 2.w),
+                              FittedBox(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      recipientCity,
+                                      style: CustomTextStyle.headlineTextStyle
+                                          .apply(fontSizeFactor: 0.6),
+                                    ),
+                                    Text(
+                                      estimatedDate.split(' ')[0],
+                                      style: CustomTextStyle.greyTextStyle,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    FittedBox(
+                      child: Row(
+                        children: [
+                          Text(
+                            'إيرادك :',
+                            style: CustomTextStyle.primaryTextStyle
+                                .apply(color: TColors.black),
+                          ),
+                          SizedBox(width: 26.w,),
+                          Text(
+                            courierEarnings??'',
+                            style: CustomTextStyle.primaryTextStyle
+                                .apply(fontSizeFactor: 1.3),
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

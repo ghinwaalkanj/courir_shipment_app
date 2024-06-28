@@ -42,8 +42,10 @@ dependencies:
   cached_network_image:
   image_fade: ^0.6.2
   firebase_messaging:
+  connectivity_plus: ^2.0.2
   firebase_core: ^3.1.0
   awesome_notifications: ^0.9.3+1
+  geolocator:
 
   # State Management
   get: ^4.6.5

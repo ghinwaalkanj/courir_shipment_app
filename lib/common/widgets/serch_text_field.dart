@@ -15,6 +15,7 @@ class TSearchFormField extends StatelessWidget {
     this.onTap,
     this.controller,
     this.onChanged,
+    this.onSubmitted,
     this.iscearch = false,
     this.focusNode,
   });
@@ -25,6 +26,7 @@ class TSearchFormField extends StatelessWidget {
   final VoidCallback? onTap;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
+  final void Function(String)? onSubmitted;
   final bool? iscearch;
   final FocusNode? focusNode;
 
@@ -44,16 +46,12 @@ class TSearchFormField extends StatelessWidget {
             SizedBox(
               width: 2.w,
             ),
-            Icon(
-              icon,
-              color: TColors.darkerGrey,
-            ),
             CustomSizedBox.itemSpacingHorizontal(),
             Expanded(
               child: TextFormField(
-                keyboardType:
-                iscearch! ? TextInputType.number : TextInputType.name,
+                keyboardType: iscearch! ? TextInputType.number : TextInputType.name,
                 onChanged: onChanged,
+                onFieldSubmitted: onSubmitted,
                 controller: controller,
                 focusNode: focusNode,
                 decoration: InputDecoration(

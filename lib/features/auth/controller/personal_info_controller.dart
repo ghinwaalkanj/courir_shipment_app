@@ -25,6 +25,7 @@ class PersonalInfoController extends GetxController {
 
   @override
   void onInit() {
+    print(Get.arguments);
     super.onInit();
     if (Get.arguments != null) {
       fullName.value = Get.arguments['name'] ?? '';
@@ -55,7 +56,6 @@ class PersonalInfoController extends GetxController {
   void submitPersonalInfo() async {
     if (fullName.value.isEmpty ||
         nationalId.value.isEmpty ||
-        businessName.value.isEmpty ||
         gender.value.isEmpty ||
         nationalId.value.length != 10) {
       Get.snackbar(
@@ -80,11 +80,9 @@ class PersonalInfoController extends GetxController {
     var response = await crud.postData(
       PersonalInfoEndpoint,
       {
-        'token': token,
         'user_id': userId.toString(),
         'name': fullName.value,
         'national_id': nationalId.value,
-        'business_name': businessName.value,
         'gender': gender.value,
       },
       {},
@@ -110,6 +108,8 @@ class PersonalInfoController extends GetxController {
           PersonalInfoResponseModel responseModel =
           PersonalInfoResponseModel.fromJson(data);
           if (responseModel.status) {
+            print(responseModel.status);
+            print(responseModel.message);
             Get.to(() => IDUploadScreen(), arguments: {
               'id_front_image': responseModel.idFrontImage,
               'id_back_image': responseModel.idBackImage,

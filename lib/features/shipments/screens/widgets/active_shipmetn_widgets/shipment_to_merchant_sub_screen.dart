@@ -1,15 +1,21 @@
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/header_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../../utils/constants/colors.dart';
+import '../../../controller/active_shipment_map_controller.dart';
 
 class ShipmentToMerchantScreen extends StatelessWidget {
-  final Future<void> Function() initializeMap;
+  final LatLng recipientLocation;
 
-  ShipmentToMerchantScreen({required this.initializeMap});
+  ShipmentToMerchantScreen({required this.recipientLocation});
 
   @override
   Widget build(BuildContext context) {
+    final ActiveShipmentsMapController mapController = Get.put(ActiveShipmentsMapController());
+    mapController.initialize(recipientLocation);
+
     return Column(
       children: [
         Padding(
@@ -31,23 +37,18 @@ class ShipmentToMerchantScreen extends StatelessWidget {
         ),
         SizedBox(
           height: 55.h,
-          child: FutureBuilder(
-            future: initializeMap(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error loading map'));
-              } else {
-                return GoogleMap(
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(37.7749, -122.4194),
-                    zoom: 12,
-                  ),
-                );
-              }
-            },
+          child: Obx(
+                () => GoogleMap(
+              zoomControlsEnabled: false,
+              zoomGesturesEnabled: true,
+              onMapCreated: mapController.onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: recipientLocation,
+                zoom: 15,
+              ),
+              markers: mapController.markers.value,
+              polylines: mapController.polylines.value,
+            ),
           ),
         ),
       ],

@@ -9,16 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import '../../../utils/constants/colors.dart';
+import '../controller/get_earnings_4_days_controller.dart';
 
 class AccountsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> accountData = [
-      {'date': '5/10/2024', 'revenue': '50,000', 'dues': '10,000'},
-      {'date': '6/10/2024', 'revenue': '58,000', 'dues': '12,000'},
-      {'date': '7/10/2024', 'revenue': '40,000', 'dues': '5,000'},
-      {'date': '8/10/2024', 'revenue': '62,000', 'dues': '15,000'},
-    ];
+    final Earnings4DaysController controller = Get.put(Earnings4DaysController());
+
     return Scaffold(
       backgroundColor: TColors.bg,
       appBar: TAppBar(title: 'الحسابات'),
@@ -26,24 +23,38 @@ class AccountsScreen extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8.w, 4.h, 8.w, 3.h),
         child: Directionality(
           textDirection: TextDirection.rtl,
-          child: Column(
-            children: [
-              AccountDataTable(data: accountData),
-              SizedBox(height: 4.h),
-              AccountSummary(
-                total: 42.000,
-              ),
-              SizedBox(height: 8.h),
-              AccountButtons(
-                onDistributeIncomePressed: () {
-                  Get.to(IncomeDistributionScreen());
-                },
-                onPayPressed: () {
-                  Get.to(PayDuesScreen());
-                },
-              ),
-            ],
-          ),
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Center(child: CircularProgressIndicator(color: TColors.primary));
+            } else {
+              List<Map<String, String>> accountData = controller.earnings4DaysResponse.value.data.map((dayEarnings) {
+                return {
+                  'date': dayEarnings.date,
+                  'revenue': dayEarnings.totalCourierIncome.toString(),
+                  'dues': dayEarnings.totalAdminIncome.toString(),
+                };
+              }).toList();
+
+              return Column(
+                children: [
+                  AccountDataTable(data: accountData),
+                  SizedBox(height: 4.h),
+                  AccountSummary(
+                    total: controller.earnings4DaysResponse.value.totalCourierIncome.toDouble(),
+                  ),
+                  Spacer(),
+                  AccountButtons(
+                    onDistributeIncomePressed: () {
+                      Get.to(IncomeDistributionScreen());
+                    },
+                    onPayPressed: () {
+                      Get.to(PayDuesScreen());
+                    },
+                  ),
+                ],
+              );
+            }
+          }),
         ),
       ),
     );

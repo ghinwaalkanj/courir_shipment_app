@@ -24,6 +24,7 @@ class ProfileButtons extends StatelessWidget {
           text: 'حفظ',
           onPressed:onPressed,
         ),
+        SizedBox(height: 2.h,),
         TTextButton(
           text: 'تسجيل خروج',
           onPressed: () async {
@@ -77,10 +78,10 @@ class ProfileButtons extends StatelessWidget {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           prefs.remove("isAuth");
-                          FirebaseMessaging.instance
-                              .unsubscribeFromTopic("merchant");
-                          FirebaseMessaging.instance.unsubscribeFromTopic(
-                              "merchant${prefs.getInt('user_id').toString()}");
+                          // FirebaseMessaging.instance
+                          //     .unsubscribeFromTopic("merchant");
+                          // FirebaseMessaging.instance.unsubscribeFromTopic(
+                          //     "merchant${prefs.getInt('user_id').toString()}");
                           Get.offAll(LoginScreen());
                         },
                       ),

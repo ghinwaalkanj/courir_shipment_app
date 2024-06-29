@@ -21,6 +21,7 @@ class AccountSummary extends StatelessWidget {
             '$total JD',
             style: CustomTextStyle.primaryTextStyle
                 .apply(fontSizeFactor: 1.1),
+            textDirection: TextDirection.ltr,
           ),
         ],
       ),

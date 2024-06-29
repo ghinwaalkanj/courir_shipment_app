@@ -11,6 +11,7 @@ import '../../../utils/constants/colors.dart';
 import '../../home/screens/qrsearch_screen.dart';
 import '../../home/screens/search_screen.dart';
 import '../controller/my_shipments_controller.dart';
+import 'active_shipments_screen.dart';
 
 class MyShipmentsScreen extends StatelessWidget {
   final selectedFilterIndex = 1.obs;
@@ -74,18 +75,21 @@ class MyShipmentsScreen extends StatelessWidget {
                   }
                   var filteredShipments = controller.filterShipments(selectedFilterIndex.value);
                   if (filteredShipments.isEmpty) {
-                    return Center(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 7.h,),
-                          Image(
-                            image: AssetImage(
-                                'assets/images/sammy-line-man-checking-mailbox.png'),
-                            height: 30.h,
-                          ),
-                          SizedBox(height: 3.h,),
-                          Text('لا يوجد شحنات', style: CustomTextStyle.primaryTextStyle,),
-                        ],
+                    return SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 7.h,),
+                            Image(
+                              image: AssetImage(
+                                  'assets/images/sammy-line-man-checking-mailbox.png'),
+                              height: 30.h,
+                            ),
+                            SizedBox(height: 3.h,),
+                            Text('لا يوجد شحنات', style: CustomTextStyle.primaryTextStyle,),
+                          ],
+                        ),
                       ),
                     );
                   }
@@ -102,7 +106,18 @@ class MyShipmentsScreen extends StatelessWidget {
                         recipientCity: shipment.recipientInfo.city,
                         estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
                         courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
-                        onTap: () {},
+                        onTap: () {
+                          if (shipment.shipmentInfo.shipmentStatus == 7 || shipment.shipmentInfo.shipmentStatus == 9) {
+                            Get.snackbar(
+                              'خطأ',
+                              'هذه الشحنة غير نشطة ولا يمكن فتحها.',
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                            );
+                          } else {
+                            Get.to(ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipment.shipmentInfo.shipmentNumber});
+                          }
+                        },
                       );
                     },
                   );

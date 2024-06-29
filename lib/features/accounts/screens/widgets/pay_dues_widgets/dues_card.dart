@@ -72,7 +72,7 @@ class DuesCard extends StatelessWidget {
               Icon(Icons.info_outline,color: TColors.primary,),
               SizedBox(width: 2.w,),
               Text(
-                ' يرجى دفع مستحقاتك قبل بلوغ مبلغ $requiredAmount JD',
+                ' يرجى دفع مستحقاتك قبل بلوغ مبلغ $requiredAmount د.أ ',
                 style: CustomTextStyle.greyTextStyle.apply(fontSizeFactor: 0.9,color: TColors.primary),
                 textAlign: TextAlign.center,
               ),

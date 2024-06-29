@@ -11,7 +11,7 @@ class DailyIncomeController extends GetxController {
   var dailyIncomeResponse = DailyIncomeResponse(
     status: false,
     date: '',
-    totalIncome: 0,
+    totalIncome: 0.0,
     shipments: [],
   ).obs;
 
@@ -40,7 +40,7 @@ class DailyIncomeController extends GetxController {
     isLoading.value = false;
 
     response.fold(
-          (failure) {
+      (failure) {
         Get.snackbar(
           'خطأ',
           'فشل في جلب البيانات اليومية',
@@ -53,7 +53,7 @@ class DailyIncomeController extends GetxController {
           duration: Duration(seconds: 5),
         );
       },
-          (data) {
+      (data) {
         dailyIncomeResponse.value = DailyIncomeResponse.fromJson(data);
       },
     );

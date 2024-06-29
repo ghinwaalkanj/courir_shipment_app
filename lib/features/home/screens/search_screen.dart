@@ -9,6 +9,7 @@ import '../../../../utils/constants/colors.dart';
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/custom_sized_box.dart';
+import '../../shipments/screens/active_shipments_screen.dart';
 import '../../shipments/screens/widgets/shipments_widgets/shipment_item.dart';
 import '../controller/search_controller.dart';
 
@@ -41,31 +42,34 @@ class SearchScreen extends StatelessWidget {
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2.h),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TSearchFormField(
-                        iscearch: true,
-                        hintText: 'ابحث عن الشحنة',
-                        controller: searchController,
-                        focusNode: focusNode,
-                        onSubmitted: (_) => searchShipment(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TSearchFormField(
+                          iscearch: true,
+                          hintText: 'ابحث عن الشحنة',
+                          controller: searchController,
+                          focusNode: focusNode,
+                          onSubmitted: (_) => searchShipment(),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 2.w,
-                    ),
-                    CircularContainer(
-                      onTap: searchShipment,
-                      icon: Icons.search,
-                      color: TColors.primary,
-                    ),
-                  ],
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      CircularContainer(
+                        onTap: searchShipment,
+                        icon: Icons.search,
+                        color: TColors.primary,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 2.h),
                 Obx(() {
@@ -74,14 +78,29 @@ class SearchScreen extends StatelessWidget {
                   } else if (controller.shipments.isEmpty) {
                     return NoShipmentsWidget();
                   } else {
-                    return Expanded(
+                    return SizedBox(
+                      height: 80.h,
                       child: ListView.builder(
+                        padding: EdgeInsets.all(5.w),
                         itemCount: controller.shipments.length,
                         itemBuilder: (context, index) {
                           var shipment = controller.shipments[index];
                           return ShipmentItem(
                             onTap: () {
-                            }, shipmentName: '', shipmentNumber: '', senderCity: '', shipmentDate: '', recipientCity: '', estimatedDate: '',
+                              Get.to(ActiveShipmentsScreen(), arguments: {
+                                'shipmentNumber':
+                                    shipment.shipmentInfo.shipmentNumber
+                              });
+                            },
+                            shipmentName:
+                                shipment.shipmentInfo.shipmentContents,
+                            shipmentNumber:
+                                shipment.shipmentInfo.shipmentNumber,
+                            senderCity: shipment.userInfo.city,
+                            shipmentDate: shipment.shipmentInfo.createdAt,
+                            recipientCity: shipment.recipientInfo.city,
+                            estimatedDate:
+                                shipment.shipmentInfo.estimatedDeliveryTime,
                           );
                         },
                       ),

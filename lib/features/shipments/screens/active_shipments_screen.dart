@@ -17,6 +17,7 @@ class ActiveShipmentsScreen extends StatelessWidget {
     final shipmentNumber = arguments?['shipmentNumber'];
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: TColors.bg,
       appBar: AppBar(
         bottom: PreferredSize(
@@ -53,18 +54,18 @@ class ActiveShipmentsScreen extends StatelessWidget {
         }
         if (shipmentNumber != null) {
           final index = tabController.getTabIndexByShipmentNumber(shipmentNumber);
-          tabController.tabController.animateTo(index);
+          if (index != -1) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              tabController.tabController.animateTo(index);
+            });
+          }
         }
         return TabBarView(
           physics: NeverScrollableScrollPhysics(),
           controller: tabController.tabController,
           children: tabController.tabs.map((tab) {
             final tabIndex = tabController.tabs.indexOf(tab);
-            final filteredShipments = myShipmentsController.shipments
-                .where((shipment) =>
-            shipment.shipmentInfo.shipmentStatus != 7 &&
-                shipment.shipmentInfo.shipmentStatus != 9)
-                .toList();
+            final filteredShipments = myShipmentsController.getActiveShipments();
             final shipment = filteredShipments[tabIndex];
             return ActiveShipmentsTab(
               tabIndex: tabIndex,
@@ -75,7 +76,8 @@ class ActiveShipmentsScreen extends StatelessWidget {
               customerPhone: shipment.recipientInfo.phone,
               shipmentAmount: double.parse(shipment.shipmentInfo.shipmentValue),
               deliveryFee: double.parse(shipment.shipmentInfo.shipmentFee),
-              initialStatus: shipment.shipmentInfo.shipmentStatus, recipientLocation: LatLng(double.parse(shipment.recipientInfo.lat), double.parse(shipment.recipientInfo.long)),
+              initialStatus: shipment.shipmentInfo.shipmentStatus,
+              recipientLocation: LatLng(double.parse(shipment.recipientInfo.lat), double.parse(shipment.recipientInfo.long)),
             );
           }).toList(),
         );

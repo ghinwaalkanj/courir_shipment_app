@@ -62,7 +62,7 @@ class MyShipmentsController extends GetxController {
   List<Shipment> filterShipments(int status) {
     switch (status) {
       case 1:
-        return shipments.where((shipment) => shipment.shipmentInfo.shipmentStatus == 1||shipment.shipmentInfo.shipmentStatus == 2||shipment.shipmentInfo.shipmentStatus == 3||shipment.shipmentInfo.shipmentStatus == 4||shipment.shipmentInfo.shipmentStatus == 5||shipment.shipmentInfo.shipmentStatus == 6).toList();
+        return shipments.where((shipment) => shipment.shipmentInfo.shipmentStatus == 1 || shipment.shipmentInfo.shipmentStatus == 2 || shipment.shipmentInfo.shipmentStatus == 3 || shipment.shipmentInfo.shipmentStatus == 4 || shipment.shipmentInfo.shipmentStatus == 5 || shipment.shipmentInfo.shipmentStatus == 6).toList();
       case 2:
         return shipments.where((shipment) => shipment.shipmentInfo.shipmentStatus == 7).toList();
       case 3:

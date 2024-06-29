@@ -4,6 +4,7 @@ import 'package:courir_shipment_app/features/shipments/screens/order_detail_scre
 import 'package:courir_shipment_app/features/shipments/screens/widgets/shipments_widgets/shipment_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../utils/constants/colors.dart';
 import '../controller/new_shipments_controller.dart';
@@ -19,27 +20,39 @@ class NewShipmentsScreen extends StatelessWidget {
       backgroundColor: TColors.bg,
       appBar: TAppBar(title: 'الشحنات الجديدة'),
       body: Obx(
-        () {
+            () {
           if (controller.isLoading.value) {
             return Center(child: CircularProgressIndicator());
           }
           if (controller.shipments.isEmpty) {
-            return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(image: AssetImage('assets/images/sammy-line-man-checking-mailbox.png')),
-                SizedBox(height: 2.h,),
-                Text('لا توجد شحنات جديدة',style:CustomTextStyle.primaryTextStyle),
-              ],
-            ));
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.fetchNewShipments();
+              },
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  height: 75.h,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(image: AssetImage('assets/images/sammy-line-man-checking-mailbox.png')),
+                        SizedBox(height: 2.h,),
+                        Text('لا توجد شحنات جديدة', style: CustomTextStyle.primaryTextStyle),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
           }
           return RefreshIndicator(
             onRefresh: () async {
               await controller.fetchNewShipments();
-
             },
             child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(), // Make sure scrolling is always possible
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Column(
@@ -57,27 +70,24 @@ class NewShipmentsScreen extends StatelessWidget {
                           senderCity: shipment.userInfo.city,
                           shipmentDate: shipment.shipmentInfo.createdAt,
                           recipientCity: shipment.recipientInfo.city,
-                          estimatedDate:
-                              shipment.shipmentInfo.estimatedDeliveryTime,
-                          courierEarnings:
-                              shipment.shipmentInfo.courierEarnings.toString(),
+                          estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
+                          courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
                           onTap: () {
                             print(shipment.shipmentInfo.courierEarnings);
                             Get.to(
-                              OrderDetailScreen(),
+                              OrderDetailScreen(
+                                recipientLocation: LatLng(
+                                  double.parse(shipment.recipientInfo.lat),
+                                  double.parse(shipment.recipientInfo.long),
+                                ),
+                              ),
                               arguments: {
-                                'shipmentNumber':
-                                    shipment.shipmentInfo.shipmentNumber,
-                                'deliveryPrice':
-                                    shipment.shipmentInfo.shipmentFee,
-                                'shipmentPrice':
-                                    shipment.shipmentInfo.shipmentValue,
+                                'shipmentNumber': shipment.shipmentInfo.shipmentNumber,
+                                'deliveryPrice': shipment.shipmentInfo.shipmentFee,
+                                'shipmentPrice': shipment.shipmentInfo.shipmentValue,
                                 'shipmentDate': shipment.shipmentInfo.createdAt,
-                                'shipmentWeight':
-                                    shipment.shipmentInfo.shipmentWeight,
-                                'shipmentQuantity': shipment
-                                    .shipmentInfo.shipmentQuantity
-                                    .toString(),
+                                'shipmentWeight': shipment.shipmentInfo.shipmentWeight,
+                                'shipmentQuantity': shipment.shipmentInfo.shipmentQuantity.toString(),
                               },
                             );
                           },

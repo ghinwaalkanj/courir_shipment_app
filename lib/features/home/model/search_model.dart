@@ -38,10 +38,12 @@ class ShipmentInfo {
   final String shipmentNote;
   final String shipmentContents;
   final String shipmentNumber;
-  final String acceptedAt;
+  final String? acceptedAt;
   final String createdAt;
   final String updatedAt;
   final String estimatedDeliveryTime;
+  final int courierEarnings;
+
 
   ShipmentInfo({
     required this.shipmentId,
@@ -58,6 +60,8 @@ class ShipmentInfo {
     required this.createdAt,
     required this.updatedAt,
     required this.estimatedDeliveryTime,
+    required this.courierEarnings,
+
   });
 
   factory ShipmentInfo.fromJson(Map<String, dynamic> json) {
@@ -72,10 +76,11 @@ class ShipmentInfo {
       shipmentNote: json['shipment_note'],
       shipmentContents: json['shipment_contents'],
       shipmentNumber: json['shipment_number'],
-      acceptedAt: json['accepted_at'],
+      acceptedAt: json['accepted_at']??'',
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       estimatedDeliveryTime: json['estimated_delivery_time'],
+      courierEarnings: json['courier_earnings'] ?? 0,
     );
   }
 }

@@ -44,7 +44,7 @@ class ShipmentInfo extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.local_shipping, color: TColors.primary),
+                Icon( Iconsax.box, color: TColors.primary),
                 SizedBox(width: 2.w),
                 Text(
                   '$price د.أ',
@@ -58,7 +58,7 @@ class ShipmentInfo extends StatelessWidget {
             SizedBox(height: 2.h),
             Row(
               children: [
-                Icon(Iconsax.box, color: TColors.primary),
+                Icon(Icons.local_shipping, color: TColors.primary),
                 SizedBox(width: 2.w),
                 Text(
                   '$delivery د.أ',

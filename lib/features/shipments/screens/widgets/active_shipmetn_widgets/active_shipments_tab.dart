@@ -42,7 +42,7 @@ class ActiveShipmentsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TPageController pageController =
-    Get.put(TPageController(), tag: 'tab$tabIndex');
+        Get.put(TPageController(), tag: 'tab$tabIndex');
     final controller = Get.put(UpdateShipmentStatusController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -68,7 +68,7 @@ class ActiveShipmentsTab extends StatelessWidget {
             context,
             shipmentAmount + deliveryFee,
             tabIndex,
-                () async {
+            () async {
               final success = await controller.updateShipmentStatus(
                   shipmentNumber: shipmentNumber, newStatus: 7);
               if (success) {
@@ -101,14 +101,32 @@ class ActiveShipmentsTab extends StatelessWidget {
             children: [
               ShipmentToMerchantScreen(recipientLocation: recipientLocation),
               ShipmentToMerchantScreen(recipientLocation: recipientLocation),
-              BarcodeScanScreen(onPressed: () {
-                controller.updateShipmentStatus(
-                    shipmentNumber: shipmentNumber, newStatus: 4).then((success) {
-                  if (success) {
-                    pageController.changePage(3);
+              BarcodeScanScreen(
+                onBarcodeScanned: (barcode) {
+                  if (barcode == shipmentNumber) {
+                    controller
+                        .updateShipmentStatus(
+                            shipmentNumber: barcode, newStatus: 4)
+                        .then((success) {
+                      if (success) {
+                        pageController.changePage(3);
+                      }
+                    });
+                  } else {
+                    Get.snackbar(
+                      'خطأ',
+                      'رقم الشحنة غير صحيح',
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                      snackPosition: SnackPosition.TOP,
+                      margin: EdgeInsets.all(10),
+                      borderRadius: 10,
+                      icon: Icon(Icons.error_outline, color: Colors.white),
+                      duration: Duration(seconds: 5),
+                    );
                   }
-                });
-              }),
+                },
+              ),
               ShipmentToCustomerScreen(recipientLocation: recipientLocation),
               ShipmentToCustomerScreen(recipientLocation: recipientLocation),
             ],
@@ -129,14 +147,16 @@ class ActiveShipmentsTab extends StatelessWidget {
                 text: pageController.currentPage.value == 0
                     ? 'قم بالسحب عند الخروج إلى الطريق'
                     : pageController.currentPage.value == 1
-                    ? 'قم بالسحب عند الوصول إلى التاجر'
-                    : pageController.currentPage.value == 3
-                    ? 'قم بالسحب عند الخروج إلى الزبون'
-                    : 'قم بالسحب عند الوصول إلى الزبون',
+                        ? 'قم بالسحب عند الوصول إلى التاجر'
+                        : pageController.currentPage.value == 3
+                            ? 'قم بالسحب عند الخروج إلى الزبون'
+                            : 'قم بالسحب عند الوصول إلى الزبون',
                 onDragEnd: () {
                   if (pageController.currentPage.value == 0) {
-                    controller.updateShipmentStatus(
-                        shipmentNumber: shipmentNumber, newStatus: 2).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                            shipmentNumber: shipmentNumber, newStatus: 2)
+                        .then((success) {
                       if (success) {
                         pageController.changePage(1);
                       }
@@ -147,10 +167,12 @@ class ActiveShipmentsTab extends StatelessWidget {
                       shipmentAmount,
                       deliveryFee,
                       tabIndex,
-                          () {
+                      () {
                         Navigator.of(context).pop();
-                        controller.updateShipmentStatus(
-                            shipmentNumber: shipmentNumber, newStatus: 3).then((success) {
+                        controller
+                            .updateShipmentStatus(
+                                shipmentNumber: shipmentNumber, newStatus: 3)
+                            .then((success) {
                           if (success) {
                             pageController.changePage(2);
                           }
@@ -158,23 +180,29 @@ class ActiveShipmentsTab extends StatelessWidget {
                       },
                     );
                   } else if (pageController.currentPage.value == 3) {
-                    controller.updateShipmentStatus(
-                        shipmentNumber: shipmentNumber, newStatus: 5).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                            shipmentNumber: shipmentNumber, newStatus: 5)
+                        .then((success) {
                       if (success) {
                         pageController.changePage(4);
                       }
                     });
                   } else {
-                    controller.updateShipmentStatus(
-                        shipmentNumber: shipmentNumber, newStatus: 6).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                            shipmentNumber: shipmentNumber, newStatus: 6)
+                        .then((success) {
                       if (success) {
                         showShipmentCustomerDialog(
                           context,
                           shipmentAmount + deliveryFee,
                           tabIndex,
-                              () async {
-                            final success = await controller.updateShipmentStatus(
-                                shipmentNumber: shipmentNumber, newStatus: 7);
+                          () async {
+                            final success =
+                                await controller.updateShipmentStatus(
+                                    shipmentNumber: shipmentNumber,
+                                    newStatus: 7);
                             if (success) {
                               Navigator.of(context).pop();
                               Get.to(NavigationMenu());
@@ -186,7 +214,8 @@ class ActiveShipmentsTab extends StatelessWidget {
                                 snackPosition: SnackPosition.TOP,
                                 margin: EdgeInsets.all(10),
                                 borderRadius: 10,
-                                icon: Icon(Icons.check_circle_outline, color: TColors.white),
+                                icon: Icon(Icons.check_circle_outline,
+                                    color: TColors.white),
                                 duration: Duration(seconds: 5),
                               );
                             }

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../common/widgets/custom_sized_box.dart';
 import '../../../../../utils/constants/colors.dart';
@@ -6,12 +8,12 @@ import '../../../../../utils/constants/colors.dart';
 class TraderRankingWidget extends StatelessWidget {
   final double rankingPercentage;
   final int totalShipments;
-  final String motivationalMessage;
+  final double rating; // عدد النجوم من 1 إلى 5
 
   TraderRankingWidget({
     required this.rankingPercentage,
     required this.totalShipments,
-    required this.motivationalMessage,
+    required this.rating,
   });
 
   @override
@@ -34,13 +36,17 @@ class TraderRankingWidget extends StatelessWidget {
             ),
             Column(
               children: [
-                rankingPercentage==1.0?Image.asset(
+                rankingPercentage == 1.0
+                    ? Image.asset(
                   'assets/images/first.png',
                   height: 7.h,
-                ):rankingPercentage==2.0?Image.asset(
+                )
+                    : rankingPercentage == 2.0
+                    ? Image.asset(
                   'assets/images/second.png', // Replace with your image asset
                   height: 7.h,
-                ):Image.asset(
+                )
+                    : Image.asset(
                   'assets/images/third.png', // Replace with your image asset
                   height: 7.h,
                 ),
@@ -60,15 +66,18 @@ class TraderRankingWidget extends StatelessWidget {
           ),
         ),
         CustomSizedBox.itemSpacingVertical(),
-        Text(
-          motivationalMessage,
-          style: TextStyle(
-            fontSize: 10.sp,
-            color: TColors.darkGrey,
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w600,
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: RatingBarIndicator(
+            rating: rating,
+            itemBuilder: (context, index) => Icon(
+              Icons.star,
+              color: TColors.primary,
+            ),
+            itemCount: 5,
+            itemSize: 20.sp,
+            direction: Axis.horizontal,
           ),
-          textAlign: TextAlign.center,
         ),
       ],
     );

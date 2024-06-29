@@ -159,7 +159,7 @@ class ShipmentItem extends StatelessWidget {
                           ),
                           SizedBox(width: 26.w,),
                           Text(
-                            courierEarnings??'',
+                            "$courierEarnings JD"??'',
                             style: CustomTextStyle.primaryTextStyle
                                 .apply(fontSizeFactor: 1.3),
                             textDirection: TextDirection.ltr,

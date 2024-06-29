@@ -42,7 +42,7 @@ class ShipmentInfo {
   final String createdAt;
   final String updatedAt;
   final String estimatedDeliveryTime;
-  final int courierEarnings;
+  final double courierEarnings;
 
   ShipmentInfo({
     required this.shipmentId,
@@ -62,7 +62,7 @@ class ShipmentInfo {
     required this.courierEarnings,
   });
 
-  factory ShipmentInfo.fromJson(Map<String, dynamic> json) {
+  factory ShipmentInfo.fromJson(Map<dynamic, dynamic> json) {
     return ShipmentInfo(
       shipmentId: json['shipment_id'] ?? 0,
       shipmentStatus: json['shipment_status'] ?? 0,
@@ -78,7 +78,7 @@ class ShipmentInfo {
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       estimatedDeliveryTime: json['estimated_delivery_time'] ?? '',
-      courierEarnings: json['courier_earnings'] ?? 0,
+      courierEarnings: json['courier_earnings'] ?? 0.0,
     );
   }
 
@@ -172,7 +172,7 @@ class Shipment {
     required this.announcements,
   });
 
-  factory Shipment.fromJson(Map<String, dynamic> json) {
+  factory Shipment.fromJson(Map<dynamic, dynamic> json) {
     var announcementList = json['announcements'] as List;
     List<Announcement> announcements =
     announcementList.map((i) => Announcement.fromJson(i)).toList();

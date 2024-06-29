@@ -13,10 +13,12 @@ class MyTabController extends GetxController with GetSingleTickerProviderStateMi
     super.onInit();
     myShipmentsController.fetchMyShipments().then((_) {
       updateTabs();
-      tabController = TabController(length: tabs.length, vsync: this);
-      int initialIndex = getInitialTabIndex();
-      tabController.animateTo(initialIndex);
-      changeTabIndex(initialIndex);
+      if (tabs.isNotEmpty) {
+        tabController = TabController(length: tabs.length, vsync: this);
+        int initialIndex = getInitialTabIndex();
+        tabController.animateTo(initialIndex);
+        changeTabIndex(initialIndex);
+      }
     });
   }
 
@@ -40,7 +42,9 @@ class MyTabController extends GetxController with GetSingleTickerProviderStateMi
 
   @override
   void onClose() {
-    tabController.dispose();
+    if (tabController != null && tabController.animation != null) {
+      tabController.dispose();
+    }
     super.onClose();
   }
 }

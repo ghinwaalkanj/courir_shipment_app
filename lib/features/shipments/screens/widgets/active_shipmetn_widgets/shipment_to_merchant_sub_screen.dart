@@ -5,16 +5,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../controller/active_shipment_map_controller.dart';
+import '../../../controller/new_shipment_mp_controller.dart';
 
 class ShipmentToMerchantScreen extends StatelessWidget {
   final LatLng recipientLocation;
+  final LatLng deliveryLocation;
 
-  ShipmentToMerchantScreen({required this.recipientLocation});
+  ShipmentToMerchantScreen({required this.recipientLocation, required this.deliveryLocation});
 
   @override
   Widget build(BuildContext context) {
-    final ActiveShipmentsMapController mapController = Get.put(ActiveShipmentsMapController());
-    mapController.initialize(recipientLocation);
+    final NewShipmentsMapController mapController =
+    Get.put(NewShipmentsMapController());
 
     return Column(
       children: [
@@ -39,15 +41,16 @@ class ShipmentToMerchantScreen extends StatelessWidget {
           height: 55.h,
           child: Obx(
                 () => GoogleMap(
-              zoomControlsEnabled: false,
-              zoomGesturesEnabled: true,
-              onMapCreated: mapController.onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: recipientLocation,
-                zoom: 15,
-              ),
-              markers: mapController.markers.value,
-            ),
+                  zoomControlsEnabled: false,
+                  zoomGesturesEnabled: true,
+                  onMapCreated: mapController.onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: recipientLocation,
+                    zoom: 15,
+                  ),
+                  markers: mapController.markers.value,
+                  polylines: mapController.polylines.value,
+                ),
           ),
         ),
       ],

@@ -30,6 +30,9 @@ class TTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasError = errorText != null && errorText!.isNotEmpty;
+    final Color borderColor = hasError ? Colors.red : TColors.primary;
+
     return Container(
       width: 88.w,
       child: Directionality(
@@ -67,13 +70,23 @@ class TTextField extends StatelessWidget {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(18.0),
+                  borderSide: BorderSide(
+                    color: borderColor,
+                    width: 2.0,
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: TColors.primary, width: 2.0),
+                  borderSide: BorderSide(
+                    color: borderColor,
+                    width: 2.0,
+                  ),
                   borderRadius: BorderRadius.circular(18.0),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                  borderSide: BorderSide(
+                    color: borderColor,
+                    width: 2.0,
+                  ),
                   borderRadius: BorderRadius.circular(18.0),
                 ),
                 suffixIcon: suffixIcon,
@@ -101,7 +114,7 @@ class TTextField extends StatelessWidget {
               maxLength: isPhone ? 8 : isNationalID ? 10 : null,
               buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
             ),
-            if (errorText != null && errorText!.isNotEmpty)
+            if (hasError)
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(

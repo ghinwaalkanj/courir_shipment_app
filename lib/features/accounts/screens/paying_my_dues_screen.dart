@@ -29,7 +29,7 @@ class PayDuesScreen extends StatelessWidget {
           if (earningsController.isLoading.value || contactController.isLoading.value) { // Add contactController loading
             return Center(child: CircularProgressIndicator(color: TColors.primary));
           } else {
-            double totalIncome = earningsController.earnings4DaysResponse.value.totalAdminIncome.toDouble();
+            double totalIncome = double.parse(earningsController.earnings4DaysResponse.value.totalAdminIncome);
             double maxEarningsLimit = double.parse(earningsController.earnings4DaysResponse.value.maxEarningsLimit);
 
             double percentage = maxEarningsLimit > 0 ? (totalIncome / maxEarningsLimit).clamp(0, 1) * 100 : 0;
@@ -43,7 +43,7 @@ class PayDuesScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 ContactCard(
-                  contactInfoList: contactController.contactInfoList, // Pass contactInfoList here
+                  contactInfoList: contactController.contactInfoList,
                 ),
               ],
             );

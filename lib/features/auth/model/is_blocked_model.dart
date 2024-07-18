@@ -1,6 +1,6 @@
 class BlockStatus {
   final bool status;
-  final int isBlocked;
+  final int? isBlocked;
 
   BlockStatus({
     required this.status,

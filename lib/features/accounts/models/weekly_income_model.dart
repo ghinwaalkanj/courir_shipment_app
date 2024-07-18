@@ -2,7 +2,7 @@ class WeeklyIncomeResponse {
   final bool status;
   final String startDate;
   final String endDate;
-  final int totalIncome;
+  final String totalIncome;
   final List<Shipment> shipments;
 
   WeeklyIncomeResponse({

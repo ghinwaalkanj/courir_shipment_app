@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../common/styles/custom_textstyle.dart';
 import '../../../../../utils/constants/colors.dart';
@@ -34,17 +35,18 @@ class ContactCard extends StatelessWidget {
               SizedBox(height: 7.h),
               Text(
                 'يرجى التواصل مع الإدارة عبر',
-                style: CustomTextStyle.primaryTextStyle.apply(fontSizeFactor: 1.4, fontWeightDelta: 4),
+                style: CustomTextStyle.primaryTextStyle
+                    .apply(fontSizeFactor: 1.4, fontWeightDelta: 4),
               ),
               SizedBox(height: 4.h),
               ...contactInfoList.map((contact) => Padding(
-                padding: EdgeInsets.symmetric(vertical: 2.h),
-                child: ContactDetail(
-                  icon: getIconForContactType(contact.type),
-                  detail: contact.value,
-                  type: contact.type,
-                ),
-              )),
+                    padding: EdgeInsets.symmetric(vertical: 2.h),
+                    child: ContactDetail(
+                      icon: getIconForContactType(contact.type),
+                      detail: contact.value,
+                      type: contact.type,
+                    ),
+                  )),
             ],
           ),
         ),
@@ -55,7 +57,8 @@ class ContactCard extends StatelessWidget {
           child: CircleAvatar(
             radius: 15.w,
             backgroundColor: TColors.primary,
-            child: Icon(Icons.headset_mic_outlined, color: TColors.white, size: 18.w),
+            child: Icon(Icons.headset_mic_outlined,
+                color: TColors.white, size: 18.w),
           ),
         ),
       ],
@@ -67,7 +70,8 @@ class ContactCard extends StatelessWidget {
       case 'phone':
         return Icons.local_phone_outlined;
       case 'whatsapp':
-        return Icons.messenger;
+        return FontAwesomeIcons.whatsapp;
+
       case 'telegram':
         return Icons.telegram;
       case 'facebook':

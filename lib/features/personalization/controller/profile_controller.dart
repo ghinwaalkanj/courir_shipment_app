@@ -11,6 +11,7 @@ class ProfileController extends GetxController {
   var name = ''.obs;
   var phone = ''.obs;
   var gender = ''.obs;
+  var averageRating = ''.obs;
   var totalShipments = 0.obs;
 
   var vehicleType = ''.obs;
@@ -66,6 +67,7 @@ class ProfileController extends GetxController {
         phone.value = userProfile.phone;
         gender.value = userProfile.gender;
         totalShipments.value = userProfile.completedShipments;
+        averageRating.value=userProfile.averageRating;
 
         nameController.text = userProfile.name;
         phoneController.text = userProfile.phone;

@@ -21,6 +21,7 @@ class HomeScreen extends StatelessWidget {
     final MyShipmentsController myShipmentsController = Get.put(MyShipmentsController());
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: TColors.bg,
       appBar: HomeAppBar(
         title: Text(
@@ -41,25 +42,15 @@ class HomeScreen extends StatelessWidget {
             await myShipmentsController.fetchMyShipments();
             await mapController.initialize();
           },
-          child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 2.h, left: 5.w, right: 5.w, bottom: 1.h),
-                        child: const SearchWidgets(),
-                      ),
-                      SizedBox(height: 2.h),
-                    ],
-                  ),
-                ),
-              ];
-            },
-            body: Column(
+          child: SingleChildScrollView(
+            child: Column(
               children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 2.h, left: 5.w, right: 5.w, bottom: 1.h),
+                  child: const SearchWidgets(),
+                ),
+                SizedBox(height: 2.h),
                 SizedBox(
                   height: 53.h,
                   child: FutureBuilder(
@@ -105,15 +96,23 @@ class HomeScreen extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return Center();
+                      return Container();
                     } else {
                       return Obx(() {
                         int activeShipmentsCount = myShipmentsController.getActiveShipmentsCount();
+                        final activeShipments = myShipmentsController.getActiveShipments();
+                        if (activeShipments.isEmpty) {
+                          return ActiveShipmentsButton(
+                            count: 0,
+                            onPressed: (){},
+                          );
+                        }
+                        final shipmentId = activeShipments.first.shipmentInfo.shipmentId;
                         return ActiveShipmentsButton(
                           count: activeShipmentsCount,
                           onPressed: activeShipmentsCount > 0
                               ? () {
-                            Get.to(ActiveShipmentsScreen());
+                            Get.to(ActiveShipmentsScreen(), arguments: {'shipmentId': shipmentId});
                           }
                               : null,
                         );

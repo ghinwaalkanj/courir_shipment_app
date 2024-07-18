@@ -18,6 +18,11 @@ class VehicleInfoController extends GetxController {
   late TextEditingController vehicleModelController;
   late TextEditingController vehicleColorController;
 
+  var vehicleTypeError = ''.obs;
+  var vehiclePlateError = ''.obs;
+  var vehicleModelError = ''.obs;
+  var vehicleColorError = ''.obs;
+
   final Crud crud = Get.find<Crud>();
 
   @override
@@ -36,36 +41,54 @@ class VehicleInfoController extends GetxController {
     vehicleColorController = TextEditingController(text: vehicleColor.value);
   }
 
-  void validateForm() {
+  bool validateForm() {
+    bool isValid = true;
+
     if (vehicleTypeController.text.isEmpty) {
-      vehicleType.value = 'يرجى إدخال نوع المركبة';
+      vehicleTypeError.value = 'يرجى إدخال نوع المركبة';
+      isValid = false;
     } else {
-      vehicleType.value = '';
+      vehicleTypeError.value = '';
     }
 
     if (vehiclePlateController.text.isEmpty) {
-      vehiclePlate.value = 'يرجى إدخال لوحة المركبة';
+      vehiclePlateError.value = 'يرجى إدخال لوحة المركبة';
+      isValid = false;
     } else {
-      vehiclePlate.value = '';
+      vehiclePlateError.value = '';
     }
 
     if (vehicleModelController.text.isEmpty) {
-      vehicleModel.value = 'يرجى إدخال موديل المركبة';
+      vehicleModelError.value = 'يرجى إدخال موديل المركبة';
+      isValid = false;
     } else {
-      vehicleModel.value = '';
+      vehicleModelError.value = '';
     }
 
     if (vehicleColorController.text.isEmpty) {
-      vehicleColor.value = 'يرجى إدخال لون المركبة';
+      vehicleColorError.value = 'يرجى إدخال لون المركبة';
+      isValid = false;
     } else {
-      vehicleColor.value = '';
+      vehicleColorError.value = '';
     }
 
-    if (vehicleType.value.isEmpty &&
-        vehiclePlate.value.isEmpty &&
-        vehicleModel.value.isEmpty &&
-        vehicleColor.value.isEmpty) {
-      saveVehicleInfo();
+    return isValid;
+  }
+
+  void clearError(String field) {
+    switch (field) {
+      case 'vehicleType':
+        vehicleTypeError.value = '';
+        break;
+      case 'vehiclePlate':
+        vehiclePlateError.value = '';
+        break;
+      case 'vehicleModel':
+        vehicleModelError.value = '';
+        break;
+      case 'vehicleColor':
+        vehicleColorError.value = '';
+        break;
     }
   }
 
@@ -104,8 +127,6 @@ class VehicleInfoController extends GetxController {
           (data) {
         var responseModel = VehicleResponseModel.fromJson(data);
         if (responseModel.status) {
-          print(responseModel.status);
-          print(responseModel.message);
           SuccessSnackbar.show(responseModel.message ?? 'تم تحديث معلومات المركبة بنجاح');
           Get.to(AddDeliveryAreasScreen(), arguments: {'cities': responseModel.cities});
         } else {

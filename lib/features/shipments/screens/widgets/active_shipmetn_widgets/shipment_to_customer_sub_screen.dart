@@ -5,16 +5,19 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../controller/active_shipment_map_controller.dart';
+import '../../../controller/new_shipment_mp_controller.dart';
 
 class ShipmentToCustomerScreen extends StatelessWidget {
   final LatLng recipientLocation;
+  final LatLng deliveryLocation;
 
-  ShipmentToCustomerScreen({required this.recipientLocation});
+  ShipmentToCustomerScreen({required this.recipientLocation, required this.deliveryLocation});
 
   @override
   Widget build(BuildContext context) {
-    final ActiveShipmentsMapController mapController = Get.put(ActiveShipmentsMapController());
-    mapController.initialize(recipientLocation);
+    final NewShipmentsMapController mapController =
+        Get.put(NewShipmentsMapController());
+    mapController.initialize(recipientLocation,deliveryLocation);
 
     return Column(
       children: [
@@ -38,23 +41,16 @@ class ShipmentToCustomerScreen extends StatelessWidget {
         SizedBox(
           height: 55.h,
           child: Obx(
-                () => GoogleMap(
+            () => GoogleMap(
               zoomControlsEnabled: false,
+              zoomGesturesEnabled: true,
               onMapCreated: mapController.onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: recipientLocation,
                 zoom: 15,
               ),
               markers: mapController.markers.value,
-              circles: {
-                Circle(
-                  circleId: CircleId('delivery_area'),
-                  radius: 10000,
-                  fillColor: TColors.error.withOpacity(0.3),
-                  strokeColor: TColors.error,
-                  strokeWidth: 1,
-                ),
-              },
+              polylines: mapController.polylines.value,
             ),
           ),
         ),

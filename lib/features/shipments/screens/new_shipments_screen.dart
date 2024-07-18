@@ -20,7 +20,7 @@ class NewShipmentsScreen extends StatelessWidget {
       backgroundColor: TColors.bg,
       appBar: TAppBar(title: 'الشحنات الجديدة'),
       body: Obx(
-            () {
+        () {
           if (controller.isLoading.value) {
             return Center(child: CircularProgressIndicator());
           }
@@ -37,9 +37,14 @@ class NewShipmentsScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image(image: AssetImage('assets/images/sammy-line-man-checking-mailbox.png')),
-                        SizedBox(height: 2.h,),
-                        Text('لا توجد شحنات جديدة', style: CustomTextStyle.primaryTextStyle),
+                        Image(
+                            image: AssetImage(
+                                'assets/images/sammy-line-man-checking-mailbox.png')),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Text('لا توجد شحنات جديدة',
+                            style: CustomTextStyle.primaryTextStyle),
                       ],
                     ),
                   ),
@@ -52,7 +57,8 @@ class NewShipmentsScreen extends StatelessWidget {
               await controller.fetchNewShipments();
             },
             child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(), // Make sure scrolling is always possible
+              physics: AlwaysScrollableScrollPhysics(),
+              // Make sure scrolling is always possible
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Column(
@@ -70,24 +76,46 @@ class NewShipmentsScreen extends StatelessWidget {
                           senderCity: shipment.userInfo.city,
                           shipmentDate: shipment.shipmentInfo.createdAt,
                           recipientCity: shipment.recipientInfo.city,
-                          estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
-                          courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
+                          estimatedDate:
+                              shipment.shipmentInfo.estimatedDeliveryTime,
+                          courierEarnings:
+                              shipment.shipmentInfo.courierEarnings.toString(),
                           onTap: () {
                             print(shipment.shipmentInfo.courierEarnings);
+                            print(shipment.recipientInfo.lat);
+                            print(shipment.recipientInfo.long);
+                            print(shipment.recipientInfo.lat);
+                            print(shipment.userInfo.fromAddressLong);
                             Get.to(
                               OrderDetailScreen(
                                 recipientLocation: LatLng(
                                   double.parse(shipment.recipientInfo.lat),
                                   double.parse(shipment.recipientInfo.long),
                                 ),
+                                merchentLocation: LatLng(
+                                  double.parse(
+                                      shipment.recipientInfo.lat),
+                                  double.parse(
+                                      shipment.userInfo.fromAddressLong),
+                                ),
                               ),
                               arguments: {
-                                'shipmentNumber': shipment.shipmentInfo.shipmentNumber,
-                                'deliveryPrice': shipment.shipmentInfo.shipmentFee,
-                                'shipmentPrice': shipment.shipmentInfo.shipmentValue,
+                                'shipmentStatus':
+                                    shipment.shipmentInfo.shipmentStatus,
+                                'shipmentNumber':
+                                    shipment.shipmentInfo.shipmentNumber,
+                                'shipmentId':
+                                    shipment.shipmentInfo.shipmentId,
+                                'deliveryPrice':
+                                    shipment.shipmentInfo.shipmentFee,
+                                'shipmentPrice':
+                                    shipment.shipmentInfo.shipmentValue,
                                 'shipmentDate': shipment.shipmentInfo.createdAt,
-                                'shipmentWeight': shipment.shipmentInfo.shipmentWeight,
-                                'shipmentQuantity': shipment.shipmentInfo.shipmentQuantity.toString(),
+                                'shipmentWeight':
+                                    shipment.shipmentInfo.shipmentWeight,
+                                'shipmentQuantity': shipment
+                                    .shipmentInfo.shipmentQuantity
+                                    .toString(),
                               },
                             );
                           },

@@ -12,14 +12,16 @@ import '../../../utils/constants/colors.dart';
 import '../controller/barcode_scan_controller.dart';
 
 class BarcodeScanScreen extends StatelessWidget {
-  const BarcodeScanScreen({Key? key, required this.onBarcodeScanned}) : super(key: key);
+  const BarcodeScanScreen({Key? key, required this.onBarcodeScanned})
+      : super(key: key);
   final void Function(String barcode) onBarcodeScanned;
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
     QRViewController? controller;
-    final BarcodeScanController barcodeController = Get.put(BarcodeScanController());
+    final BarcodeScanController barcodeController =
+        Get.put(BarcodeScanController());
 
     void _onQRViewCreated(QRViewController qrController) {
       controller = qrController;
@@ -64,7 +66,8 @@ class BarcodeScanScreen extends StatelessWidget {
                 width: 100.w,
                 decoration: BoxDecoration(
                   color: TColors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20.sp)),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.sp)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(top: 3.h, left: 5.w, right: 5.w),
@@ -75,12 +78,23 @@ class BarcodeScanScreen extends StatelessWidget {
                         Center(
                           child: Text(
                             '! امسح الرمز لاستلام الشحنة',
-                            style: CustomTextStyle.headlineTextStyle
-                                .apply(color: TColors.primary, fontSizeFactor: 1.0),
+                            style: CustomTextStyle.headlineTextStyle.apply(
+                                color: TColors.primary, fontSizeFactor: 1.0),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        CustomSizedBox.textSpacingVertical(),
+                        CustomSizedBox.textSpacingVertical(height: 0.2.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          child: Center(
+                            child: Text(
+                              'عندما يصل المندوب إلى موقع التاجر، سيقوم التاجر بعرض الباركود الخاص بالشحنة على هاتفه أو أي جهاز آخر. يقوم المندوب باستخدام جهازه لمسح الباركود المقدم. بمجرد مسح الباركود بنجاح، يتم تأكيد استلام الشحنة من قبل المندوب.',
+                              style: CustomTextStyle.greyTextStyle.apply(
+                                  fontSizeFactor: 1.2, fontWeightDelta: -1),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

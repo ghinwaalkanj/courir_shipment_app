@@ -115,7 +115,7 @@ class MyShipmentsScreen extends StatelessWidget {
                               colorText: Colors.white,
                             );
                           } else {
-                            Get.to(ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipment.shipmentInfo.shipmentNumber});
+                            Get.to(ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipment.shipmentInfo.shipmentNumber,'shipmentId': shipment.shipmentInfo.shipmentId});
                           }
                         },
                       );

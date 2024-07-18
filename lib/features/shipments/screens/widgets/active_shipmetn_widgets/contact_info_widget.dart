@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../common/styles/custom_textstyle.dart';
@@ -61,10 +62,10 @@ class ContactInfoWidget extends StatelessWidget {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () => _makePhoneCall(phoneNumber), // Add this line
+                    onTap: () => _handleTap('phone',phoneNumber),
                     child: Container(
-                      height: 5.5.h,
-                      width: 13.w,
+                      height: 4.9.h,
+                      width: 11.w,
                       decoration: BoxDecoration(
                         color: TColors.primary,
                         borderRadius:
@@ -73,13 +74,33 @@ class ContactInfoWidget extends StatelessWidget {
                       child: Icon(
                         Icons.phone_outlined,
                         color: TColors.white,
-                        size: 25.sp,
+                        size: 22.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 2.w),
+                  GestureDetector(
+                    onTap: () => _handleTap('whatsapp',phoneNumber), // Add this line
+                    child: Container(
+                      height: 5.h,
+                      width: 12.w,
+                      decoration: BoxDecoration(
+                        color: TColors.primary,
+                        borderRadius:
+                        BorderRadius.circular(10.sp),
+                      ),
+                      child:  Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.whatsapp,
+                          color: Colors.white,
+                          size: 35,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(width: 2.w),
                   Container(
-                    width: 65.w,
+                    width: 52.w,
                     padding: EdgeInsets.fromLTRB(2.w, 1.h, 2.w, 1.h),
                     decoration: BoxDecoration(
                       color: Colors.transparent,
@@ -108,11 +129,20 @@ class ContactInfoWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    await launchUrl(launchUri);
+  void _handleTap(String type, String detail) async {
+    if (type == 'phone') {
+      final Uri launchUri = Uri(
+        scheme: 'tel',
+        path: detail,
+      );
+      await launchUrl(launchUri);
+    } else if (type == 'whatsapp') {
+      final Uri launchUri = Uri(
+        scheme: 'https',
+        host: 'wa.me',
+        path: detail,
+      );
+      await launchUrl(launchUri);
+    }
   }
 }

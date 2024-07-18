@@ -1,8 +1,8 @@
 class Earnings4DaysResponse {
   final bool status;
   final List<DayEarnings> data;
-  final int totalCourierIncome;
-  final int totalAdminIncome;
+  final String totalCourierIncome;
+  final String totalAdminIncome;
   final String maxEarningsLimit;
 
   Earnings4DaysResponse({
@@ -16,18 +16,21 @@ class Earnings4DaysResponse {
   factory Earnings4DaysResponse.fromJson(Map<dynamic, dynamic> json) {
     return Earnings4DaysResponse(
       status: json['status'],
-      data: (json['data'] as List).map((i) => DayEarnings.fromJson(i)).toList(),
-      totalCourierIncome: json['total_courier_income'],
-      totalAdminIncome: json['total_admin_income'],
-      maxEarningsLimit: json['max_earnings_limit'],
+      data: json['data'] != null
+          ? (json['data'] as List).map((i) => DayEarnings.fromJson(i)).toList()
+          : [],
+      totalCourierIncome: json['total_courier_income'] ?? '',
+      totalAdminIncome: json['total_admin_income'] ?? '',
+      maxEarningsLimit: json['max_earnings_limit'] ?? '',
     );
   }
 }
 
+
 class DayEarnings {
   final String date;
-  final int totalCourierIncome;
-  final int totalAdminIncome;
+  final String totalCourierIncome;
+  final String totalAdminIncome;
   final List<Shipment> shipments;
 
   DayEarnings({
@@ -37,12 +40,14 @@ class DayEarnings {
     required this.shipments,
   });
 
-  factory DayEarnings.fromJson(Map<String, dynamic> json) {
+  factory DayEarnings.fromJson(Map<dynamic, dynamic> json) {
     return DayEarnings(
-      date: json['date'],
-      totalCourierIncome: json['total_courier_income'],
-      totalAdminIncome: json['total_admin_income'],
-      shipments: (json['shipments'] as List).map((i) => Shipment.fromJson(i)).toList(),
+      date: json['date'] ?? '',
+      totalCourierIncome: json['total_courier_income'] ?? '',
+      totalAdminIncome: json['total_admin_income'] ?? '',
+      shipments: json['shipments'] != null
+          ? (json['shipments'] as List).map((i) => Shipment.fromJson(i)).toList()
+          : [],
     );
   }
 }

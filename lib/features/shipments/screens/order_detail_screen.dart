@@ -10,25 +10,32 @@ import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../common/styles/custom_textstyle.dart';
-import '../controller/active_shipment_map_controller.dart';
+import '../controller/new_shipment_mp_controller.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   final LatLng recipientLocation;
+  final LatLng merchentLocation;
 
-  const OrderDetailScreen({super.key, required this.recipientLocation});
+  const OrderDetailScreen(
+      {super.key,
+        required this.recipientLocation,
+        required this.merchentLocation});
 
   @override
   Widget build(BuildContext context) {
     final arguments = Get.arguments as Map;
     final shipmentNumber = arguments['shipmentNumber'];
+    final shipmentId = arguments['shipmentId'];
+    final shipmentStatus = arguments['shipmentStatus'];
     final deliveryPrice = arguments['deliveryPrice'];
     final shipmentPrice = arguments['shipmentPrice'];
     final shipmentDate = arguments['shipmentDate'];
     final shipmentWeight = arguments['shipmentWeight'];
     final shipmentQuantity = arguments['shipmentQuantity'];
     final controller = Get.put(UpdateShipmentStatusController());
-    final ActiveShipmentsMapController mapController = Get.put(ActiveShipmentsMapController());
-    mapController.initialize(recipientLocation);
+    final NewShipmentsMapController mapController =
+    Get.put(NewShipmentsMapController());
+    mapController.initialize(recipientLocation, merchentLocation);
 
     return Scaffold(
       backgroundColor: TColors.bg,
@@ -62,15 +69,18 @@ class OrderDetailScreen extends StatelessWidget {
                         zoom: 15,
                       ),
                       markers: mapController.markers.value,
+                      polylines: mapController.polylines.value,
                     ),
                   ),
                 ),
                 DraggableConfirmButton(
                   text: 'قم بالسحب لقبول الشحنة',
                   onDragEnd: () async {
-                    bool success = await controller.updateShipmentStatus(shipmentNumber: shipmentNumber, newStatus: 1);
+                    bool success = await controller.updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 1);
                     if (success) {
-                      Get.off(ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipmentNumber});
+                      Get.off(ActiveShipmentsScreen(),
+                          arguments: {'shipmentNumber': shipmentNumber,'shipmentId': shipmentId});
                     }
                   },
                 ),

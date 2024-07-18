@@ -10,8 +10,8 @@ class Earnings4DaysController extends GetxController {
   var earnings4DaysResponse = Earnings4DaysResponse(
     status: false,
     data: [],
-    totalCourierIncome: 0,
-    totalAdminIncome: 0,
+    totalCourierIncome: '',
+    totalAdminIncome: '',
     maxEarningsLimit: '',
   ).obs;
 

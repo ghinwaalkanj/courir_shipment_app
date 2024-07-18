@@ -94,7 +94,7 @@ class AddDeliveryAreasScreen extends StatelessWidget {
             ActionButtonsWidget(
               isLoading: controller.isLoading,
               onPressed: () async {
-                 controller.addDeliveryCities();
+                 controller.validateForm();
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('isAuth', true);
               },

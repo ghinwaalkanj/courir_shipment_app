@@ -60,11 +60,10 @@ class ContactDetail extends StatelessWidget {
     } else if (type == 'whatsapp') {
       final Uri launchUri = Uri(
         scheme: 'https',
-        path: 'api.whatsapp.com/send',
-        queryParameters: {'phone': detail},
+        host: 'wa.me',
+        path: detail,
       );
       await launchUrl(launchUri);
     }
-    // Add other types if needed
   }
 }

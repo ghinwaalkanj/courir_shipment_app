@@ -36,54 +36,62 @@ class VehicleInfoScreen extends StatelessWidget {
               SizedBox(height: 7.h),
               Column(
                 children: [
-                  TTextField(
+                  Obx(() => TTextField(
                     hintText: "نوع المركبة",
                     prefixIcon: Icon(Iconsax.car),
                     controller: controller.vehicleTypeController,
                     keyboardType: TextInputType.name,
                     onChanged: (value) {
                       controller.vehicleType.value = value;
-                      controller.validateForm();
+                      controller.clearError('vehicleType');
                     },
-                  ),
+                    errorText: controller.vehicleTypeError.value,
+                  )),
                   SizedBox(height: 2.h),
-                  TTextField(
+                  Obx(() => TTextField(
                     hintText: "لوحة المركبة",
                     prefixIcon: Icon(Iconsax.card),
                     controller: controller.vehiclePlateController,
                     keyboardType: TextInputType.phone,
                     onChanged: (value) {
                       controller.vehiclePlate.value = value;
-                      controller.validateForm();
+                      controller.clearError('vehiclePlate');
                     },
-                  ),
+                    errorText: controller.vehiclePlateError.value,
+                  )),
                   SizedBox(height: 2.h),
-                  TTextField(
+                  Obx(() => TTextField(
                     hintText: "موديل المركبة",
                     prefixIcon: Icon(Iconsax.car),
                     controller: controller.vehicleModelController,
                     keyboardType: TextInputType.phone,
                     onChanged: (value) {
                       controller.vehicleModel.value = value;
-                      controller.validateForm();
+                      controller.clearError('vehicleModel');
                     },
-                  ),
+                    errorText: controller.vehicleModelError.value,
+                  )),
                   SizedBox(height: 2.h),
-                  TTextField(
+                  Obx(() => TTextField(
                     hintText: "لون المركبة",
                     prefixIcon: Icon(Iconsax.paintbucket),
                     controller: controller.vehicleColorController,
                     keyboardType: TextInputType.name,
                     onChanged: (value) {
                       controller.vehicleColor.value = value;
-                      controller.validateForm();
+                      controller.clearError('vehicleColor');
                     },
-                  ),
+                    errorText: controller.vehicleColorError.value,
+                  )),
                 ],
               ),
               SizedBox(height: 5.h),
               ActionButtonsWidget(
-                onPressed: controller.saveVehicleInfo,
+                onPressed: () {
+                  if (controller.validateForm()) {
+                    controller.saveVehicleInfo();
+                  }
+                },
                 isLoading: controller.isLoading,
               )
             ],

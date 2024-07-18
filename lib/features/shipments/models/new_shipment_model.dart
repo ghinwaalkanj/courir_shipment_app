@@ -42,7 +42,7 @@ class ShipmentInfo {
   final String createdAt;
   final String updatedAt;
   final String estimatedDeliveryTime;
-  final double courierEarnings;
+  final String courierEarnings;
 
   ShipmentInfo({
     required this.shipmentId,
@@ -78,7 +78,7 @@ class ShipmentInfo {
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       estimatedDeliveryTime: json['estimated_delivery_time'] ?? '',
-      courierEarnings: json['courier_earnings'] ?? 0.0,
+      courierEarnings: json['courier_earnings'] ?? '',
     );
   }
 

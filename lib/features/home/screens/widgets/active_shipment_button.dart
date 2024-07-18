@@ -19,7 +19,7 @@ class ActiveShipmentsButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: count > 0 ? TColors.primary : TColors.darkerGrey,
+          backgroundColor: count > 0 ? TColors.primary : TColors.grey,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),

@@ -1,7 +1,7 @@
 class DailyIncomeResponse {
   final bool status;
   final String date;
-  final double totalIncome;
+  final String totalIncome;
   final List<Shipment> shipments;
 
   DailyIncomeResponse({
@@ -15,7 +15,7 @@ class DailyIncomeResponse {
     return DailyIncomeResponse(
       status: json['status'],
       date: json['date'],
-      totalIncome: json['total_income']??0.0,
+      totalIncome: json['total_income']??'',
       shipments: (json['shipments'] as List).map((i) => Shipment.fromJson(i)).toList(),
     );
   }

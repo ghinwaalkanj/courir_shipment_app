@@ -38,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
                       CustomSizedBox.itemSpacingVertical(),
                       TraderRankingWidget(
                         rankingPercentage: 50.0,
-                        totalShipments: controller.totalShipments.value, rating: 3.5,
+                        totalShipments: controller.totalShipments.value, rating:controller.averageRating.value,
                       ),
                       CustomSizedBox.itemSpacingVertical(),
                       CommonContainer(

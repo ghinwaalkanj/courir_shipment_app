@@ -1,8 +1,9 @@
+import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/return_to_merchant_dialog.dart';
 import 'package:courir_shipment_app/navigation_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../utils/constants/colors.dart';
 import '../../../controller/page_controller.dart';
 import 'draggable_button.dart';
@@ -12,9 +13,13 @@ class CustomerShipmentDialog extends StatelessWidget {
   final int tabIndex;
   final TPageController pageController;
   final void Function() onDragEnd;
+  final void Function() onDragEndReturn;
 
-
-  CustomerShipmentDialog({required this.total, required this.tabIndex, required this.onDragEnd})
+  CustomerShipmentDialog(
+      {required this.total,
+      required this.tabIndex,
+      required this.onDragEnd,
+      required this.onDragEndReturn})
       : pageController = Get.find<TPageController>(tag: 'tab$tabIndex');
 
   @override
@@ -33,14 +38,35 @@ class CustomerShipmentDialog extends StatelessWidget {
               padding: EdgeInsets.all(4.w),
               child: Column(
                 children: [
-                  Text(
-                    'المبلغ المقبوض من الزبون',
-                    style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.bold,
-                      color: TColors.primary,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          showShipmentReturnDialog(
+                              context, tabIndex, onDragEndReturn);
+                        },
+                        child: Text(
+                          'إرجاع',
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: TColors.error,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        'المبلغ المقبوض من الزبون',
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: TColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 7.h),
                   Text('إجمالي قيمة الشحنة',
@@ -64,10 +90,9 @@ class CustomerShipmentDialog extends StatelessWidget {
               ),
             ),
             DraggableConfirmButton(
-              dragThreshold: 0.5,
-              text: 'قم بالسحب للتأكيد',
-              onDragEnd: onDragEnd
-            ),
+                dragThreshold: 0.5,
+                text: 'قم بالسحب للتأكيد',
+                onDragEnd: onDragEnd),
           ],
         ),
       ),
@@ -75,14 +100,16 @@ class CustomerShipmentDialog extends StatelessWidget {
   }
 }
 
-void showShipmentCustomerDialog(BuildContext context, double total, int tabIndex,void Function() onDragEnd) {
+void showShipmentCustomerDialog(BuildContext context, double total,
+    int tabIndex, void Function() onDragEnd,void Function() onDragEndReturn) {
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return CustomerShipmentDialog(
         total: total,
         tabIndex: tabIndex,
-        onDragEnd: onDragEnd,
+        onDragEnd: onDragEnd, onDragEndReturn:onDragEndReturn,
       );
     },
   );

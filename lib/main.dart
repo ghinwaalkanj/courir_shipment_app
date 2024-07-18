@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           home: Obx(() {
             if (blockStatusController.isLoading.value) {
               return Scaffold(body:Center(child: CircularProgressIndicator()),);
-            } else if (blockStatusController.isBlocked.value) {
+            } else if (blockStatusController.isBlocked.value&&prefs.get("isFirstTime")==true&&prefs.get("isAuth")==true) {
               return BlockedScreen();
             } else if (prefs.getBool('isAuth') == true) {
               return NavigationMenu();

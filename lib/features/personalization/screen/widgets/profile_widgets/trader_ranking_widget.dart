@@ -8,7 +8,7 @@ import '../../../../../utils/constants/colors.dart';
 class TraderRankingWidget extends StatelessWidget {
   final double rankingPercentage;
   final int totalShipments;
-  final double rating; // عدد النجوم من 1 إلى 5
+  final String rating;
 
   TraderRankingWidget({
     required this.rankingPercentage,
@@ -28,7 +28,7 @@ class TraderRankingWidget extends StatelessWidget {
               height: 11.h,
               width: 11.h,
               child: CircularProgressIndicator(
-                value: rankingPercentage / 10, // Set the progress value here
+                value: rankingPercentage / 10,
                 color: TColors.primary,
                 backgroundColor: TColors.buttonDisabled,
                 strokeWidth: 8.0,
@@ -43,11 +43,11 @@ class TraderRankingWidget extends StatelessWidget {
                 )
                     : rankingPercentage == 2.0
                     ? Image.asset(
-                  'assets/images/second.png', // Replace with your image asset
+                  'assets/images/second.png',
                   height: 7.h,
                 )
                     : Image.asset(
-                  'assets/images/third.png', // Replace with your image asset
+                  'assets/images/third.png',
                   height: 7.h,
                 ),
                 SizedBox(height: 1.h),
@@ -69,7 +69,7 @@ class TraderRankingWidget extends StatelessWidget {
         Directionality(
           textDirection: TextDirection.ltr,
           child: RatingBarIndicator(
-            rating: rating,
+            rating:double.parse(rating),
             itemBuilder: (context, index) => Icon(
               Icons.star,
               color: TColors.primary,

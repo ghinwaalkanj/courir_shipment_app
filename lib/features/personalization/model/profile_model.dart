@@ -57,6 +57,8 @@ class UserProfile {
   final List<Vehicle> vehicles;
   final List<City> cities;
   final int completedShipments;
+  final String averageRating;
+
 
   UserProfile({
     required this.name,
@@ -65,9 +67,11 @@ class UserProfile {
     required this.vehicles,
     required this.cities,
     required this.completedShipments,
+    required this.averageRating,
+
   });
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
+  factory UserProfile.fromJson(Map<dynamic, dynamic> json) {
     var vehiclesFromJson = json['vehicles'] as List;
     List<Vehicle> vehicleList = vehiclesFromJson.map((vehicleJson) => Vehicle.fromJson(vehicleJson)).toList();
 
@@ -81,6 +85,7 @@ class UserProfile {
       vehicles: vehicleList,
       cities: cityList,
       completedShipments: json['completed_shipments'],
+      averageRating: json['average_rating'],
     );
   }
 }

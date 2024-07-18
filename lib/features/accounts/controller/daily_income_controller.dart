@@ -11,7 +11,7 @@ class DailyIncomeController extends GetxController {
   var dailyIncomeResponse = DailyIncomeResponse(
     status: false,
     date: '',
-    totalIncome: 0.0,
+    totalIncome:'',
     shipments: [],
   ).obs;
 

@@ -17,7 +17,7 @@ class ScanInstructions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'امسح الرمز لتسليم الشحنة!',
+            'إرجاع الشحنة إلى التاجر',
             style: CustomTextStyle.headlineTextStyle.apply(
               color: TColors.primary,
               fontSizeFactor: 1.1,
@@ -27,7 +27,7 @@ class ScanInstructions extends StatelessWidget {
           CustomSizedBox.textSpacingVertical(),
           CustomSizedBox.textSpacingVertical(),
           Text(
-            'سيبدأ عملية التوصيل للعميل بمجرد مسح المندوب رمز ال QR الظاهر لديك.',
+            'يرجى عرض الباركود الموجود على هاتفك للتاجر ليمسحه ويؤكد عملية إرجاع الشحنة بنجاح.',
             style: CustomTextStyle.greyTextStyle
                 .apply(fontWeightDelta: 0, fontSizeFactor: 0.88),
             textAlign: TextAlign.center,

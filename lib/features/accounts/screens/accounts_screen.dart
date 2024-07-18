@@ -40,7 +40,7 @@ class AccountsScreen extends StatelessWidget {
                   AccountDataTable(data: accountData),
                   SizedBox(height: 4.h),
                   AccountSummary(
-                    total: controller.earnings4DaysResponse.value.totalAdminIncome.toDouble(),
+                    total: double.parse(controller.earnings4DaysResponse.value.totalAdminIncome),
                   ),
                   Spacer(),
                   AccountButtons(

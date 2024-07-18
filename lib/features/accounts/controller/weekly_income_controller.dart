@@ -12,7 +12,7 @@ class WeeklyIncomeController extends GetxController {
     status: false,
     startDate: '',
     endDate: '',
-    totalIncome: 0,
+    totalIncome: '',
     shipments: [],
   ).obs;
 

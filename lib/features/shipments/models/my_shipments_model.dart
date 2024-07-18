@@ -42,7 +42,7 @@ class ShipmentInfo {
   final String createdAt;
   final String updatedAt;
   final String estimatedDeliveryTime;
-  final double courierEarnings;
+  final String courierEarnings;
 
 
   ShipmentInfo({
@@ -80,13 +80,14 @@ class ShipmentInfo {
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       estimatedDeliveryTime: json['estimated_delivery_time'],
-      courierEarnings: json['courier_earnings'] ?? 0.0,
+      courierEarnings: json['courier_earnings'] ?? '',
 
     );
   }
 }
 
 class UserInfo {
+  final int id;
   final String name;
   final String businessName;
   final String fromAddressDetails;
@@ -95,7 +96,8 @@ class UserInfo {
   final String city;
   final String phone;
 
-  UserInfo({
+  UserInfo( {
+    required this.id,
     required this.name,
     required this.businessName,
     required this.fromAddressDetails,
@@ -107,6 +109,7 @@ class UserInfo {
 
   factory UserInfo.fromJson(Map<String, dynamic> json) {
     return UserInfo(
+      id: json['id'],
       name: json['name'],
       businessName: json['business_name'],
       fromAddressDetails: json['from_address_details'],

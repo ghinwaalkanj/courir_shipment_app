@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
@@ -106,6 +107,11 @@ class DeliveryCitiesController extends GetxController {
       prefs.setBool('isCities', true);
 
       if (responseModel.status) {
+
+        FirebaseMessaging.instance.subscribeToTopic("courier");
+        FirebaseMessaging.instance
+            .subscribeToTopic("courier${userId.toString()}");
+
         Get.offAll(NavigationMenu());
       } else {
         Get.snackbar(

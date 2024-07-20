@@ -2,6 +2,7 @@ import 'package:courir_shipment_app/common/widgets/snack_bars/success_snack_bar.
 import 'package:courir_shipment_app/features/auth/screen/add_delivery_areas_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../model/vehicle_info_model.dart';
@@ -124,11 +125,14 @@ class VehicleInfoController extends GetxController {
           duration: Duration(seconds: 5),
         );
       },
-          (data) {
+          (data) async {
         var responseModel = VehicleResponseModel.fromJson(data);
         if (responseModel.status) {
           SuccessSnackbar.show(responseModel.message ?? 'تم تحديث معلومات المركبة بنجاح');
           Get.to(AddDeliveryAreasScreen(), arguments: {'cities': responseModel.cities});
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isVehicleInfo', true);
+
         } else {
           Get.snackbar(
             'خطأ',

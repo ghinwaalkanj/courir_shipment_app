@@ -61,7 +61,8 @@ class ProfileButtons extends StatelessWidget {
                             fontFamily: 'Cairo',
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+
                           Get.back();
                         },
                       ),
@@ -78,6 +79,7 @@ class ProfileButtons extends StatelessWidget {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           prefs.remove("isAuth");
+
                           // FirebaseMessaging.instance
                           //     .unsubscribeFromTopic("merchant");
                           // FirebaseMessaging.instance.unsubscribeFromTopic(

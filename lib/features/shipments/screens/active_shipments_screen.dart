@@ -139,6 +139,7 @@ class ActiveShipmentsScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         controller.fetchNewShipments();
+        myShipmentsController.fetchMyShipments();
        Get.to(NavigationMenu());
        return false;
       },

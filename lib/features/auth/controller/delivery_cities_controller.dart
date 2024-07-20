@@ -3,6 +3,7 @@ import 'package:courir_shipment_app/common/widgets/snack_bars/success_snack_bar.
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../../../core/integration/crud.dart';
@@ -53,9 +54,7 @@ class DeliveryCitiesController extends GetxController {
         // handle failure
       },
           (data) {
-        var cityList = (data['data'] as List)
-            .map((cityJson) => City.fromJson(cityJson))
-            .toList();
+        var cityList = (data['data'] as List).map((cityJson) => City.fromJson(cityJson)).toList();
         cities.assignAll(cityList);
         updateSelectedGovernorates();
       },
@@ -103,6 +102,9 @@ class DeliveryCitiesController extends GetxController {
       );
       var responseModel = AddDeliveryCitiesResponse.fromJson(response);
       SuccessSnackbar.show('تم إضافة المناطق بنجاح');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isCities', true);
+
       if (responseModel.status) {
         Get.offAll(NavigationMenu());
       } else {
@@ -138,6 +140,7 @@ class DeliveryCitiesController extends GetxController {
       isLoading.value = false;
     }
   }
+
   void setSelectedCities(List<City> selectedCities) {
     for (var city in selectedCities) {
       if (!selectedGovernorates.contains(city.name)) {
@@ -145,28 +148,34 @@ class DeliveryCitiesController extends GetxController {
       }
     }
   }
+
   void fetchDeliveryCities() async {
     isLoading.value = true;
     int? userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-        'https://api.wasenahon.com/Kwickly/delivery/cities/get_delivery_cities.php',
-        {
-          'user_id': userId.toString(),
-        },
-        {});
+      'https://api.wasenahon.com/Kwickly/delivery/cities/get_delivery_cities.php',
+      {
+        'user_id': userId.toString(),
+      },
+      {},
+    );
     isLoading.value = false;
 
     response.fold(
           (failure) {
         // handle failure
       },
-          (data) {
-        var cityList = (data['data'] as List)
-            .map((cityJson) => DeliveryCity.fromJson(cityJson))
-            .toList();
-        print(cityList);
-        deliveryCities.assignAll(cityList);
-        updateSelectedGovernorates();
+          (data) async {
+        if (data['data'] != null) {
+
+          var cityList = (data['data'] as List).map((cityJson) => DeliveryCity.fromJson(cityJson)).toList();
+          print(cityList);
+          deliveryCities.assignAll(cityList);
+          updateSelectedGovernorates();
+
+        } else {
+          print('No data available');
+        }
       },
     );
   }

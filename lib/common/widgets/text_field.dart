@@ -11,6 +11,8 @@ class TTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final bool showPrefix;
   final bool isPhone;
+  final bool isYear;
+
   final bool isNationalID;
   final String? errorText;
 
@@ -25,6 +27,7 @@ class TTextField extends StatelessWidget {
     this.showPrefix = true,
     this.isPhone = false,
     this.isNationalID = false,
+    this.isYear = false,
     this.errorText,
   }) : super(key: key);
 
@@ -111,7 +114,7 @@ class TTextField extends StatelessWidget {
               ),
               keyboardType: keyboardType,
               textDirection: isPhone ? TextDirection.ltr : TextDirection.rtl,
-              maxLength: isPhone ? 8 : isNationalID ? 10 : null,
+              maxLength: isPhone ? 8 : isNationalID ? 10:isYear?4 : null,
               buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
             ),
             if (hasError)

@@ -14,8 +14,17 @@ class AddDeliveryAreasScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DeliveryCitiesController());
-    final selectedCities = Get.arguments['cities'] as List<City>;
-    controller.setSelectedCities(selectedCities);
+    final arguments = Get.arguments as Map?;
+    List<City>? selectedCities;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (arguments == null || !arguments.containsKey('cities') || arguments['cities'] == null) {
+       print('');
+      } else {
+        selectedCities = arguments['cities'] as List<City>;
+        controller.setSelectedCities(selectedCities!);
+      }
+    });
 
     return Scaffold(
       body: Padding(
@@ -94,9 +103,7 @@ class AddDeliveryAreasScreen extends StatelessWidget {
             ActionButtonsWidget(
               isLoading: controller.isLoading,
               onPressed: () async {
-                 controller.validateForm();
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('isAuth', true);
+                controller.validateForm();
               },
             ),
             SizedBox(height: 3.h),

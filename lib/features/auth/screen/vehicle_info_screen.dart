@@ -61,7 +61,8 @@ class VehicleInfoScreen extends StatelessWidget {
                   )),
                   SizedBox(height: 2.h),
                   Obx(() => TTextField(
-                    hintText: "موديل المركبة",
+                    hintText: "سنة الصنع",
+                    isYear: true,
                     prefixIcon: Icon(Iconsax.car),
                     controller: controller.vehicleModelController,
                     keyboardType: TextInputType.phone,

@@ -16,12 +16,12 @@ class RatingDialog extends StatelessWidget {
   RatingDialog({required this.onSubmit});
 
   void _submit(BuildContext context) {
-    if (rating == 0.0 || commentController.text.isEmpty) {
+    if (rating == 0.0 ) {
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text('Error'),
-          content: Text('Please provide a rating and a comment.'),
+          content: Text('Please provide a rating.'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),

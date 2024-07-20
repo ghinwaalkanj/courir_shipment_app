@@ -1,3 +1,6 @@
+import 'package:courir_shipment_app/features/auth/screen/id_upload_screen.dart';
+import 'package:courir_shipment_app/features/auth/screen/personal_info_screen.dart';
+import 'package:courir_shipment_app/features/auth/screen/vehicle_info_screen.dart';
 import 'package:courir_shipment_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -7,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/integration/crud.dart';
 import 'core/services/InternetController.dart';
 import 'features/auth/controller/is_block_controller.dart';
+import 'features/auth/screen/add_delivery_areas_screen.dart';
 import 'features/auth/screen/block_screen.dart';
 import 'features/auth/screen/login_screen.dart';
 import 'features/onboarding/controller/onboarding_controller.dart';
@@ -38,10 +42,16 @@ class MyApp extends StatelessWidget {
           home: Obx(() {
             if (blockStatusController.isLoading.value) {
               return Scaffold(body:Center(child: CircularProgressIndicator()),);
-            } else if (blockStatusController.isBlocked.value&&prefs.get("isFirstTime")==true&&prefs.get("isAuth")==true) {
-              return BlockedScreen();
-            } else if (prefs.getBool('isAuth') == true) {
+            } else if (prefs.getBool('isCities') == true) {
               return NavigationMenu();
+            }else if (prefs.getBool('isVehicleInfo') == true) {
+              return AddDeliveryAreasScreen();
+            }else if (prefs.getBool('isIdUpload') == true) {
+              return VehicleInfoScreen();
+            }else if (prefs.getBool('isPersonalInfo') == true) {
+              return IDUploadScreen();
+            } else if (prefs.getBool('isAuth') == true) {
+              return PersonalInfoScreen();
             } else {
               return prefs.getBool('isFirstTime') == false ? LoginScreen() : OnBoardingScreen();
             }
@@ -51,3 +61,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -72,17 +73,21 @@ class VerifyController extends GetxController {
                 'user_id', verifyResponse.userId);
             String? token = await SharedPreferencesHelper.getString('token');
             int? userId = await SharedPreferencesHelper.getInt('user_id');
+
             if (token != null && userId != null) {
               print('verifyToken: $token, User ID: $userId');
             } else {
               print('No token or user_id found');
             }
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isAuth', true);
 
             Get.to(() => PersonalInfoScreen(), arguments: {
               'name': verifyResponse.name ?? '',
               'national_id': verifyResponse.nationalId ?? '',
               'gender': verifyResponse.gender ?? '',
             });
+
           } else {
             errorMessage.value = 'رمز التحقق غير صحيح';
             Get.snackbar('Error', 'رمز التحقق غير صحيح');

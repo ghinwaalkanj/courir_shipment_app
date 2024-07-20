@@ -201,8 +201,6 @@ class IDUploadController extends GetxController {
         print(responseModel.vehicleInfo?.vehiclePlateNumber);
         print(responseModel.vehicleInfo?.vehicleType);
         if (responseModel.status) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setBool('isAuth', true);
           // FirebaseMessaging.instance.subscribeToTopic("merchant");
           // FirebaseMessaging.instance
           //     .subscribeToTopic("merchant${userId.toString()}");
@@ -212,6 +210,9 @@ class IDUploadController extends GetxController {
             'vehicle_model':responseModel.vehicleInfo?.vehicleModel,
             'vehicle_color':responseModel.vehicleInfo?.vehicleColor,
           });
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isIdUpload', true);
+
         } else {
           Get.snackbar(
             'خطأ',

@@ -30,102 +30,113 @@ class MyShipmentsScreen extends StatelessWidget {
       appBar: TAppBar(
         title: 'الشحنات',
       ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: RefreshIndicator(
-          onRefresh: () async {
-            await controller.fetchMyShipments();
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 2.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                child: Row(
+      body: FutureBuilder(
+        future: controller.fetchMyShipments(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return Directionality(
+              textDirection: TextDirection.rtl,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchMyShipments();
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TSearchContainer(
-                      text: "ابحث عن الشحنة",
-                      onTap: () {
-                        Get.to(SearchScreen());
-                      },
+                    SizedBox(height: 2.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: Row(
+                        children: [
+                          TSearchContainer(
+                            text: "ابحث عن الشحنة",
+                            onTap: () {
+                              Get.to(SearchScreen());
+                            },
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                          CircularContainer(
+                            onTap: () {
+                              Get.to(BarcodeSearchScreen());
+                            },
+                            icon: Icons.search,
+                            color: TColors.primary,
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      width: 2.w,
-                    ),
-                    CircularContainer(
-                      onTap: () {
-                        Get.to(BarcodeSearchScreen());
-                      },
-                      icon: Icons.search,
-                      color: TColors.primary,
+                    SizedBox(height: 4.h),
+                    Obx(() => FilterButtonRow(
+                      selectedFilterIndex: selectedFilterIndex.value,
+                      onTap: (index) => _onFilterTap(index, controller),
+                    )),
+                    Expanded(
+                      child: Obx(() {
+                        if (controller.isLoading.value) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        var filteredShipments = controller.filterShipments(selectedFilterIndex.value);
+                        if (filteredShipments.isEmpty) {
+                          return SingleChildScrollView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 7.h,),
+                                  Image(
+                                    image: AssetImage(
+                                        'assets/images/sammy-line-man-checking-mailbox.png'),
+                                    height: 30.h,
+                                  ),
+                                  SizedBox(height: 3.h,),
+                                  Text('لا يوجد شحنات', style: CustomTextStyle.primaryTextStyle,),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          padding: EdgeInsets.all(5.w),
+                          itemCount: filteredShipments.length,
+                          itemBuilder: (context, index) {
+                            final shipment = filteredShipments[index];
+                            return ShipmentItem(
+                              shipmentName: shipment.shipmentInfo.shipmentContents,
+                              shipmentNumber: shipment.shipmentInfo.shipmentNumber,
+                              senderCity: shipment.userInfo.city,
+                              shipmentDate: shipment.shipmentInfo.createdAt,
+                              recipientCity: shipment.recipientInfo.city,
+                              estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
+                              courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
+                              onTap: () {
+                                if (shipment.shipmentInfo.shipmentStatus == 7 || shipment.shipmentInfo.shipmentStatus == 9) {
+                                  Get.snackbar(
+                                    'خطأ',
+                                    'هذه الشحنة غير نشطة ولا يمكن فتحها.',
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                } else {
+                                  Get.to(ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipment.shipmentInfo.shipmentNumber,'shipmentId': shipment.shipmentInfo.shipmentId});
+                                }
+                              },
+                            );
+                          },
+                        );
+                      }),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 4.h),
-              Obx(() => FilterButtonRow(
-                selectedFilterIndex: selectedFilterIndex.value,
-                onTap: (index) => _onFilterTap(index, controller),
-              )),
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  var filteredShipments = controller.filterShipments(selectedFilterIndex.value);
-                  if (filteredShipments.isEmpty) {
-                    return SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 7.h,),
-                            Image(
-                              image: AssetImage(
-                                  'assets/images/sammy-line-man-checking-mailbox.png'),
-                              height: 30.h,
-                            ),
-                            SizedBox(height: 3.h,),
-                            Text('لا يوجد شحنات', style: CustomTextStyle.primaryTextStyle,),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                    padding: EdgeInsets.all(5.w),
-                    itemCount: filteredShipments.length,
-                    itemBuilder: (context, index) {
-                      final shipment = filteredShipments[index];
-                      return ShipmentItem(
-                        shipmentName: shipment.shipmentInfo.shipmentContents,
-                        shipmentNumber: shipment.shipmentInfo.shipmentNumber,
-                        senderCity: shipment.userInfo.city,
-                        shipmentDate: shipment.shipmentInfo.createdAt,
-                        recipientCity: shipment.recipientInfo.city,
-                        estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
-                        courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
-                        onTap: () {
-                          if (shipment.shipmentInfo.shipmentStatus == 7 || shipment.shipmentInfo.shipmentStatus == 9) {
-                            Get.snackbar(
-                              'خطأ',
-                              'هذه الشحنة غير نشطة ولا يمكن فتحها.',
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                            );
-                          } else {
-                            Get.to(ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipment.shipmentInfo.shipmentNumber,'shipmentId': shipment.shipmentInfo.shipmentId});
-                          }
-                        },
-                      );
-                    },
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
     );
   }

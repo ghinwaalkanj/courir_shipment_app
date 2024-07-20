@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -103,13 +104,16 @@ class PersonalInfoController extends GetxController {
           duration: Duration(seconds: 5),
         );
       },
-          (data) {
+          (data) async {
         try {
           PersonalInfoResponseModel responseModel =
           PersonalInfoResponseModel.fromJson(data);
           if (responseModel.status) {
             print(responseModel.status);
             print(responseModel.message);
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isPersonalInfo', true);
+
             Get.to(() => IDUploadScreen(), arguments: {
               'id_front_image': responseModel.idFrontImage,
               'id_back_image': responseModel.idBackImage,

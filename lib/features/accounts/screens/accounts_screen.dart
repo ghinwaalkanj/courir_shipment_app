@@ -23,38 +23,43 @@ class AccountsScreen extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8.w, 4.h, 8.w, 3.h),
         child: Directionality(
           textDirection: TextDirection.rtl,
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return Center(child: CircularProgressIndicator(color: TColors.primary));
-            } else {
-              List<Map<String, String>> accountData = controller.earnings4DaysResponse.value.data.map((dayEarnings) {
-                return {
-                  'date': dayEarnings.date,
-                  'revenue': dayEarnings.totalCourierIncome.toString(),
-                  'dues': dayEarnings.totalAdminIncome.toString(),
-                };
-              }).toList();
+          child: FutureBuilder(
+            future: controller.fetchEarnings4Days(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator(color: TColors.primary));
+              } else if (snapshot.hasError) {
+                return Center(child: Text('حدث خطأ أثناء جلب البيانات'));
+              } else {
+                List<Map<String, String>> accountData = controller.earnings4DaysResponse.value.data.map((dayEarnings) {
+                  return {
+                    'date': dayEarnings.date,
+                    'revenue': dayEarnings.totalCourierIncome.toString(),
+                    'dues': dayEarnings.totalAdminIncome.toString(),
+                  };
+                }).toList();
 
-              return Column(
-                children: [
-                  AccountDataTable(data: accountData),
-                  SizedBox(height: 4.h),
-                  AccountSummary(
-                    total: double.parse(controller.earnings4DaysResponse.value.totalAdminIncome),
-                  ),
-                  Spacer(),
-                  AccountButtons(
-                    onDistributeIncomePressed: () {
-                      Get.to(IncomeDistributionScreen());
-                    },
-                    onPayPressed: () {
-                      Get.to(PayDuesScreen());
-                    },
-                  ),
-                ],
-              );
-            }
-          }),
+                return Column(
+                  children: [
+                    AccountDataTable(data: accountData),
+                    SizedBox(height: 4.h),
+                    AccountSummary(
+                      total: double.parse(controller.earnings4DaysResponse.value.totalAdminIncome),
+                    ),
+                    Spacer(),
+                    AccountButtons(
+                      onDistributeIncomePressed: () {
+                        Get.to(IncomeDistributionScreen());
+                      },
+                      onPayPressed: () {
+                        Get.to(PayDuesScreen());
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );

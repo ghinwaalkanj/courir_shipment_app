@@ -16,6 +16,7 @@ import '../../../../../core/services/storage_service.dart';
 import '../../../../../navigation_menu.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../personalization/controller/rating_controller.dart';
+import '../../../controller/my_shipments_controller.dart';
 import '../../../controller/page_controller.dart';
 import '../../../controller/update_status_controller.dart';
 import 'contact_info_widget.dart';
@@ -136,6 +137,8 @@ class ActiveShipmentsTab extends StatelessWidget {
     final TPageController pageController =
     Get.put(TPageController(), tag: 'tab$tabIndex');
     final controller = Get.put(UpdateShipmentStatusController());
+    final MyShipmentsController myShipmentsController =
+    Get.put(MyShipmentsController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       switch (initialStatus) {
@@ -163,6 +166,8 @@ class ActiveShipmentsTab extends StatelessWidget {
             if (success) {
               var rater = await SharedPreferencesHelper.getInt('user_id');
               Get.to(NavigationMenu());
+              myShipmentsController.fetchMyShipments();
+
               SuccessSnackbar.show('لقد قمت بتسليم الشحنة بنجاح');
               print(shipmentId);
               print(rater);
@@ -170,6 +175,7 @@ class ActiveShipmentsTab extends StatelessWidget {
               _showRatingReturnDialog(context, shipmentId, rater!, id);
             }
           }, () {
+
             Navigator.of(context).pop();
           });
           break;

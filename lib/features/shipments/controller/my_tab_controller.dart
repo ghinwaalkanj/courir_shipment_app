@@ -11,10 +11,10 @@ class MyTabController extends GetxController with GetSingleTickerProviderStateMi
   @override
   void onInit() {
     super.onInit();
-    fetchAndInitializeTabs();
+    fetchData();
   }
 
-  Future<void> fetchAndInitializeTabs() async {
+  Future<void> fetchData() async {
     await myShipmentsController.fetchMyShipments();
     updateTabs();
     if (tabs.isNotEmpty) {

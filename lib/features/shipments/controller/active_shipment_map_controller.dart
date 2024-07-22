@@ -37,7 +37,7 @@ class ActiveShipmentsMapController extends GetxController {
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
     mapController.animateCamera(
-      CameraUpdate.newLatLngZoom(selectedLocation.value, 12), // Focus on the selected location with appropriate zoom level
+      CameraUpdate.newLatLngZoom(selectedLocation.value, 8),
     );
   }
 

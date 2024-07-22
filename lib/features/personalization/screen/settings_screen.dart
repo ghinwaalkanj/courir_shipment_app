@@ -1,8 +1,6 @@
-import 'package:courir_shipment_app/common/styles/custom_textstyle.dart';
 import 'package:courir_shipment_app/common/widgets/custom_list_tile.dart';
 import 'package:courir_shipment_app/features/accounts/screens/accounts_screen.dart';
 import 'package:courir_shipment_app/features/accounts/screens/income_distribution_screen.dart';
-import 'package:courir_shipment_app/features/auth/screen/add_delivery_areas_screen.dart';
 import 'package:courir_shipment_app/features/personalization/screen/privacy_policy_screen.dart';
 import 'package:courir_shipment_app/features/personalization/screen/profile_screen.dart';
 import 'package:courir_shipment_app/features/personalization/screen/truck_info_screen.dart';
@@ -15,14 +13,21 @@ import 'package:sizer/sizer.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/custom_sized_box.dart';
 import '../../../utils/constants/colors.dart';
+import '../controller/settings_controller.dart';
 import 'about_screen.dart';
 import 'add_delivery_cities_screen.dart';
+import 'notification_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final SettingsController settingsController = Get.put(SettingsController());
+
+
+
     return Scaffold(
       appBar: TAppBar(
         title: 'الإعدادات',
@@ -61,6 +66,30 @@ class SettingsScreen extends StatelessWidget {
                       onTap: () {
                         Get.to(() => TruckInfoScreen());
                       },
+                    ),
+                  ],
+                ),
+                CustomSizedBox.itemSpacingVertical(),
+                const SectionTitle(title: 'التفضيلات'),
+                CustomSettingsSection(
+                  children: [
+                    CustomListTile(
+                      title: 'الإشعارات',
+                      icon: Iconsax.notification,
+                      onTap: () {
+                        Get.to(() => NotificationScreen());
+                      },
+                    ),
+                    CustomListTile(
+                      title: 'الإشعارات',
+                      icon: Iconsax.notification,
+                      trailing: Obx(() => Switch(
+                        activeColor: TColors.primary,
+                        value: settingsController.isNotificationsEnabled.value,
+                        onChanged: (value) {
+                          settingsController.toggleNotifications(value);
+                        },
+                      )),
                     ),
                   ],
                 ),

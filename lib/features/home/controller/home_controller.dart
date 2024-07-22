@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../common/styles/custom_textstyle.dart';
 import '../../../core/integration/crud.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/colors.dart';
@@ -63,6 +64,44 @@ class HomeController extends GetxController {
         print(isOnline.value);
       },
     );
+  }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: Text(
+            'هل تود الخروج من التطبيق؟',
+            style: CustomTextStyle.headlineTextStyle.apply(
+              color: TColors.primary,
+              fontSizeFactor: 1.1,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'نعم',
+                style: CustomTextStyle.headlineTextStyle.apply(
+                  color: TColors.primary,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'لا',
+                style: CustomTextStyle.headlineTextStyle.apply(
+                  color:TColors.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    )) ?? false;
   }
 
   void toggleOnlineStatus(bool value) async {

@@ -1,4 +1,4 @@
-package com.example.courir_shipment_app
+package com.kwickly_courir.app
 
 import io.flutter.embedding.android.FlutterActivity
 

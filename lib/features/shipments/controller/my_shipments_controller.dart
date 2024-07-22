@@ -14,7 +14,7 @@ class MyShipmentsController extends GetxController {
     fetchMyShipments();
   }
 
-  fetchMyShipments() async {
+ Future<void> fetchMyShipments() async {
     isLoading.value = true;
     int? deliveryId = await SharedPreferencesHelper.getInt('user_id');
     print("Fetching shipments for delivery_id: $deliveryId");

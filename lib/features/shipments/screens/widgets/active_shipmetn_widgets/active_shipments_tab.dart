@@ -165,8 +165,9 @@ class ActiveShipmentsTab extends StatelessWidget {
                 shipmentNumber: shipmentNumber, newStatus: 7);
             if (success) {
               var rater = await SharedPreferencesHelper.getInt('user_id');
+              await myShipmentsController.fetchMyShipments();
+
               Get.to(NavigationMenu());
-              myShipmentsController.fetchMyShipments();
 
               SuccessSnackbar.show('لقد قمت بتسليم الشحنة بنجاح');
               print(shipmentId);
@@ -231,6 +232,9 @@ class ActiveShipmentsTab extends StatelessWidget {
               QrCodeDisplayScreen(
                 shipmentNumber: shipmentNumber,
                 onPressed: () async {
+                  await controller.updateShipmentStatus(
+                      shipmentNumber: shipmentNumber, newStatus: 9);
+
                   var rater = await SharedPreferencesHelper.getInt('user_id');
                   Get.to(NavigationMenu());
                   SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
@@ -339,6 +343,8 @@ class ActiveShipmentsTab extends StatelessWidget {
                               QrCodeDisplayScreen(
                                 shipmentNumber: shipmentNumber,
                                 onPressed: () async {
+                                  await controller.updateShipmentStatus(
+                                      shipmentNumber: shipmentNumber, newStatus: 9);
                                   var rater =
                                   await SharedPreferencesHelper.getInt(
                                       'user_id');

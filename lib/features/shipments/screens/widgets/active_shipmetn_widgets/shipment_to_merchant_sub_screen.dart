@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../utils/constants/colors.dart';
+import '../../../controller/active_shipment_map_controller.dart';
 import '../../../controller/new_shipment_mp_controller.dart';
 
 class ShipmentToMerchantScreen extends StatelessWidget {
@@ -12,59 +13,37 @@ class ShipmentToMerchantScreen extends StatelessWidget {
 
   ShipmentToMerchantScreen({required this.recipientLocation, required this.deliveryLocation});
 
-  Future<void> _initializeMap(NewShipmentsMapController mapController) async {
-    await mapController.initialize(recipientLocation, deliveryLocation);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final NewShipmentsMapController mapController = Get.put(NewShipmentsMapController());
+    final NewShipmentsMapController mapController =
+    Get.put(NewShipmentsMapController());
 
-    return FutureBuilder<void>(
-      future: _initializeMap(mapController),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-
-        return Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-                top: 3.h,
-                left: 6.w,
-                right: 6.w,
-              ),
-              child: HeaderWidget(
-                title: 'في الطريق إلى التاجر',
-                subTitle: 'التالي :  استلام الشحنة',
-                currentStep: 1,
-                totalSteps: 2,
-              ),
-            ),
-            SizedBox(
-              height: 3.h,
-            ),
-            SizedBox(
-              height: 55.h,
-              child: Obx(
-                    () => GoogleMap(
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 3.h,
+            left: 6.w,
+            right: 6.w,
+          ),
+          child: HeaderWidget(
+            title: 'في الطريق إلى التاجر',
+            subTitle: 'التالي :  استلام الشحنة',
+            currentStep: 1,
+            totalSteps: 2,
+          ),
+        ),
+        SizedBox(
+          height: 3.h,
+        ),
+        SizedBox(
+          height: 55.h,
+          child: Obx(
+                () => GoogleMap(
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: true,
-                  onMapCreated: (GoogleMapController controller) {
-                    mapController.onMapCreated(controller);
-                    mapController.mapController = controller;
-                    // Ensure the camera moves to the recipient location
-                    controller.animateCamera(CameraUpdate.newCameraPosition(
-                      CameraPosition(
-                        target: recipientLocation,
-                        zoom: 15,
-                      ),
-                    ));
-                  },
+                  onMapCreated: mapController.onMapCreated,
                   initialCameraPosition: CameraPosition(
                     target: recipientLocation,
                     zoom: 15,
@@ -72,11 +51,9 @@ class ShipmentToMerchantScreen extends StatelessWidget {
                   markers: mapController.markers.value,
                   polylines: mapController.polylines.value,
                 ),
-              ),
-            ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 }

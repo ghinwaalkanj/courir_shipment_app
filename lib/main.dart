@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:courir_shipment_app/features/auth/screen/id_upload_screen.dart';
 import 'package:courir_shipment_app/features/auth/screen/personal_info_screen.dart';
 import 'package:courir_shipment_app/features/auth/screen/vehicle_info_screen.dart';
@@ -15,55 +14,9 @@ import 'features/auth/screen/add_delivery_areas_screen.dart';
 import 'features/auth/screen/block_screen.dart';
 import 'features/auth/screen/login_screen.dart';
 import 'features/onboarding/controller/onboarding_controller.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp();
-
-  await AwesomeNotifications().initialize(
-      'resource://drawable/ic_stat_icon',
-      [
-        NotificationChannel(
-            channelKey: 'alerts',
-            channelName: 'Alerts',
-            channelDescription: 'Notification tests as alerts',
-            playSound: true,
-            onlyAlertOnce: true,
-            groupAlertBehavior: GroupAlertBehavior.Children,
-            importance: NotificationImportance.High,
-            defaultPrivacy: NotificationPrivacy.Private,
-            defaultColor: Colors.green,
-            ledColor: Colors.green)
-      ],
-      debug: true);
-
-  NotificationSettings settings =
-  await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: true,
-    badge: true,
-    carPlay: true,
-    criticalAlert: true,
-    provisional: true,
-    sound: true,
-  );
-
-  FirebaseMessaging.onMessage.listen((message) {
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 10,
-        channelKey: 'alerts',
-        title: message.notification!.title!,
-        body: message.notification!.body!,
-      ),
-    );
-  });
-
   final prefs = await SharedPreferences.getInstance();
   Get.put(Crud());
   Get.put(OnBoardingController());

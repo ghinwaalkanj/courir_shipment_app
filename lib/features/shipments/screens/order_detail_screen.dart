@@ -1,7 +1,6 @@
 import 'package:courir_shipment_app/common/widgets/app_bar.dart';
 import 'package:courir_shipment_app/features/shipments/controller/update_status_controller.dart';
 import 'package:courir_shipment_app/features/shipments/screens/active_shipments_screen.dart';
-import 'package:courir_shipment_app/features/shipments/screens/my_shipments_screen.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/draggable_button.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/order_detil_widgets/map_widget.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/order_detil_widgets/shipment_info.dart';
@@ -12,8 +11,6 @@ import 'package:get/get.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../common/styles/custom_textstyle.dart';
 import '../controller/new_shipment_mp_controller.dart';
-import '../controller/my_shipments_controller.dart';
-import '../controller/my_tab_controller.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   final LatLng recipientLocation;
@@ -36,11 +33,10 @@ class OrderDetailScreen extends StatelessWidget {
     final shipmentWeight = arguments['shipmentWeight'];
     final shipmentQuantity = arguments['shipmentQuantity'];
     final controller = Get.put(UpdateShipmentStatusController());
-    final NewShipmentsMapController mapController = Get.put(NewShipmentsMapController());
-    final MyShipmentsController myShipmentsController = Get.put(MyShipmentsController());
-    final MyTabController tabController = Get.put(MyTabController());
-
+    final NewShipmentsMapController mapController =
+    Get.put(NewShipmentsMapController());
     mapController.initialize(recipientLocation, merchentLocation);
+
     return Scaffold(
       backgroundColor: TColors.bg,
       appBar: TAppBar(
@@ -83,12 +79,8 @@ class OrderDetailScreen extends StatelessWidget {
                     bool success = await controller.updateShipmentStatus(
                         shipmentNumber: shipmentNumber, newStatus: 1);
                     if (success) {
-                      // تحديث البيانات بعد قبول الشحنة
-                      await myShipmentsController.fetchMyShipments();
-                      tabController.updateTabs();
-                      final index = tabController.getTabIndexByShipmentNumber(shipmentNumber);
-                      // Get.off(() => ActiveShipmentsScreen(), arguments: {'shipmentNumber': shipmentNumber, 'shipmentId': shipmentId, 'tabIndex': index});
-                      Get.off(() => MyShipmentsScreen(),);
+                      Get.off(ActiveShipmentsScreen(),
+                          arguments: {'shipmentNumber': shipmentNumber,'shipmentId': shipmentId});
                     }
                   },
                 ),

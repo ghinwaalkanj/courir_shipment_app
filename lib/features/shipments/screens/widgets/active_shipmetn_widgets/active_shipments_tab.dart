@@ -3,7 +3,6 @@ import 'package:courir_shipment_app/features/Qr_code/screen/Qr_code_display_scre
 import 'package:courir_shipment_app/features/Qr_code/screen/Qr_code_scan.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/rating_dialog.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/rating_return_dialog.dart';
-import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/return_to_merchant_dialog.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_customer_dialog.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_merchant_dialog.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_to_customer_sub_screen.dart';
@@ -14,7 +13,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/services/storage_service.dart';
 import '../../../../../navigation_menu.dart';
-import '../../../../../utils/constants/colors.dart';
 import '../../../../personalization/controller/rating_controller.dart';
 import '../../../controller/my_shipments_controller.dart';
 import '../../../controller/page_controller.dart';
@@ -168,7 +166,6 @@ class ActiveShipmentsTab extends StatelessWidget {
               await myShipmentsController.fetchMyShipments();
 
               Get.to(NavigationMenu());
-
               SuccessSnackbar.show('لقد قمت بتسليم الشحنة بنجاح');
               print(shipmentId);
               print(rater);

@@ -25,6 +25,7 @@ void main() async {
   runApp(MyApp(prefs: prefs, blockStatusController: blockStatusController, internetController: internetController));
 }
 
+//
 class MyApp extends StatelessWidget {
   final SharedPreferences prefs;
   final BlockStatusController blockStatusController;

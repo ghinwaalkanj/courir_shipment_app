@@ -30,19 +30,21 @@ class ReturnShipmentDialog extends StatelessWidget {
               padding: EdgeInsets.all(4.w),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'هل أنت متأكد أنك تريد إرجاع الشحنة؟',
-                        style: TextStyle(
-                          fontFamily: 'Cairo',
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.bold,
-                          color: TColors.primary,
+                  FittedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'هل أنت متأكد أنك تريد إرجاع الشحنة؟',
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: TColors.primary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -34,18 +34,20 @@ class PayDuesScreen extends StatelessWidget {
 
             double percentage = maxEarningsLimit > 0 ? (totalIncome / maxEarningsLimit).clamp(0, 1) * 100 : 0;
 
-            return Column(
-              children: [
-                DuesCard(
-                  duesAmount: totalIncome.toStringAsFixed(0),
-                  percentage: percentage.toPrecision(0),
-                  requiredAmount: maxEarningsLimit.toStringAsFixed(0),
-                ),
-                SizedBox(height: 12.h),
-                ContactCard(
-                  contactInfoList: contactController.contactInfoList,
-                ),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  DuesCard(
+                    duesAmount: totalIncome.toStringAsFixed(0),
+                    percentage: percentage.toPrecision(0),
+                    requiredAmount: maxEarningsLimit.toStringAsFixed(0),
+                  ),
+                  SizedBox(height: 12.h),
+                  ContactCard(
+                    contactInfoList: contactController.contactInfoList,
+                  ),
+                ],
+              ),
             );
           }
         }),

@@ -118,9 +118,10 @@ class ActiveShipmentsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _initializeData() async {
+  Future<void> _fetchData() async {
     await controller.fetchNewShipments();
     await myShipmentsController.fetchMyShipments();
+    tabController.updateTabs();
   }
 
   @override
@@ -129,136 +130,125 @@ class ActiveShipmentsScreen extends StatelessWidget {
     final shipmentNumber = arguments?['shipmentNumber'];
     final shipmentId = arguments?['shipmentId'];
 
-    return FutureBuilder<void>(
-      future: _initializeData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            backgroundColor: TColors.bg,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        } else if (snapshot.hasError) {
-          return Scaffold(
-            backgroundColor: TColors.bg,
-            body: Center(child: Text('Error: ${snapshot.error}')),
-          );
-        }
-
-        final activeShipments = myShipmentsController.getActiveShipments();
-
-        return WillPopScope(
-          onWillPop: () async {
-            controller.fetchNewShipments();
-            myShipmentsController.fetchMyShipments();
-            Get.to(NavigationMenu());
-            return false;
-          },
-          child: DefaultTabController(
-            length: tabController.tabs.length,
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              backgroundColor: TColors.bg,
-              appBar: AppBar(
-                leading: Padding(
-                  padding: EdgeInsets.only(left: 7.w, top: 1.8.h),
-                  child: IconButton(
-                    onPressed: () async {
-                      var delivery = await SharedPreferencesHelper.getInt('user_id');
-                      if (activeShipments.isNotEmpty) {
-                        _showAnnouncementDialog(context, shipmentId, delivery!);
-                      }
-                    },
-                    icon: Icon(
-                      Iconsax.warning_2,
-                      color: TColors.error,
-                      size: 25.sp,
-                    ),
-                  ),
-                ),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(48.0),
-                  child: Obx(() {
-                    return Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: tabController.tabs.isEmpty
-                          ? Center(child: CircularProgressIndicator())
-                          : TabBar(
-                        isScrollable: tabController.tabs.length > 1,
-                        controller: tabController.tabController,
-                        tabs: tabController.tabs.map((tab) {
-                          return Tab(
-                            text: tab,
-                          );
-                        }).toList(),
-                        indicatorColor: TColors.primary,
-                        labelColor: TColors.primary,
-                        unselectedLabelColor: TColors.grey,
-                        labelStyle: TextStyle(fontSize: 16.0),
-                        unselectedLabelStyle: TextStyle(fontSize: 14.0),
-                      ),
-                    );
-                  }),
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        await _fetchData();
+        Get.to(NavigationMenu());
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: TColors.bg,
+        appBar: AppBar(
+          leading: Padding(
+            padding: EdgeInsets.only(left: 7.w, top: 1.8.h),
+            child: IconButton(
+              onPressed: () async {
+                var delivery = await SharedPreferencesHelper.getInt('user_id');
+                if (myShipmentsController.getActiveShipments().isNotEmpty) {
+                  _showAnnouncementDialog(context, shipmentId, delivery!);
+                }
+              },
+              icon: Icon(
+                Iconsax.warning_2,
+                color: TColors.error,
+                size: 25.sp,
               ),
-              body: Obx(() {
-                if (tabController.tabs.isEmpty) {
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(48.0),
+            child: FutureBuilder<void>(
+              future: _fetchData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
 
-                final filteredShipments = myShipmentsController.getActiveShipments();
+                return Obx(() {
+                  return Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: tabController.tabs.isEmpty
+                        ? Center(child: Text('No shipments available.'))
+                        : TabBar(
+                      isScrollable: tabController.tabs.length > 1,
+                      controller: tabController.tabController,
+                      tabs: tabController.tabs.map((tab) {
+                        return Tab(
+                          text: tab,
+                        );
+                      }).toList(),
+                      indicatorColor: TColors.primary,
+                      labelColor: TColors.primary,
+                      unselectedLabelColor: TColors.grey,
+                      labelStyle: TextStyle(fontSize: 16.0),
+                      unselectedLabelStyle: TextStyle(fontSize: 14.0),
+                    ),
+                  );
+                });
+              },
+            ),
+          ),
+        ),
+        body: FutureBuilder<void>(
+          future: _fetchData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-                if (shipmentNumber != null) {
-                  final index = tabController.getTabIndexByShipmentNumber(shipmentNumber);
-                  if (index != -1) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      tabController.tabController.animateTo(index);
-                    });
-                  }
-                }
+            final filteredShipments = myShipmentsController.getActiveShipments();
 
-                if (filteredShipments.isEmpty) {
+            if (shipmentNumber != null) {
+              final index = tabController.getTabIndexByShipmentNumber(shipmentNumber);
+              if (index != -1) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  tabController.tabController.animateTo(index);
+                });
+              }
+            }
+
+            if (filteredShipments.isEmpty) {
+              return Center(child: Text('No shipments available.'));
+            }
+
+            return TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: tabController.tabController,
+              children: tabController.tabs.map((tab) {
+                final tabIndex = tabController.tabs.indexOf(tab);
+
+                if (tabIndex >= filteredShipments.length) {
                   return Center(child: Text('No shipments available.'));
                 }
 
-                return TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: tabController.tabController,
-                  children: tabController.tabs.map((tab) {
-                    final tabIndex = tabController.tabs.indexOf(tab);
-
-                    if (tabIndex >= filteredShipments.length) {
-                      return Center(child: Text('No shipments available.'));
-                    }
-
-                    final shipment = filteredShipments[tabIndex];
-                    return ActiveShipmentsTab(
-                      tabIndex: tabIndex,
-                      shipmentNumber: shipment.shipmentInfo.shipmentNumber,
-                      merchantName: shipment.userInfo.name,
-                      merchantPhone: shipment.userInfo.phone,
-                      customerName: shipment.recipientInfo.name,
-                      customerPhone: shipment.recipientInfo.phone,
-                      shipmentAmount: double.parse(shipment.shipmentInfo.shipmentValue),
-                      deliveryFee: double.parse(shipment.shipmentInfo.shipmentFee),
-                      initialStatus: shipment.shipmentInfo.shipmentStatus,
-                      recipientLocation: LatLng(
-                        double.parse(shipment.recipientInfo.lat),
-                        double.parse(shipment.recipientInfo.long),
-                      ),
-                      merchentLocation: LatLng(
-                        double.parse(shipment.userInfo.fromAddressLat),
-                        double.parse(shipment.userInfo.fromAddressLong),
-                      ),
-                      shipmentId: shipment.shipmentInfo.shipmentId,
-                      id: shipment.userInfo.id,
-                    );
-                  }).toList(),
+                final shipment = filteredShipments[tabIndex];
+                return ActiveShipmentsTab(
+                  tabIndex: tabIndex,
+                  shipmentNumber: shipment.shipmentInfo.shipmentNumber,
+                  merchantName: shipment.userInfo.name,
+                  merchantPhone: shipment.userInfo.phone,
+                  customerName: shipment.recipientInfo.name,
+                  customerPhone: shipment.recipientInfo.phone,
+                  shipmentAmount: double.parse(shipment.shipmentInfo.shipmentValue),
+                  deliveryFee: double.parse(shipment.shipmentInfo.shipmentFee),
+                  initialStatus: shipment.shipmentInfo.shipmentStatus,
+                  recipientLocation: LatLng(
+                    double.parse(shipment.recipientInfo.lat),
+                    double.parse(shipment.recipientInfo.long),
+                  ),
+                  merchentLocation: LatLng(
+                    double.parse(shipment.userInfo.fromAddressLat),
+                    double.parse(shipment.userInfo.fromAddressLong),
+                  ),
+                  shipmentId: shipment.shipmentInfo.shipmentId,
+                  id: shipment.userInfo.id,
                 );
-              }),
-            ),
-          ),
-        );
-      },
+              }).toList(),
+            );
+          },
+        ),
+      ),
     );
   }
 }

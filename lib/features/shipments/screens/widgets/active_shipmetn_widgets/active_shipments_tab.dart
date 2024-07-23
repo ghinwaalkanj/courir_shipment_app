@@ -1,3 +1,6 @@
+import 'package:courir_shipment_app/common/widgets/snack_bars/success_snack_bar.dart';
+import 'package:courir_shipment_app/features/Qr_code/screen/Qr_code_display_screen.dart';
+import 'package:courir_shipment_app/features/Qr_code/screen/Qr_code_scan.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/rating_dialog.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/rating_return_dialog.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_customer_dialog.dart';
@@ -5,23 +8,19 @@ import 'package:courir_shipment_app/features/shipments/screens/widgets/active_sh
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_to_customer_sub_screen.dart';
 import 'package:courir_shipment_app/features/shipments/screens/widgets/active_shipmetn_widgets/shipment_to_merchant_sub_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/services/storage_service.dart';
 import '../../../../../navigation_menu.dart';
-import '../../../../../utils/constants/colors.dart';
-import '../../../../Qr_code/screen/Qr_code_display_screen.dart';
-import '../../../../Qr_code/screen/Qr_code_scan.dart';
+import '../../../../personalization/controller/rating_controller.dart';
 import '../../../controller/my_shipments_controller.dart';
 import '../../../controller/page_controller.dart';
 import '../../../controller/update_status_controller.dart';
-import '../../../../personalization/controller/rating_controller.dart';
-import '../../../../../common/widgets/snack_bars/success_snack_bar.dart';
 import 'contact_info_widget.dart';
 import 'draggable_button.dart';
 
-class ActiveShipmentsTab extends StatefulWidget {
+class ActiveShipmentsTab extends StatelessWidget {
   final int tabIndex;
   final int id;
   final int shipmentId;
@@ -52,20 +51,8 @@ class ActiveShipmentsTab extends StatefulWidget {
     required this.id,
   });
 
-  @override
-  _ActiveShipmentsTabState createState() => _ActiveShipmentsTabState();
-}
-
-class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
-  late GoogleMapController _mapController;
-
-  @override
-  void dispose() {
-    _mapController.dispose();
-    super.dispose();
-  }
-
-  void _showRatingDialog(BuildContext context, int shipmentId, int raterId, int rateeId) {
+  void _showRatingDialog(BuildContext context, int shipmentId, int raterId,
+      int rateeId) {
     final RatingController ratingController = Get.put(RatingController());
 
     showDialog(
@@ -103,7 +90,8 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
     );
   }
 
-  void _showRatingReturnDialog(BuildContext context, int shipmentId, int raterId, int rateeId) {
+  void _showRatingReturnDialog(BuildContext context, int shipmentId,
+      int raterId, int rateeId) {
     Get.lazyPut(() => RatingController());
 
     showDialog(
@@ -144,12 +132,14 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
 
   @override
   Widget build(BuildContext context) {
-    final TPageController pageController = Get.put(TPageController(), tag: 'tab${widget.tabIndex}');
+    final TPageController pageController =
+    Get.put(TPageController(), tag: 'tab$tabIndex');
     final controller = Get.put(UpdateShipmentStatusController());
-    final MyShipmentsController myShipmentsController = Get.put(MyShipmentsController());
+    final MyShipmentsController myShipmentsController =
+    Get.put(MyShipmentsController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      switch (widget.initialStatus) {
+      switch (initialStatus) {
         case 1:
           pageController.changePage(0);
           break;
@@ -168,18 +158,22 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
         case 6:
           pageController.changePage(4);
           showShipmentCustomerDialog(
-              context, widget.shipmentAmount + widget.deliveryFee, widget.tabIndex, () async {
+              context, shipmentAmount + deliveryFee, tabIndex, () async {
             final success = await controller.updateShipmentStatus(
-                shipmentNumber: widget.shipmentNumber, newStatus: 7);
+                shipmentNumber: shipmentNumber, newStatus: 7);
             if (success) {
               var rater = await SharedPreferencesHelper.getInt('user_id');
-              Get.to(NavigationMenu());
-              myShipmentsController.fetchMyShipments();
+              await myShipmentsController.fetchMyShipments();
 
+              Get.to(NavigationMenu());
               SuccessSnackbar.show('لقد قمت بتسليم الشحنة بنجاح');
-              _showRatingReturnDialog(context, widget.shipmentId, rater!, widget.id);
+              print(shipmentId);
+              print(rater);
+              print(id);
+              _showRatingReturnDialog(context, shipmentId, rater!, id);
             }
           }, () {
+
             Navigator.of(context).pop();
           });
           break;
@@ -199,17 +193,16 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
             index: pageController.currentPage.value,
             children: [
               ShipmentToMerchantScreen(
-                recipientLocation: widget.recipientLocation,
-                deliveryLocation: widget.merchentLocation,
-              ),
+                recipientLocation: recipientLocation, deliveryLocation:merchentLocation,),
               ShipmentToMerchantScreen(
-                recipientLocation: widget.recipientLocation,
-                deliveryLocation: widget.merchentLocation,
-              ),
+                recipientLocation: recipientLocation, deliveryLocation:merchentLocation,),
               BarcodeScanScreen(
                 onBarcodeScanned: (barcode) {
-                  if (barcode == widget.shipmentNumber) {
-                    controller.updateShipmentStatus(shipmentNumber: barcode, newStatus: 4).then((success) {
+                  if (barcode == shipmentNumber) {
+                    controller
+                        .updateShipmentStatus(
+                        shipmentNumber: barcode, newStatus: 4)
+                        .then((success) {
                       if (success) {
                         pageController.changePage(3);
                       }
@@ -230,29 +223,36 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
                 },
               ),
               ShipmentToCustomerScreen(
-                recipientLocation: widget.recipientLocation,
-                deliveryLocation: widget.merchentLocation,
-              ),
+                recipientLocation: recipientLocation, deliveryLocation:merchentLocation,),
               ShipmentToCustomerScreen(
-                recipientLocation: widget.recipientLocation,
-                deliveryLocation: widget.merchentLocation,
-              ),
+                recipientLocation: recipientLocation, deliveryLocation:merchentLocation,),
               QrCodeDisplayScreen(
-                shipmentNumber: widget.shipmentNumber,
+                shipmentNumber: shipmentNumber,
                 onPressed: () async {
+                  await controller.updateShipmentStatus(
+                      shipmentNumber: shipmentNumber, newStatus: 9);
+
                   var rater = await SharedPreferencesHelper.getInt('user_id');
                   Get.to(NavigationMenu());
                   SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
+                  // _showRatingDialog(context, shipmentId, rater!, id);
                 },
               ),
+
             ],
           ),
-          if (pageController.currentPage.value != 2 && pageController.currentPage.value != 5)
+          if (pageController.currentPage.value != 2 &&
+              pageController.currentPage.value != 5)
             ContactInfoWidget(
-              name: pageController.currentPage.value < 3 ? widget.merchantName : widget.customerName,
-              phoneNumber: pageController.currentPage.value < 3 ? widget.merchantPhone : widget.customerPhone,
+              name: pageController.currentPage.value < 3
+                  ? merchantName
+                  : customerName,
+              phoneNumber: pageController.currentPage.value < 3
+                  ? merchantPhone
+                  : customerPhone,
             ),
-          if (pageController.currentPage.value != 2 && pageController.currentPage.value != 5)
+          if (pageController.currentPage.value != 2 &&
+              pageController.currentPage.value != 5)
             Padding(
               padding: EdgeInsets.only(top: 76.2.h),
               child: DraggableConfirmButton(
@@ -265,7 +265,10 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
                     : 'قم بالسحب عند الوصول إلى الزبون',
                 onDragEnd: () {
                   if (pageController.currentPage.value == 0) {
-                    controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 2).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 2)
+                        .then((success) {
                       if (success) {
                         pageController.changePage(1);
                       }
@@ -273,12 +276,15 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
                   } else if (pageController.currentPage.value == 1) {
                     showShipmentMerchantDialog(
                       context,
-                      widget.shipmentAmount,
-                      widget.deliveryFee,
-                      widget.tabIndex,
+                      shipmentAmount,
+                      deliveryFee,
+                      tabIndex,
                           () {
                         Navigator.of(context).pop();
-                        controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 3).then((success) {
+                        controller
+                            .updateShipmentStatus(
+                            shipmentNumber: shipmentNumber, newStatus: 3)
+                            .then((success) {
                           if (success) {
                             pageController.changePage(2);
                           }
@@ -286,51 +292,68 @@ class _ActiveShipmentsTabState extends State<ActiveShipmentsTab> {
                       },
                     );
                   } else if (pageController.currentPage.value == 2) {
-                    controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 5).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 5)
+                        .then((success) {
                       if (success) {
                         pageController.changePage(3);
                       }
                     });
                   } else if (pageController.currentPage.value == 3) {
-                    controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 5).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 5)
+                        .then((success) {
                       if (success) {
                         pageController.changePage(4);
                       }
                     });
                   } else {
-                    controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 6).then((success) {
+                    controller
+                        .updateShipmentStatus(
+                        shipmentNumber: shipmentNumber, newStatus: 6)
+                        .then((success) {
                       if (success) {
                         showShipmentCustomerDialog(
-                          context,
-                          widget.shipmentAmount + widget.deliveryFee,
-                          widget.tabIndex,
-                              () async {
-                            var rater = await SharedPreferencesHelper.getInt('user_id');
-                            final success = await controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 7);
-                            if (success) {
-                              Navigator.of(context).pop();
-                              Get.to(NavigationMenu());
-                              _showRatingDialog(context, widget.shipmentId, rater!, widget.id);
-                              SuccessSnackbar.show('لقد قمت بتسليم الشحنة بنجاح');
-                            }
-                          },
-                              () async {
-                            final success = await controller.updateShipmentStatus(shipmentNumber: widget.shipmentNumber, newStatus: 8);
-                            if (success) {
-                              Navigator.of(context).pop();
-                              Get.to(
-                                QrCodeDisplayScreen(
-                                  shipmentNumber: widget.shipmentNumber,
-                                  onPressed: () async {
-                                    var rater = await SharedPreferencesHelper.getInt('user_id');
-                                    Get.to(NavigationMenu());
-                                    SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
-                                  },
-                                ),
-                              );
-                            }
-                          },
-                        );
+                            context, shipmentAmount + deliveryFee, tabIndex,
+                                () async {
+                              var rater =
+                              await SharedPreferencesHelper.getInt('user_id');
+                              final success = await controller
+                                  .updateShipmentStatus(
+                                  shipmentNumber: shipmentNumber, newStatus: 7);
+                              if (success) {
+                                Navigator.of(context).pop();
+                                Get.to(NavigationMenu());
+                                _showRatingDialog(
+                                    context, shipmentId, rater!, id);
+                                SuccessSnackbar.show(
+                                    'لقد قمت بتسليم الشحنة بنجاح');
+                              }
+                            }, () async {
+                          final success = await controller.updateShipmentStatus(
+                              shipmentNumber: shipmentNumber, newStatus: 8);
+                          if (success) {
+                            Navigator.of(context).pop();
+                            Get.to(
+                              QrCodeDisplayScreen(
+                                shipmentNumber: shipmentNumber,
+                                onPressed: () async {
+                                  await controller.updateShipmentStatus(
+                                      shipmentNumber: shipmentNumber, newStatus: 9);
+                                  var rater =
+                                  await SharedPreferencesHelper.getInt(
+                                      'user_id');
+                                  Get.to(NavigationMenu());
+                                  SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
+                                  // _showRatingDialog(
+                                  //     context, shipmentId, rater!, id);
+                                },
+                              ),
+                            );
+                          }
+                        });
                       }
                     });
                   }

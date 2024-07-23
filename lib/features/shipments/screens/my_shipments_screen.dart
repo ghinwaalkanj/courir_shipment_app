@@ -36,7 +36,7 @@ class MyShipmentsScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Error: no internet'));
           } else {
             return Directionality(
               textDirection: TextDirection.rtl,

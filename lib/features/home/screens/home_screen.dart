@@ -43,7 +43,6 @@ class HomeScreen extends StatelessWidget {
             await mapController.initialize();
           },
           child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 Padding(

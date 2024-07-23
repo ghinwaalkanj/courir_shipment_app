@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../utils/constants/colors.dart';
-import '../../../../personalization/screen/privacy_policy_screen.dart';
-import '../../../../personalization/screen/terms_and_conditions_screen.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy({
@@ -40,7 +38,7 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                   Get.to(TermsAndConditionsScreen());
+                  // Get.to(TermsAndConditionsScreen());
                   ///ToDo
                 },
             ),
@@ -64,7 +62,7 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                   Get.to(PrivacyPolicyScreen());
+                  // Get.to(PrivacyPolicyScreen());
                   ///ToDo
                 },
             ),

@@ -44,6 +44,7 @@ class OrderDetailScreen extends StatelessWidget {
         showBackArrow: true,
       ),
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

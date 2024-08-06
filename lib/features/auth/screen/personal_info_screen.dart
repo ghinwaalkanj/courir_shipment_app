@@ -66,7 +66,7 @@ class PersonalInfoScreen extends StatelessWidget {
                 onChanged: (value) {
                   controller.gender.value = value!;
                   controller.validateForm();
-                }, item1: 'ذكر', item2: 'أنثى', hintText: 'النوع',
+                }, item1: 'ذكر', item2: 'أنثى', hintText: 'الجنس',
               ),
               SizedBox(height: 15.h),
               ActionButtonsWidget(

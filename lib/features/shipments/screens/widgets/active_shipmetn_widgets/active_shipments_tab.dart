@@ -211,17 +211,17 @@ class ActiveShipmentsTab extends StatelessWidget {
                       }
                     });
                   } else {
-                    Get.snackbar(
-                      'خطأ',
-                      'رقم الشحنة غير صحيح',
-                      backgroundColor: Colors.red,
-                      colorText: Colors.white,
-                      snackPosition: SnackPosition.TOP,
-                      margin: EdgeInsets.all(10),
-                      borderRadius: 10,
-                      icon: Icon(Icons.error_outline, color: Colors.white),
-                      duration: Duration(seconds: 5),
-                    );
+                    // Get.snackbar(
+                    //   'خطأ',
+                    //   'رقم الشحنة غير صحيح',
+                    //   backgroundColor: Colors.red,
+                    //   colorText: Colors.white,
+                    //   snackPosition: SnackPosition.TOP,
+                    //   margin: EdgeInsets.all(10),
+                    //   borderRadius: 10,
+                    //   icon: Icon(Icons.error_outline, color: Colors.white),
+                    //   duration: Duration(seconds: 5),
+                    // );
                   }
                 },
               ),

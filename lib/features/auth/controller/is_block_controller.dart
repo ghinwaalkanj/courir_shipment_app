@@ -24,7 +24,7 @@ class BlockStatusController extends GetxController {
     isLoading.value = true;
     var deliveryId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/get_is_blocked.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/get_is_blocked.php',
       {
         'delivery_id': deliveryId.toString(),
       },

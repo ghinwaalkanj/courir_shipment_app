@@ -7,6 +7,11 @@ class TImages {
   // -- App Logos
   static const String darkAppLogo = "assets/logos/t-store-splash-logo-black.png";
   static const String lightAppLogo = "assets/logos/t-store-splash-logo-white.png";
+  static const String app_icon = "assets/images/app_icon.png";
+
+  // -- Loading
+  static const String loading = "assets/gifs/loading.json";
+  static const String no_connection = "assets/gifs/sammy-line-no-connection.gif";
 
   // -- Social Logos
   static const String google = "assets/logos/google-icon.png";

@@ -33,7 +33,7 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       appBar: const TAppBar(
         title: 'الإشعارات',
-        showBackArrow: false,
+        showBackArrow: true,
       ),
       backgroundColor: TColors.bg,
       body: Padding(

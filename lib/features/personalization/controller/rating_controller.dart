@@ -17,7 +17,7 @@ class RatingController extends GetxController {
   }) async {
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://api.wasenahon.com/Kwickly/merchant/shipments/rate_delivery.php')
+        Uri.parse('https://darkred-wombat-762943.hostingersite.com/Kwickly/merchant/shipments/rate_delivery.php')
     );
 
     request.fields.addAll({

@@ -19,7 +19,7 @@ class DeliveryCitiesSettingsController extends GetxController {
     isLoading.value = true;
     int? userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-        'https://api.wasenahon.com/Kwickly/delivery/cities/get_delivery_cities.php',
+        'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/cities/get_delivery_cities.php',
         {
           'user_id': userId.toString(),
         },

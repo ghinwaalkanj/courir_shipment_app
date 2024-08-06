@@ -4,7 +4,9 @@ import 'package:courir_shipment_app/features/auth/screen/widgets/login_widgets/e
 import 'package:courir_shipment_app/features/auth/screen/widgets/login_widgets/slogan_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sizer/sizer.dart';
+import '../../../utils/constants/colors.dart';
 import '../controller/login_controller.dart';
 import 'widgets/login_widgets/label_text_field_widget.dart';
 import 'widgets/login_widgets/logo_image_widget.dart';
@@ -35,7 +37,85 @@ class LoginScreen extends StatelessWidget {
               left: 2.w,
               child: ActionButtonsWidget(
                 isLoading: controller.isLoading,
-                onPressed: controller.login,
+                onPressed: () {
+                  if (!controller.isLoading.value &&
+                      controller.phoneNumber.value.isNotEmpty &&
+                      controller.errorMessage.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '+9627${controller.phoneNumber.value}',
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: TColors.textPrimary,
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                'هل هذا هو رقمك الصحيح؟',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: TColors.textPrimary,
+                                  fontFamily: 'Cairo',
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'تعديل',
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: TColors.primary,
+                                        fontFamily: 'Cairo',
+                                      ),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      controller.login();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: TColors.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'تأكيد',
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontFamily: 'Cairo',
+                                        color: TColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
                 continueButtonText: 'تسجيل الدخول',
                 showBackButton: false,
               ),

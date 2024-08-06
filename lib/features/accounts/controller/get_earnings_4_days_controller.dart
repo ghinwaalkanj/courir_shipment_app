@@ -29,7 +29,7 @@ class Earnings4DaysController extends GetxController {
     String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/get_earnings_4_days.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/get_earnings_4_days.php',
       {
         'delivery_id': deliveryId.toString(),
         'date': currentDate,

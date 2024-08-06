@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../utils/constants/colors.dart';
 
 class ProfileTextField extends StatelessWidget {
@@ -14,7 +13,7 @@ class ProfileTextField extends StatelessWidget {
     this.initialValue,
     required this.labelText,
     this.isEnabled = true,
-     this.controller,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -25,22 +24,29 @@ class ProfileTextField extends StatelessWidget {
       style: TextStyle(
         fontFamily: 'Cairo',
         fontSize: 13.sp,
+        color: isEnabled ? Colors.black : Colors.grey,
       ),
+      cursorColor: TColors.primary,
       controller: controller,
-      initialValue:initialValue,
+      initialValue: initialValue,
       enabled: isEnabled,
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w600,
-            color: TColors.primary),
+          fontFamily: 'Cairo',
+          fontWeight: FontWeight.w600,
+          color: TColors.primary,
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: TColors.primary),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey),
         ),
       ),
     );

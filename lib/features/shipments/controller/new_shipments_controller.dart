@@ -20,7 +20,7 @@ class NewShipmentsController extends GetxController {
     print("Fetching shipments for delivery_id: $deliveryId");
 
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/shipments/get_new_shipments.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/shipments/get_new_shipments.php',
       {
         'delivery_id': deliveryId.toString(),
       },

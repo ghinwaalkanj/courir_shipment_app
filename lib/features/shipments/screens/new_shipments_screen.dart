@@ -5,8 +5,10 @@ import 'package:courir_shipment_app/features/shipments/screens/widgets/shipments
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../controller/new_shipments_controller.dart';
 
 class NewShipmentsScreen extends StatelessWidget {
@@ -23,12 +25,52 @@ class NewShipmentsScreen extends StatelessWidget {
         future: controller.fetchNewShipments(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    TImages.loading,
+                    height: 20.h,
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'جاري تحميل الشحنات',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: TColors.darkGrey,
+                      fontFamily: 'Cairo',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    TImages.no_connection,
+                    height: 20.h,
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'يبدو أننا نواجه خطأ فني. يرجى المحاولة لاحقًا.',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: TColors.darkGrey,
+                      fontFamily: 'Cairo',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else {
             return Obx(
-                  () {
+              () {
                 if (controller.shipments.isEmpty) {
                   return RefreshIndicator(
                     onRefresh: () async {
@@ -43,8 +85,10 @@ class NewShipmentsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image(
-                                  image: AssetImage(
-                                      'assets/images/sammy-line-man-checking-mailbox.png')),
+                                image: AssetImage(
+                                    'assets/images/sammy-line-man-checking-mailbox.png'),
+                                height: 35.h,
+                              ),
                               SizedBox(
                                 height: 2.h,
                               ),
@@ -75,48 +119,55 @@ class NewShipmentsScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final shipment = controller.shipments[index];
                               return ShipmentItem(
-                                shipmentName: shipment.shipmentInfo.shipmentContents,
-                                shipmentNumber: shipment.shipmentInfo.shipmentNumber,
+                                shipmentName:
+                                    shipment.shipmentInfo.shipmentContents,
+                                shipmentNumber:
+                                    shipment.shipmentInfo.shipmentNumber,
                                 senderCity: shipment.userInfo.city,
-                                shipmentDate: shipment.shipmentInfo.createdAt,
+                                shipmentDate: shipment.userInfo.fromAddressDetails,
                                 recipientCity: shipment.recipientInfo.city,
                                 estimatedDate:
-                                shipment.shipmentInfo.estimatedDeliveryTime,
-                                courierEarnings:
-                                shipment.shipmentInfo.courierEarnings.toString(),
+                                    shipment.recipientInfo.address,
+                                courierEarnings: shipment
+                                    .shipmentInfo.courierEarnings
+                                    .toString(),
                                 onTap: () {
                                   print(shipment.shipmentInfo.courierEarnings);
                                   print(shipment.recipientInfo.lat);
                                   print(shipment.recipientInfo.long);
                                   print(shipment.recipientInfo.lat);
                                   print(shipment.userInfo.fromAddressLong);
+
                                   Get.to(
                                     OrderDetailScreen(
                                       recipientLocation: LatLng(
-                                        double.parse(shipment.recipientInfo.lat),
-                                        double.parse(shipment.recipientInfo.long),
+                                        double.parse(
+                                            shipment.recipientInfo.lat),
+                                        double.parse(
+                                            shipment.recipientInfo.long),
                                       ),
                                       merchentLocation: LatLng(
                                         double.parse(
-                                            shipment.recipientInfo.lat),
+                                            shipment.userInfo.fromAddressLat),
                                         double.parse(
                                             shipment.userInfo.fromAddressLong),
                                       ),
                                     ),
                                     arguments: {
                                       'shipmentStatus':
-                                      shipment.shipmentInfo.shipmentStatus,
+                                          shipment.shipmentInfo.shipmentStatus,
                                       'shipmentNumber':
-                                      shipment.shipmentInfo.shipmentNumber,
+                                          shipment.shipmentInfo.shipmentNumber,
                                       'shipmentId':
-                                      shipment.shipmentInfo.shipmentId,
+                                          shipment.shipmentInfo.shipmentId,
                                       'deliveryPrice':
-                                      shipment.shipmentInfo.shipmentFee,
+                                          shipment.shipmentInfo.shipmentFee,
                                       'shipmentPrice':
-                                      shipment.shipmentInfo.shipmentValue,
-                                      'shipmentDate': shipment.shipmentInfo.createdAt,
+                                          shipment.shipmentInfo.shipmentValue,
+                                      'shipmentDate':
+                                          shipment.shipmentInfo.createdAt,
                                       'shipmentWeight':
-                                      shipment.shipmentInfo.shipmentWeight,
+                                          shipment.shipmentInfo.shipmentWeight,
                                       'shipmentQuantity': shipment
                                           .shipmentInfo.shipmentQuantity
                                           .toString(),

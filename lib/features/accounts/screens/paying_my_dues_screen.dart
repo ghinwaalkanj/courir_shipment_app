@@ -3,10 +3,12 @@ import 'package:courir_shipment_app/features/accounts/screens/widgets/pay_dues_w
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../controller/get_earnings_4_days_controller.dart';
 import '../controller/contact_info_controller.dart'; // Add this line
 import '../models/contact_info_model.dart'; // Add this line
@@ -26,8 +28,11 @@ class PayDuesScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.fromLTRB(4.w, 4.h, 4.w, 4.h),
         child: Obx(() {
-          if (earningsController.isLoading.value || contactController.isLoading.value) { // Add contactController loading
-            return Center(child: CircularProgressIndicator(color: TColors.primary));
+          if (earningsController.isLoading.value || contactController.isLoading.value) {
+            return Center(child:  Lottie.asset(
+              TImages.loading,
+              height: 20.h,
+            ),);
           } else {
             double totalIncome = double.parse(earningsController.earnings4DaysResponse.value.totalAdminIncome);
             double maxEarningsLimit = double.parse(earningsController.earnings4DaysResponse.value.maxEarningsLimit);

@@ -60,7 +60,7 @@ class NavigationMenu extends StatelessWidget {
                       maxLines: 1,
                       style: TextStyle(
                         color: color,
-                        fontSize: isActive ? 7.2.sp : 5.5.sp,
+                        fontSize: isActive ? 6.7.sp : 5.5.sp,
                         fontFamily: 'Cairo',
                         fontWeight: isActive ? FontWeight.bold : FontWeight.w700,
                       ),

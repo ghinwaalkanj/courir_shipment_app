@@ -18,6 +18,8 @@ import 'features/onboarding/controller/onboarding_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'features/onboarding/screen/splash_screen.dart';
+
 
 
 void main() async {
@@ -86,23 +88,7 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Obx(() {
-            if (blockStatusController.isLoading.value) {
-              return Scaffold(body:Center(child: CircularProgressIndicator()),);
-            } else if (prefs.getBool('isCities') == true) {
-              return NavigationMenu();
-            }else if (prefs.getBool('isVehicleInfo') == true) {
-              return AddDeliveryAreasScreen();
-            }else if (prefs.getBool('isIdUpload') == true) {
-              return VehicleInfoScreen();
-            }else if (prefs.getBool('isPersonalInfo') == true) {
-              return IDUploadScreen();
-            } else if (prefs.getBool('isAuth') == true) {
-              return PersonalInfoScreen();
-            } else {
-              return prefs.getBool('isFirstTime') == false ? LoginScreen() : OnBoardingScreen();
-            }
-          }),
+          home:  MyCustomSplashScreen(),
         );
       },
     );

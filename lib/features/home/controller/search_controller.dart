@@ -15,7 +15,7 @@ class TSearchController extends GetxController {
     shipments.clear(); // Clear previous shipments
 
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/shipments/search_shipment.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/shipments/search_shipment.php',
       {
         'shipment_number': shipmentNumber,
       },

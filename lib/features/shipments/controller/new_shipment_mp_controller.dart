@@ -22,15 +22,19 @@ class NewShipmentsMapController extends GetxController {
     userLocation.value = userPosition;
     await setCustomMarkerIcons();
     addMarkers();
+    polylines.clear();
     await addPolyline();
   }
 
   Future<void> setCustomMarkerIcons() async {
-    recipientCustomIcon = await createCustomMarkerIcon('assets/images/delivery_mark.png');
+    markers.clear();
+
+    recipientCustomIcon = await createCustomMarkerIcon('assets/images/recipent_mark.png');
     userCustomIcon = await createCustomMarkerIcon('assets/images/merchant_mark.png');
   }
 
   Future<BitmapDescriptor> createCustomMarkerIcon(String assetPath) async {
+
     final ByteData byteData = await rootBundle.load(assetPath);
     final Uint8List imageData = byteData.buffer.asUint8List();
 

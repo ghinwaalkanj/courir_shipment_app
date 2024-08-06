@@ -12,7 +12,7 @@ class AnnouncementController extends GetxController {
     required int deliveryId,
     required String announcementText,
   }) async {
-    var request = http.MultipartRequest('POST', Uri.parse('https://api.wasenahon.com/Kwickly/delivery/shipments/add_announcements.php'));
+    var request = http.MultipartRequest('POST', Uri.parse('https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/shipments/add_announcements.php'));
     request.fields.addAll({
       'shipment_id': shipmentId.toString(),
       'delivery_id': deliveryId.toString(),

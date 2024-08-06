@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/snack_bars/success_snack_bar.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../controller/announcement_controller.dart';
 import '../controller/my_tab_controller.dart';
 import '../controller/my_shipments_controller.dart';
@@ -18,11 +20,14 @@ import '../controller/new_shipments_controller.dart';
 
 class ActiveShipmentsScreen extends StatelessWidget {
   final MyTabController tabController = Get.put(MyTabController());
-  final MyShipmentsController myShipmentsController = Get.put(MyShipmentsController());
-  final AnnouncementController announcementController = Get.put(AnnouncementController());
+  final MyShipmentsController myShipmentsController =
+      Get.put(MyShipmentsController());
+  final AnnouncementController announcementController =
+      Get.put(AnnouncementController());
   final NewShipmentsController controller = Get.put(NewShipmentsController());
 
-  void _showAnnouncementDialog(BuildContext context, int shipmentId, int deliveryId) {
+  void _showAnnouncementDialog(
+      BuildContext context, int shipmentId, int deliveryId) {
     showDialog(
       context: context,
       builder: (context) {
@@ -41,7 +46,8 @@ class ActiveShipmentsScreen extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   child: TextField(
                     textDirection: TextDirection.rtl,
-                    controller: announcementController.announcementTextController,
+                    controller:
+                        announcementController.announcementTextController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'اكتب البلاغ هنا',
@@ -63,7 +69,8 @@ class ActiveShipmentsScreen extends StatelessWidget {
                         backgroundColor: TColors.primary,
                       ),
                       onPressed: () async {
-                        if (announcementController.announcementTextController.text.isEmpty) {
+                        if (announcementController
+                            .announcementTextController.text.isEmpty) {
                           Get.snackbar(
                             'خطأ',
                             'يجب عليك كتابة البلاغ',
@@ -72,14 +79,17 @@ class ActiveShipmentsScreen extends StatelessWidget {
                             snackPosition: SnackPosition.TOP,
                             margin: EdgeInsets.all(10),
                             borderRadius: 10,
-                            icon: Icon(Icons.error_outline, color: Colors.white),
+                            icon:
+                                Icon(Icons.error_outline, color: Colors.white),
                             duration: Duration(seconds: 5),
                           );
                         } else {
-                          final response = await announcementController.submitAnnouncement(
+                          final response =
+                              await announcementController.submitAnnouncement(
                             shipmentId: shipmentId,
                             deliveryId: deliveryId,
-                            announcementText: announcementController.announcementTextController.text,
+                            announcementText: announcementController
+                                .announcementTextController.text,
                           );
 
                           if (response != null && response.status) {
@@ -94,19 +104,22 @@ class ActiveShipmentsScreen extends StatelessWidget {
                               snackPosition: SnackPosition.TOP,
                               margin: EdgeInsets.all(10),
                               borderRadius: 10,
-                              icon: Icon(Icons.error_outline, color: Colors.white),
+                              icon: Icon(Icons.error_outline,
+                                  color: Colors.white),
                               duration: Duration(seconds: 5),
                             );
                           }
                         }
                       },
-                      child: Text('تأكيد', style: TextStyle(color: TColors.white)),
+                      child:
+                          Text('تأكيد', style: TextStyle(color: TColors.white)),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('إلغاء', style: TextStyle(color: TColors.primary)),
+                      child: Text('إلغاء',
+                          style: TextStyle(color: TColors.primary)),
                     ),
                   ],
                 ),
@@ -162,7 +175,7 @@ class ActiveShipmentsScreen extends StatelessWidget {
               future: _fetchData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: SizedBox());
                 }
 
                 return Obx(() {
@@ -171,19 +184,19 @@ class ActiveShipmentsScreen extends StatelessWidget {
                     child: tabController.tabs.isEmpty
                         ? Center(child: Text('No shipments available.'))
                         : TabBar(
-                      isScrollable: tabController.tabs.length > 1,
-                      controller: tabController.tabController,
-                      tabs: tabController.tabs.map((tab) {
-                        return Tab(
-                          text: tab,
-                        );
-                      }).toList(),
-                      indicatorColor: TColors.primary,
-                      labelColor: TColors.primary,
-                      unselectedLabelColor: TColors.grey,
-                      labelStyle: TextStyle(fontSize: 16.0),
-                      unselectedLabelStyle: TextStyle(fontSize: 14.0),
-                    ),
+                            isScrollable: tabController.tabs.length > 1,
+                            controller: tabController.tabController,
+                            tabs: tabController.tabs.map((tab) {
+                              return Tab(
+                                text: tab,
+                              );
+                            }).toList(),
+                            indicatorColor: TColors.primary,
+                            labelColor: TColors.primary,
+                            unselectedLabelColor: TColors.grey,
+                            labelStyle: TextStyle(fontSize: 16.0,fontFamily: 'Cairo'),
+                            unselectedLabelStyle: TextStyle(fontSize: 14.0),
+                          ),
                   );
                 });
               },
@@ -194,13 +207,20 @@ class ActiveShipmentsScreen extends StatelessWidget {
           future: _fetchData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: Lottie.asset(
+                  TImages.loading,
+                  height: 20.h,
+                ),
+              );
             }
 
-            final filteredShipments = myShipmentsController.getActiveShipments();
+            final filteredShipments =
+                myShipmentsController.getActiveShipments();
 
             if (shipmentNumber != null) {
-              final index = tabController.getTabIndexByShipmentNumber(shipmentNumber);
+              final index =
+                  tabController.getTabIndexByShipmentNumber(shipmentNumber);
               if (index != -1) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   tabController.tabController.animateTo(index);
@@ -230,7 +250,8 @@ class ActiveShipmentsScreen extends StatelessWidget {
                   merchantPhone: shipment.userInfo.phone,
                   customerName: shipment.recipientInfo.name,
                   customerPhone: shipment.recipientInfo.phone,
-                  shipmentAmount: double.parse(shipment.shipmentInfo.shipmentValue),
+                  shipmentAmount:
+                      double.parse(shipment.shipmentInfo.shipmentValue),
                   deliveryFee: double.parse(shipment.shipmentInfo.shipmentFee),
                   initialStatus: shipment.shipmentInfo.shipmentStatus,
                   recipientLocation: LatLng(

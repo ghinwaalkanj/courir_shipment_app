@@ -2,12 +2,14 @@ import 'package:courir_shipment_app/features/accounts/screens/widgets/income_dis
 import 'package:courir_shipment_app/features/accounts/screens/widgets/income_distrubution_widgets/income_summary_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 
 import '../../../common/styles/custom_textstyle.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../controller/daily_income_controller.dart';
 import '../controller/weekly_income_controller.dart';
 
@@ -34,7 +36,26 @@ class IncomeDistributionScreen extends StatelessWidget {
           if (dailyController.isLoading.value ||
               weeklyController.isLoading.value) {
             return Center(
-                child: CircularProgressIndicator(color: TColors.primary));
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    TImages.loading,
+                    height: 20.h,
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'جاري تحميل توزيع الدخل',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: TColors.darkGrey,
+                      fontFamily: 'Cairo',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else {
             return Column(
               children: [

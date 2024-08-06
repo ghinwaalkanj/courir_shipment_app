@@ -79,6 +79,10 @@ class ProfileButtons extends StatelessWidget {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           prefs.remove("isAuth");
+                          prefs.remove("isCities");
+                          prefs.remove("isVehicleInfo");
+                          prefs.remove("isIdUpload");
+                          prefs.remove("isPersonalInfo");
 
                           // FirebaseMessaging.instance
                           //     .unsubscribeFromTopic("merchant");

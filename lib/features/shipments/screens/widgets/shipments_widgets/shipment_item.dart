@@ -109,7 +109,7 @@ class ShipmentItem extends StatelessWidget {
                                         maxLines: 1,
                                       ),
                                       Text(
-                                        shipmentDate.split(' ')[0],
+                                        shipmentDate,
                                         style: CustomTextStyle.greyTextStyle,
                                       ),
                                     ],
@@ -140,7 +140,7 @@ class ShipmentItem extends StatelessWidget {
                                         maxLines: 1,
                                       ),
                                       Text(
-                                        estimatedDate.split(' ')[0],
+                                        estimatedDate,
                                         style: CustomTextStyle.greyTextStyle,
                                         overflow: TextOverflow.ellipsis,
                                       ),

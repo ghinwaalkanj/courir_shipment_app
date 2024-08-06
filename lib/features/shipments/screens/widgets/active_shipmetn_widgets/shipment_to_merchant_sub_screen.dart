@@ -15,8 +15,7 @@ class ShipmentToMerchantScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NewShipmentsMapController mapController =
-    Get.put(NewShipmentsMapController());
+    final NewShipmentsMapController mapController = Get.put(NewShipmentsMapController());
 
     return Column(
       children: [
@@ -41,16 +40,16 @@ class ShipmentToMerchantScreen extends StatelessWidget {
           height: 55.h,
           child: Obx(
                 () => GoogleMap(
-                  zoomControlsEnabled: false,
-                  zoomGesturesEnabled: true,
-                  onMapCreated: mapController.onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: recipientLocation,
-                    zoom: 15,
-                  ),
-                  markers: mapController.markers.value,
-                  polylines: mapController.polylines.value,
-                ),
+              zoomControlsEnabled: false,
+              zoomGesturesEnabled: true,
+              onMapCreated: mapController.onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: recipientLocation,
+                zoom: 15,
+              ),
+              markers: mapController.markers.value,
+              polylines: mapController.polylines.value,
+            ),
           ),
         ),
       ],

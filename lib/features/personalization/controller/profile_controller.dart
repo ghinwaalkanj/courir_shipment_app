@@ -46,7 +46,7 @@ class ProfileController extends GetxController {
     isLoading.value = true;
     var deliveryId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/get_delivery_profile.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/get_delivery_profile.php',
       {
         'delivery_id': deliveryId.toString(),
       },
@@ -89,7 +89,7 @@ class ProfileController extends GetxController {
     isLoading.value = true;
     var deliveryId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/update_delivery_profile.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/update_delivery_profile.php',
       {
         'delivery_id': deliveryId.toString(),
         'name': nameController.text,
@@ -116,7 +116,7 @@ class ProfileController extends GetxController {
     isLoading.value = true;
     var deliveryId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/edit_delivery_profile.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/edit_delivery_profile.php',
       {
         'delivery_id': deliveryId.toString(),
         'name': newName,

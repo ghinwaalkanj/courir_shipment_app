@@ -26,7 +26,7 @@ class TruckController extends GetxController {
     isLoading.value = true;
     var userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/auth/add_vehicles.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/auth/add_vehicles.php',
       {
         'user_id': userId.toString(),
         'vehicle_type': newType,

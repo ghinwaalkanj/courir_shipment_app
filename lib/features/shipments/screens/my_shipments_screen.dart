@@ -3,11 +3,13 @@ import 'package:courir_shipment_app/features/shipments/screens/widgets/shipments
 import 'package:courir_shipment_app/features/shipments/screens/widgets/shipments_widgets/shipment_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/widgets/app_bar.dart';
 import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
 import '../../../common/widgets/custom_shapes/containers/search_container.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../../home/screens/qrsearch_screen.dart';
 import '../../home/screens/search_screen.dart';
 import '../controller/my_shipments_controller.dart';
@@ -34,9 +36,49 @@ class MyShipmentsScreen extends StatelessWidget {
         future: controller.fetchMyShipments(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    TImages.loading,
+                    height: 20.h,
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'جاري تحميل الشحنات',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: TColors.darkGrey,
+                      fontFamily: 'Cairo',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: no internet'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    TImages.no_connection,
+                    height: 20.h,
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'يبدو أننا نواجه خطأ فني. يرجى المحاولة لاحقًا.',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: TColors.darkGrey,
+                      fontFamily: 'Cairo',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else {
             return Directionality(
               textDirection: TextDirection.rtl,
@@ -79,7 +121,27 @@ class MyShipmentsScreen extends StatelessWidget {
                     Expanded(
                       child: Obx(() {
                         if (controller.isLoading.value) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  TImages.loading,
+                                  height: 20.h,
+                                ),
+                                SizedBox(height: 2.h),
+                                Text(
+                                  'جاري تحميل الشحنات',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: TColors.darkGrey,
+                                    fontFamily: 'Cairo',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                         }
                         var filteredShipments = controller.filterShipments(selectedFilterIndex.value);
                         if (filteredShipments.isEmpty) {
@@ -110,9 +172,10 @@ class MyShipmentsScreen extends StatelessWidget {
                               shipmentName: shipment.shipmentInfo.shipmentContents,
                               shipmentNumber: shipment.shipmentInfo.shipmentNumber,
                               senderCity: shipment.userInfo.city,
-                              shipmentDate: shipment.shipmentInfo.createdAt,
+                              shipmentDate: shipment.userInfo.fromAddressDetails,
                               recipientCity: shipment.recipientInfo.city,
-                              estimatedDate: shipment.shipmentInfo.estimatedDeliveryTime,
+                              estimatedDate:
+                              shipment.recipientInfo.address,
                               courierEarnings: shipment.shipmentInfo.courierEarnings.toString(),
                               onTap: () {
                                 if (shipment.shipmentInfo.shipmentStatus == 7 || shipment.shipmentInfo.shipmentStatus == 9) {

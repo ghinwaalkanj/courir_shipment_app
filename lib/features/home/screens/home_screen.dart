@@ -3,9 +3,11 @@ import 'package:courir_shipment_app/features/home/screens/widgets/app_bar.dart';
 import 'package:courir_shipment_app/features/home/screens/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../../shipments/screens/active_shipments_screen.dart';
 import '../controller/home_controller.dart';
 import '../controller/map_controller.dart';
@@ -57,7 +59,27 @@ class HomeScreen extends StatelessWidget {
                     future: mapController.initialize(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Lottie.asset(
+                                TImages.loading,
+                                height: 20.h,
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                'جاري تحميل الخريطة',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: TColors.darkGrey,
+                                  fontFamily: 'Cairo',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else {
@@ -94,7 +116,10 @@ class HomeScreen extends StatelessWidget {
                   future: myShipmentsController.fetchMyShipments(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return ActiveShipmentsButton(
+                        count: 0,
+                        onPressed:  null,
+                      );
                     } else if (snapshot.hasError) {
                       return Container();
                     } else {

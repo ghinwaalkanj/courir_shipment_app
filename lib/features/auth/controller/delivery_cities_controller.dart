@@ -47,7 +47,7 @@ class DeliveryCitiesController extends GetxController {
 
   void fetchCities() async {
     isLoading.value = true;
-    var response = await crud.getData('https://api.wasenahon.com/Kwickly/delivery/auth/get_cities.php', {});
+    var response = await crud.getData('https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/auth/get_cities.php', {});
     isLoading.value = false;
 
     response.fold(
@@ -98,7 +98,7 @@ class DeliveryCitiesController extends GetxController {
 
     try {
       var response = await postDataList(
-        'https://api.wasenahon.com/Kwickly/delivery/auth/add_delivery_cities.php',
+        'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/auth/add_delivery_cities.php',
         requestBody,
       );
       var responseModel = AddDeliveryCitiesResponse.fromJson(response);
@@ -159,7 +159,7 @@ class DeliveryCitiesController extends GetxController {
     isLoading.value = true;
     int? userId = await SharedPreferencesHelper.getInt('user_id');
     var response = await crud.postData(
-      'https://api.wasenahon.com/Kwickly/delivery/cities/get_delivery_cities.php',
+      'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/cities/get_delivery_cities.php',
       {
         'user_id': userId.toString(),
       },

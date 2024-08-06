@@ -62,6 +62,7 @@ class LoginController extends GetxController {
         {'phone': '+9627${phoneNumber.value}', 'role': 'مندوب'},
         {},
       );
+      print(response);
       isLoading.value = false;
       response.fold(
         (failure) {

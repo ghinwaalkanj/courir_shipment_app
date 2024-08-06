@@ -16,7 +16,7 @@ class ContactInfoController extends GetxController {
   Future<void> fetchContactInfo() async {
     isLoading.value = true;
     final response = await http.get(
-      Uri.parse('https://api.wasenahon.com/Kwickly/admin/contact_info/get_contact_info.php'),
+      Uri.parse('https://darkred-wombat-762943.hostingersite.com/Kwickly/admin/contact_info/get_contact_info.php'),
     );
 
     if (response.statusCode == 200) {

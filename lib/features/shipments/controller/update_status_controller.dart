@@ -3,7 +3,9 @@ import 'package:courir_shipment_app/features/shipments/screens/active_shipments_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 import '../../../core/services/storage_service.dart';
+import '../../../utils/constants/colors.dart';
 import '../models/update_status_model.dart';
 import '../screens/widgets/active_shipmetn_widgets/shipment_to_merchant_sub_screen.dart';
 
@@ -17,7 +19,7 @@ class UpdateShipmentStatusController extends GetxController {
   }) async {
     isLoading.value = true;
 
-    var url = 'https://api.wasenahon.com/Kwickly/delivery/shipments/update_shipment_status.php';
+    var url = 'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/shipments/update_shipment_status.php';
     int? deliveryId = await SharedPreferencesHelper.getInt('user_id');
 
     var body = {
@@ -41,12 +43,76 @@ class UpdateShipmentStatusController extends GetxController {
 
         if (updateResponse.status) {
           shipmentDetails.value = updateResponse.shipmentDetails;
-          Get.snackbar('Success', updateResponse.message,
-              backgroundColor: Colors.green, colorText: Colors.white);
+          Get.snackbar(
+            'نجاح',
+            updateResponse.message,
+            backgroundColor: TColors.primary,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: TColors.white),
+            titleText: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                'نجاح',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                  color: TColors.white,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ),
+            messageText: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                updateResponse.message,
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  color: TColors.white,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ),
+          );
+
           return true;
         } else {
-          Get.snackbar('Error', updateResponse.message,
-              backgroundColor: Colors.red, colorText: Colors.white);
+
+          Get.snackbar(
+            'خطأ',
+            updateResponse.message,
+            backgroundColor: TColors.error,
+            colorText: TColors.white,
+            snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.all(10),
+            borderRadius: 10,
+            icon: Icon(Icons.error_outline, color: TColors.white),
+            titleText: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                'خطأ',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                  color: TColors.white,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ),
+            messageText: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                updateResponse.message,
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  color: TColors.white,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ),
+          );
           return false;
         }
       } else {

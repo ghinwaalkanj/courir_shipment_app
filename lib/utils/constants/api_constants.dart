@@ -1,8 +1,8 @@
 
 /* -- LIST OF Constants used in APIs -- */
 
-const String DelieveryAPIKey = "https://api.wasenahon.com/Kwickly/delivery/";
-const String UploadIdImagesAPI = "https://api.wasenahon.com/Kwickly/upload/id_images/";
+const String DelieveryAPIKey = "https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/";
+const String UploadIdImagesAPI = "https://darkred-wombat-762943.hostingersite.com/Kwickly/upload/id_images/";
 
 // Authentication Endpoints
 const String LoginEndpoint = "${DelieveryAPIKey}auth/login.php";

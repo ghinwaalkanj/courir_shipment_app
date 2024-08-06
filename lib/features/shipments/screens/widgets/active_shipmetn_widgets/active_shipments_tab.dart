@@ -232,13 +232,25 @@ class ActiveShipmentsTab extends StatelessWidget {
               QrCodeDisplayScreen(
                 shipmentNumber: shipmentNumber,
                 onPressed: () async {
-                  await controller.updateShipmentStatus(
-                      shipmentNumber: shipmentNumber, newStatus: 9);
+                  final isReturned = await controller.checkShipmentReturnStatus(shipmentNumber);
 
-                  var rater = await SharedPreferencesHelper.getInt('user_id');
-                  Get.to(NavigationMenu());
-                  SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
-                  // _showRatingDialog(context, shipmentId, rater!, id);
+                  if (isReturned) {
+                    SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
+                    var rater = await SharedPreferencesHelper.getInt('user_id');
+                    Get.to(NavigationMenu());
+                  } else {
+                    Get.snackbar(
+                      'خطأ',
+                      'الشحنة لم تُرجع بعد',
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                      snackPosition: SnackPosition.TOP,
+                      margin: EdgeInsets.all(10),
+                      borderRadius: 10,
+                      icon: Icon(Icons.error_outline, color: Colors.white),
+                      duration: Duration(seconds: 5),
+                    );
+                  }
                 },
               ),
 
@@ -339,22 +351,7 @@ class ActiveShipmentsTab extends StatelessWidget {
                               shipmentNumber: shipmentNumber, newStatus: 8);
                           if (success) {
                             Navigator.of(context).pop();
-                            Get.to(
-                              QrCodeDisplayScreen(
-                                shipmentNumber: shipmentNumber,
-                                onPressed: () async {
-                                  await controller.updateShipmentStatus(
-                                      shipmentNumber: shipmentNumber, newStatus: 9);
-                                  var rater =
-                                  await SharedPreferencesHelper.getInt(
-                                      'user_id');
-                                  Get.to(NavigationMenu());
-                                  SuccessSnackbar.show('تم إرجاع الشحنة بنجاح');
-                                  // _showRatingDialog(
-                                  //     context, shipmentId, rater!, id);
-                                },
-                              ),
-                            );
+                            pageController.changePage(5);
                           }
                         });
                       }

@@ -79,7 +79,6 @@ class UpdateShipmentStatusController extends GetxController {
 
           return true;
         } else {
-
           Get.snackbar(
             'خطأ',
             updateResponse.message,
@@ -117,6 +116,40 @@ class UpdateShipmentStatusController extends GetxController {
         }
       } else {
         Get.snackbar('Error', 'Failed to update shipment status',
+            backgroundColor: Colors.red, colorText: Colors.white);
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(),
+          backgroundColor: Colors.red, colorText: Colors.white);
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<bool> checkShipmentReturnStatus(String shipmentNumber) async {
+    isLoading.value = true;
+    var url = 'https://darkred-wombat-762943.hostingersite.com/Kwickly/delivery/shipments/is_returned.php';
+
+    var body = {
+      'shipment_number': shipmentNumber,
+    };
+
+    try {
+      var response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        return jsonResponse['status'] as bool;
+      } else {
+        Get.snackbar('Error', 'Failed to check shipment return status',
             backgroundColor: Colors.red, colorText: Colors.white);
         return false;
       }
